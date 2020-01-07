@@ -1,23 +1,18 @@
 import React from 'react';
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import App from '../../App';
-import Home from '../screens/Home';
-import Book from '../component/Book';
-import Search from '../component/Search';
+
+
 
 import Order from '../screens/Order';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
 import Intro from '../screens/Intro';
-import Library from '../screens/Library';
-import SignIn from '../screens/SignIn';
-import SignUp from '../screens/SignUp';
 
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
-import iconLibrary from '../../assets/images/library_icon.jpg';
+import iconHome from '../../assets/images/home_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
-import profile_icon from '../../assets/images/profile_icon.png';
 
 export default () => {
   Navigation.events().registerAppLaunchedListener(() => {
@@ -50,13 +45,11 @@ export default () => {
 
   Navigation.registerComponent('App', () => App);
   Navigation.registerComponent('Intro', () => Intro);
-  Navigation.registerComponent('Library', () => Library);
-  Navigation.registerComponent('Home', () => Home);
+
+  Navigation.registerComponent('Books', () => Books);
   Navigation.registerComponent('Order', () => Order);
   Navigation.registerComponent('Notification', () => Notification);
   Navigation.registerComponent('Profile', () => Profile);
-  Navigation.registerComponent('SignIn', () => SignIn);
-  Navigation.registerComponent('SignUp', () => SignUp);
 };
 
 export const onChangeIntoMainScreen = () => {
@@ -69,7 +62,7 @@ export const onChangeIntoMainScreen = () => {
               children: [
                 {
                   component: {
-                    name: 'Home',
+                    name: 'Books',
                     options: {
                       topBar: {
                         title: {
@@ -83,7 +76,7 @@ export const onChangeIntoMainScreen = () => {
               ],
               options: {
                 bottomTab: {
-                  text: 'Home',
+                  text: 'Books',
                   icon: books_icon,
                   testID: 'FIRST_TAB_BAR_BUTTON',
                 },
@@ -139,24 +132,6 @@ export const onChangeIntoMainScreen = () => {
               children: [
                 {
                   component: {
-                    name: 'Library',
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Library',
-                  icon: iconLibrary,
-                  testID: 'FOUR_TAB_BAR_BUTTON',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
                     name: 'Profile',
                   },
                 },
@@ -164,7 +139,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Profile',
-                  icon: profile_icon,
+                  icon: iconHome,
                   testID: 'FOUR_TAB_BAR_BUTTON',
                 },
               },
@@ -194,6 +169,7 @@ export const onIntro = () => {
   });
 };
 
+<<<<<<< HEAD
 export const onSignIn = () => {
   Navigation.setRoot({
     root: {
@@ -230,3 +206,22 @@ export const onSignUp = () => {
   });
 
 };
+=======
+// export const onLogIn = () => {
+//   Navigation.setRoot({
+//     root: {
+//       component: {
+//         name: 'Login',
+//         options: {
+//           topBar: {
+//             title: {
+//               text: 'Login',
+//               alignment: 'center',
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
+// };
+>>>>>>> parent of 32e57fb... Tuan has finished into screens
