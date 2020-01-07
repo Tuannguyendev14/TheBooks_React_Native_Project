@@ -1,7 +1,8 @@
 import React from 'react';
 import {Navigation} from 'react-native-navigation';
-import App from '../../App';
-import Home from '../screens/Home';
+import Filter from './../screens/Filter/Filter';
+
+import store from '../redux/store';
 
 function ReduxProvider(Component) {
   return props => (
@@ -11,20 +12,21 @@ function ReduxProvider(Component) {
   );
 }
 
-export default () => {
+Navigation.registerComponent(`Filter`, () => Filter);
+
+export const FilterScreen = () => {
   Navigation.events().registerAppLaunchedListener(() => {
-    Navigation.setRoot({
-      root: {
-        component: {
-          name: 'Home',
+    Navigation.push(this.props.componentId, {
+      component: {
+        name: 'Filter',
+        options: {
+          topBar: {
+            title: {
+              text: 'Filter',
+            },
+          },
         },
       },
     });
   });
-
-  Navigation.registerComponent(
-    'Home',
-    () => ReduxProvider(Home),
-    () => Home,
-  );
 };

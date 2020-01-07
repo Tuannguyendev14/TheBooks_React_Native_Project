@@ -11,7 +11,7 @@ import com.facebook.soloader.SoLoader;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
-
+import com.oblador.vectoricons.VectorIconsPackage;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.Arrays;
@@ -39,6 +39,7 @@ public class MainApplication extends NavigationApplication {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
+      new VectorIconsPackage()
     // eg. new VectorIconsPackage()
     );
   }
