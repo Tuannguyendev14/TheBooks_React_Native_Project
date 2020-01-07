@@ -3,7 +3,7 @@ import {Navigation} from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home';
 import Book from '../component/Book';
-import Search from '../component/Search';
+import Search from '../screens/Home/Search';
 
 function ReduxProvider(Component) {
   return props => (
@@ -18,25 +18,13 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'Search',
+          name: 'Home',
         },
       },
     });
   });
 
-  Navigation.registerComponent(
-    'Search',
-    () => ReduxProvider(Search),
-    () => Search,
-  );
-  Navigation.registerComponent(
-    'Home',
-    () => ReduxProvider(Home),
-    () => Home,
-  );
-  Navigation.registerComponent(
-    'Book',
-    () => ReduxProvider(Book),
-    () => Book,
-  );
+  Navigation.registerComponent('Search', () => Search);
+  Navigation.registerComponent('Home', () => Home);
+  Navigation.registerComponent('Book', () => Book);
 };
