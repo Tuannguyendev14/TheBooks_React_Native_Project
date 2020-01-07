@@ -1,6 +1,7 @@
 package com.thebooks;
 
 import com.reactnativenavigation.NavigationActivity;
+import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 
 public class MainActivity extends NavigationActivity {
 

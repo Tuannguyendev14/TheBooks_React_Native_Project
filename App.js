@@ -1,21 +1,37 @@
-import React , {Component}from 'react';
+import React, {Component} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
+  AsyncStorage,
+  ActivityIndicator,
 } from 'react-native';
+import {onChangeIntoMainScreen, onIntro} from './src/navigation';
 
-export default class App extends Component{
-render(){
-  return(
-    <View>
-      <Text>Hello </Text>
-    </View>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+  }
+
+  componentDidMount() {
+    // onChangeIntoMainScreen();
+    onIntro();
+  }
+
+  render() {
+    return (
+      <View style={style.container}>
+        <ActivityIndicator size="large" color="red " />
+      </View>
+    );
+  }
 }
-}
 
-
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
