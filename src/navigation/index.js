@@ -2,6 +2,9 @@ import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home';
+import Book from '../component/Book';
+import Search from '../component/Search';
+
 import Order from '../screens/Order';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
@@ -21,11 +24,29 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'App',
+          name: 'Search',
+
         },
       },
     });
   });
+
+
+  Navigation.registerComponent(
+    'Search',
+    () => ReduxProvider(Search),
+    () => Search,
+  );
+  Navigation.registerComponent(
+    'Home',
+    () => ReduxProvider(Home),
+    () => Home,
+  );
+  Navigation.registerComponent(
+    'Book',
+    () => ReduxProvider(Book),
+    () => Book,
+  );
 
   Navigation.registerComponent('App', () => App);
   Navigation.registerComponent('Intro', () => Intro);
@@ -207,4 +228,5 @@ export const onSignUp = () => {
       },
     },
   });
+
 };
