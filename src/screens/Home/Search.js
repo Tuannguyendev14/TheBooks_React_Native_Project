@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Navigation} from 'react-native-navigation';
+
 import {
   Text,
   View,
@@ -13,14 +15,35 @@ import {
 import {offlineData} from '../../utils/offlineData';
 import {searchData} from '../../utils/searchData';
 export default class Search extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      textInput: '',
+    };
+  }
+  itemOnclick = data => {
+    this.setState({
+      textInput: data,
+    });
+  };
+
+  backMainScreen = () => {
+    Navigation.dismissAllModals();
+  };
   render() {
     return (
       <View style={styles.main}>
-        <Icon name="ios-close" size={41} color="#5f5f5f" />
+        <Icon
+          name="ios-close"
+          size={41}
+          color="#5f5f5f"
+          onPress={() => this.backMainScreen()}
+        />
         <View style={styles.SectionStyle}>
           <TextInput
             style={styles.textInput}
             placeholder="Hãy nhập tên sách mà bạn muốn tìm!"
+            value={this.state.textInput}
           />
           <Image
             source={{
@@ -34,7 +57,13 @@ export default class Search extends Component {
         <FlatList
           style={styles.list}
           data={searchData}
-          renderItem={({item}) => <Text style={styles.listsearch}>{item}</Text>}
+          renderItem={({item}) => (
+            <Text
+              style={styles.listsearch}
+              onPress={() => this.itemOnclick(item)}>
+              {item}
+            </Text>
+          )}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
         />

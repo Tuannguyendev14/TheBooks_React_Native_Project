@@ -6,15 +6,6 @@ import Book from '../component/Book';
 import Search from '../screens/Home/Search';
 import ShowAllBook from '../screens/Home/ShowAllBook';
 
-
-function ReduxProvider(Component) {
-  return props => (
-    <Provider store={store}>
-      <Component {...props} />
-    </Provider>
-  );
-}
-
 export default () => {
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
@@ -30,5 +21,4 @@ export default () => {
   Navigation.registerComponent('Home', () => Home);
   Navigation.registerComponent('Book', () => Book);
   Navigation.registerComponent('ShowAllBook', () => ShowAllBook);
-
 };

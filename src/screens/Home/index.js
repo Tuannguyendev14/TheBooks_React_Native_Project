@@ -32,18 +32,28 @@ export default class index extends Component {
   };
 
   changScreenShowAll = (data, title) => {
-    Navigation.setRoot({
-      root: {
-        component: {
-          name: 'ShowAllBook',
-          passProps: {
-            data: data,
-            title: title,
-          },
+    Navigation.showModal({
+      component: {
+        name: 'ShowAllBook',
+        passProps: {
+          data: data,
+          title: title,
         },
       },
     });
   };
+
+  changScreenSearch = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Search',
+        
+      },
+    });
+  };
+
+   
+
   render() {
     return (
       <View>
@@ -54,6 +64,7 @@ export default class index extends Component {
             name="ios-search"
             size={30}
             color="#5f5f5f"
+            onPress={() => this.changScreenSearch()}
           />
         </View>
         <ScrollView style={styles.scroll}>
@@ -65,7 +76,10 @@ export default class index extends Component {
               <Text
                 style={styles.showall}
                 onPress={() =>
-                  this.changScreenShowAll(offlineData.Data.NewBooks, 'Đọc nhiều')
+                  this.changScreenShowAll(
+                    offlineData.Data.NewBooks,
+                    'Đọc nhiều',
+                  )
                 }>
                 Xem hết
               </Text>
@@ -90,7 +104,13 @@ export default class index extends Component {
               <Text style={styles.text}>
                 Sách mới{'('} {offlineData.Data.NewBooks.length} {')'}
               </Text>
-              <Text style={styles.showall}>Xem hết</Text>
+              <Text
+                style={styles.showall}
+                onPress={() =>
+                  this.changScreenShowAll(offlineData.Data.NewBooks, 'Sách mới')
+                }>
+                Xem hết
+              </Text>
             </View>
             <FlatList
               style={styles.list}
@@ -112,7 +132,16 @@ export default class index extends Component {
                 Sách mượn nhiều{'('} {offlineData.Data.MostBorrowBooks.length}{' '}
                 {')'}
               </Text>
-              <Text style={styles.showall}>Xem hết</Text>
+              <Text
+                style={styles.showall}
+                onPress={() =>
+                  this.changScreenShowAll(
+                    offlineData.Data.MostBorrowBooks,
+                    'Sách mượn nhiều',
+                  )
+                }>
+                Xem hết
+              </Text>
             </View>
             <FlatList
               style={styles.list}

@@ -9,7 +9,12 @@ class Book extends Component {
         <TouchableOpacity>
           <Image
             source={{uri: this.props.image}}
-            style={{width: 150, height: 200, backgroundColor: 'red'}}
+            style={{
+              width: 150,
+              height: 200,
+              backgroundColor: 'red',
+              marginHorizontal: 2,
+            }}
           />
         </TouchableOpacity>
         <TouchableOpacity>
@@ -61,7 +66,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   showflast: {
-    padding: 5,
+    //padding: 10,
+    marginRight: 15,
     width: 150,
   },
   name: {
