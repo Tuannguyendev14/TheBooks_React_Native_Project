@@ -47,7 +47,7 @@ export default class ShowAllBook extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 10,
     paddingBottom: 80,
   },
   title1: {

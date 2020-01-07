@@ -56,7 +56,7 @@ export default class index extends Component {
       <View>
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
-            <Icon name="ios-options" size={30} color="#5f5f5f" />
+            <Icon name="ios-menu" size={37} color="#5f5f5f" />
           </View>
           <View style={styles.search}>
             <Icon

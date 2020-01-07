@@ -10,7 +10,7 @@ class Book extends Component {
           <Image
             source={{uri: this.props.image}}
             style={{
-              width: 170,
+              width: 150,
               height: 200,
               backgroundColor: 'red',
               marginHorizontal: 2,
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     // width: 190,
     marginHorizontal: 10,
+    flex: 0.5,
   },
   name: {
     color: '#4a4a4a',
