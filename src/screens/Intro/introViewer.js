@@ -7,10 +7,11 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {Colors} from '../../themers';
+import {onChangeIntoMainScreen} from '../../navigation';
 
 export default class IntroViewer extends React.PureComponent {
-  test = () => {
-    alert('ok');
+  onPressed = () => {
+    onChangeIntoMainScreen();
   };
 
   render() {
@@ -35,14 +36,13 @@ export default class IntroViewer extends React.PureComponent {
           {data.description}
         </Text>
 
-        <View style={styles.startButton}>
-          {/* <TouchableWithoutFeedback onPress={this.onLogin}>
-            <Text style={styles.button}>Login</Text>
-          </TouchableWithoutFeedback> */}
-          <Text type="regular" style={styles.button}>
-            {data.text}
-          </Text>
-        </View>
+        {/* <View style={styles.startButton}>
+          <TouchableWithoutFeedback onPress={this.onPressed}>
+            <Text type="regular" style={styles.button}>
+              {data.text}
+            </Text>
+          </TouchableWithoutFeedback>
+        </View> */}
       </View>
     );
   }
@@ -74,9 +74,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    borderWidth: 1.5,
-    padding: 12,
-
+    // borderWidth: 1.5,
+    // padding: 13,
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',

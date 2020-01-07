@@ -6,7 +6,7 @@ import {
   AsyncStorage,
   ActivityIndicator,
 } from 'react-native';
-import {onChangeIntoMainScreen, onIntro} from './src/navigation';
+import {onIntro} from './src/navigation';
 
 export default class App extends Component {
   constructor() {
@@ -16,6 +16,10 @@ export default class App extends Component {
   componentDidMount() {
     // onChangeIntoMainScreen();
     onIntro();
+  }
+
+  componentWillMount() {
+    setTimeout(() => {}, 3000);
   }
 
   render() {
