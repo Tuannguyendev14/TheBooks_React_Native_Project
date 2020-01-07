@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Navigation} from 'react-native-navigation';
 import {
   Text,
   View,
@@ -30,6 +31,19 @@ export default class index extends Component {
     );
   };
 
+  changScreenShowAll = (data, title) => {
+    Navigation.setRoot({
+      root: {
+        component: {
+          name: 'ShowAllBook',
+          passProps: {
+            data: data,
+            title: title,
+          },
+        },
+      },
+    });
+  };
   render() {
     return (
       <View>
@@ -48,7 +62,13 @@ export default class index extends Component {
               <Text style={styles.text}>
                 Đọc nhiều{'('} {offlineData.Data.NewBooks.length} {')'}
               </Text>
-              <Text style={styles.showall}>Xem hết</Text>
+              <Text
+                style={styles.showall}
+                onPress={() =>
+                  this.changScreenShowAll(offlineData.Data.NewBooks, 'Đọc nhiều')
+                }>
+                Xem hết
+              </Text>
             </View>
 
             <FlatList
@@ -160,9 +180,6 @@ const styles = StyleSheet.create({
   rate: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  showflast: {
-    paddingRight: 15,
   },
   name: {
     color: '#4a4a4a',

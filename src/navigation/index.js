@@ -4,6 +4,8 @@ import App from '../../App';
 import Home from '../screens/Home';
 import Book from '../component/Book';
 import Search from '../screens/Home/Search';
+import ShowAllBook from '../screens/Home/ShowAllBook';
+
 
 function ReduxProvider(Component) {
   return props => (
@@ -27,4 +29,6 @@ export default () => {
   Navigation.registerComponent('Search', () => Search);
   Navigation.registerComponent('Home', () => Home);
   Navigation.registerComponent('Book', () => Book);
+  Navigation.registerComponent('ShowAllBook', () => ShowAllBook);
+
 };
