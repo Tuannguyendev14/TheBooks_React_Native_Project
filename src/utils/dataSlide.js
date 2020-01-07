@@ -9,7 +9,6 @@ const introData = [
     title: 'Tìm sách yêu thương',
     description:
       'Rất nhiều cuốn sách hay và chương trình thú vị được tích hợp trên hệ thống',
-    text: '',
   },
   {
     id: 2,
@@ -17,7 +16,6 @@ const introData = [
     title: 'Lưu vào giỏ và đặt sách',
     description:
       'Sách sẽ được giữ trong 2 giờ đồng hồ, hãy chắc chắn là bạn đến nhận kịp giờ',
-    text: '',
   },
   {
     id: 3,
@@ -25,7 +23,6 @@ const introData = [
     title: 'Tận hưởng cuốn sách',
     description:
       'Chọn một nơi yêu thích và tận hưởng cuốn sách bạn yêu thích thôi nào',
-    text: 'Bắt đầu',
   },
 ];
 
