@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
+import {connect} from 'react-redux';
+import {getBook} from '../../redux/bookRedux/actions';
 import {
   Text,
   View,
@@ -12,11 +14,14 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
-export default class index extends Component {
+//const data = this.props.user.data.Data;
+class index extends Component {
+  constructor(props) {
+    super(props);
+  }
   componentDidMount() {
-    var dd = offlineData.Data.CommonSearch;
-    //console.log(dd[2].Medias[0].ImageUrl);
-    console.log(dd);
+    var dataApi = this.props.onGetBooks();
+    console.log('full data', this.props.user.data.Data.NewBooks);
   }
   renderItem = ({item}) => {
     return (
@@ -71,29 +76,34 @@ export default class index extends Component {
           <View style={styles.main}>
             <View style={styles.category}>
               <Text style={styles.text}>
-                Đọc nhiều{'('} {offlineData.Data.NewBooks.length} {')'}
+                Sách mới{'('} {this.props.user.data.Data.NewBooks.length} {')'}
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    offlineData.Data.NewBooks,
-                    'Đọc nhiều',
+                    this.props.user.data.Data.NewBooks,
+                    'Sách mới',
                   )
                 }>
                 Xem hết
               </Text>
             </View>
-
             <FlatList
               style={styles.list}
-              data={Object.keys(offlineData.Data.NewBooks)}
+              data={Object.keys(this.props.user.data.Data.NewBooks)}
               renderItem={({item}) => (
                 <Book
-                  image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-                  name={offlineData.Data.NewBooks[item].Shelf.Name}
-                  author={offlineData.Data.NewBooks[item].Authors[0].Name}
-                  count={offlineData.Data.NewBooks[item].Shelf.BookCount}
+                  image={
+                    this.props.user.data.Data.NewBooks[item].Medias[0].ImageUrl
+                  }
+                  name={this.props.user.data.Data.NewBooks[item].Shelf.Name}
+                  author={
+                    this.props.user.data.Data.NewBooks[item].Authors[0].Name
+                  }
+                  count={
+                    this.props.user.data.Data.NewBooks[item].Shelf.BookCount
+                  }
                 />
               )}
               horizontal={true}
@@ -102,41 +112,14 @@ export default class index extends Component {
             />
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mới{'('} {offlineData.Data.NewBooks.length} {')'}
-              </Text>
-              <Text
-                style={styles.showall}
-                onPress={() =>
-                  this.changScreenShowAll(offlineData.Data.NewBooks, 'Sách mới')
-                }>
-                Xem hết
-              </Text>
-            </View>
-            <FlatList
-              style={styles.list}
-              data={Object.keys(offlineData.Data.NewBooks)}
-              renderItem={({item}) => (
-                <Book
-                  image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-                  name={offlineData.Data.NewBooks[item].Shelf.Name}
-                  author={offlineData.Data.NewBooks[item].Authors[0].Name}
-                  count={offlineData.Data.NewBooks[item].Shelf.BookCount}
-                />
-              )}
-              horizontal={true}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-            />
-            <View style={styles.category}>
-              <Text style={styles.text}>
-                Sách mượn nhiều{'('} {offlineData.Data.MostBorrowBooks.length}{' '}
-                {')'}
+                Sách mượn nhiều{'('}{' '}
+                {this.props.user.data.Data.MostBorrowBooks.length} {')'}
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    offlineData.Data.MostBorrowBooks,
+                    this.props.user.data.Data.MostBorrowBooks,
                     'Sách mượn nhiều',
                   )
                 }>
@@ -145,17 +128,24 @@ export default class index extends Component {
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(offlineData.Data.MostBorrowBooks)}
+              data={Object.keys(this.props.user.data.Data.MostBorrowBooks)}
               renderItem={({item}) => (
                 <Book
                   image={
-                    offlineData.Data.MostBorrowBooks[item].Medias[0].ImageUrl
+                    this.props.user.data.Data.MostBorrowBooks[item].Medias[0]
+                      .ImageUrl
                   }
-                  name={offlineData.Data.MostBorrowBooks[item].Shelf.Name}
+                  name={
+                    this.props.user.data.Data.MostBorrowBooks[item].Shelf.Name
+                  }
                   author={
-                    offlineData.Data.MostBorrowBooks[item].Authors[0].Name
+                    this.props.user.data.Data.MostBorrowBooks[item].Authors[0]
+                      .Name
                   }
-                  count={offlineData.Data.MostBorrowBooks[item].Shelf.BookCount}
+                  count={
+                    this.props.user.data.Data.MostBorrowBooks[item].Shelf
+                      .BookCount
+                  }
                 />
               )}
               horizontal={true}
@@ -224,3 +214,15 @@ const styles = StyleSheet.create({
     width: 150,
   },
 });
+const mapStateToProps = state => {
+  //console.log('render:', state.bookReducer.data.Data.NewBooks);
+  return {user: state.bookReducer};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetBooks: () => dispatch(getBook()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(index);

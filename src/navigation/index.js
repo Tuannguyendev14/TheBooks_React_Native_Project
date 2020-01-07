@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import App from '../../App';
-import Home from '../screens/Home';
+import Home from '../screens/Home/index';
 
 import Book from '../component/Book';
 import Search from '../screens/Home/Search';
@@ -20,34 +20,83 @@ import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
+import {Provider} from 'react-redux';
+import store from '../redux/store';
 
+function ReduxProvider(Component) {
+  return props => (
+    <Provider store={store}>
+      <Component {...props} />
+    </Provider>
+  );
+}
 export default () => {
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'App',
+          name: 'Home',
         },
       },
     });
   });
-
-  Navigation.registerComponent('Search', () => Search);
-
-  Navigation.registerComponent('Book', () => Book);
-  Navigation.registerComponent('ShowAllBook', () => ShowAllBook);
-
-  Navigation.registerComponent('App', () => App);
-  Navigation.registerComponent('Intro', () => Intro);
-  Navigation.registerComponent('Library', () => Library);
-  Navigation.registerComponent('Home', () => Home);
-  Navigation.registerComponent('Order', () => Order);
-  Navigation.registerComponent('Notification', () => Notification);
-  Navigation.registerComponent('Profile', () => Profile);
-  Navigation.registerComponent('SignIn', () => SignIn);
-  Navigation.registerComponent('SignUp', () => SignUp);
 };
 
+Navigation.registerComponent(
+  'Search',
+  () => ReduxProvider(Search),
+  () => Search,
+);
+Navigation.registerComponent(
+  'Home',
+  () => ReduxProvider(Home),
+  () => Home,
+);
+Navigation.registerComponent(
+  'ShowAllBook',
+  () => ReduxProvider(ShowAllBook),
+  () => ShowAllBook,
+);
+Navigation.registerComponent(
+  'App',
+  () => ReduxProvider(App),
+  () => App,
+);
+Navigation.registerComponent(
+  'Intro',
+  () => ReduxProvider(Intro),
+  () => Intro,
+);
+Navigation.registerComponent(
+  'Library',
+  () => ReduxProvider(Library),
+  () => Library,
+);
+Navigation.registerComponent(
+  'Order',
+  () => ReduxProvider(Order),
+  () => Order,
+);
+Navigation.registerComponent(
+  'Notification',
+  () => ReduxProvider(Notification),
+  () => Notification,
+);
+Navigation.registerComponent(
+  'Profile',
+  () => ReduxProvider(Profile),
+  () => Profile,
+);
+Navigation.registerComponent(
+  'SignIn',
+  () => ReduxProvider(SignIn),
+  () => SignIn,
+);
+Navigation.registerComponent(
+  'SignUp',
+  () => ReduxProvider(SignUp),
+  () => SignUp,
+);
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
     root: {
