@@ -75,35 +75,54 @@ class SignIn extends Component {
           <Input
             getData={e => this.getData('email', e)}
             title="Email*"
-            placeholder="Enter email..."
+            placeholder="Nhập email..."
+            autoCorrect={false}
+            keyboardType="email-address"
+            // onSubmitEditing={() => this.ref.txtPassword.focus()}
             error={errorEmail}
           />
           <Input
             getData={e => this.getData('password', e)}
-            title="Password*"
-            placeholder="Enter password..."
+            title="Mật khẩu*"
+            placeholder="Nhập mật khẩu..."
             error={errorPassword}
             returnKeyType="go"
             secureTextEntry={true}
             autoCorrect={false}
+            ref={'txtPassword'}
             // value={this.state.password}
           />
         </View>
 
         <View style={style.styleLoginButton}>
           <TouchableWithoutFeedback onPress={this.onSignin}>
-            <Text style={style.button}>Đăng nhập</Text>
+            <Text
+              style={{
+                ...style.button,
+                backgroundColor: '#2bb6f9',
+                borderColor: 'blue',
+                color: 'white',
+              }}>
+              Đăng nhập
+            </Text>
           </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback onPress={this.onSignin}>
-            <Text style={style.button}>Đăng kí</Text>
+          <TouchableWithoutFeedback onPress={this.onSignUp}>
+            <Text
+              style={{
+                ...style.button,
+                backgroundColor: 'white',
+                borderColor: 'blue',
+                color: 'gray',
+              }}>
+              Đăng kí
+            </Text>
           </TouchableWithoutFeedback>
         </View>
 
         <View style={style.styleViewText}>
-          <Text style={style.styleTextBottom}>Don't you have an Account?</Text>
           <TouchableWithoutFeedback onPress={this.onSignUp}>
-            <Text style={style.styleButtonSignUp}>Create Account</Text>
+            <Text style={style.styleButtonSignUp}>Quên mật khẩu?</Text>
           </TouchableWithoutFeedback>
         </View>
       </ScrollView>
@@ -119,9 +138,6 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     padding: 12,
     textAlign: 'center',
-    backgroundColor: '#2bb6f9',
-    borderColor: 'blue',
-    color: 'white',
     flex: 1,
     margin: 10,
   },
@@ -155,13 +171,8 @@ const style = StyleSheet.create({
     marginBottom: 50,
   },
   styleButtonSignUp: {
-    color: '#2bb6f9',
-    fontWeight: 'bold',
+    color: 'gray',
     fontSize: 20,
-  },
-  styleTextBottom: {
-    fontSize: 20,
-    textAlign: 'center',
   },
 });
 

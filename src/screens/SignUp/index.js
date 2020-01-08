@@ -43,7 +43,7 @@ class SignUp extends Component {
     });
   };
 
-  onLogIn = () => {
+  onSignin = () => {
     onSignIn();
   };
 
@@ -131,33 +131,33 @@ class SignUp extends Component {
         <View style={style.container}>
           <Input
             getData={e => this.getData('userName', e)}
-            title="User name *"
-            placeholder="Enter user name..."
+            title="Tên người dùng *"
+            placeholder="Nhập tên người dùng..."
             error={errorUserName}
           />
           <Input
             getData={e => this.getData('email', e)}
             title="Email *"
-            placeholder="Enter email..."
+            placeholder="Nhập email..."
             error={errorEmail}
           />
           <Input
             getData={e => this.getData('phone', e)}
-            title="Phone *"
-            placeholder="Enter phone number..."
+            title="Số điện thoại *"
+            placeholder="Nhập số điện thoại..."
             error={errorPhone}
             keyboardType="numeric"
           />
           <Input
             getData={e => this.getData('accountName', e)}
-            title="User account's name *"
-            placeholder="Enter user account's name..."
+            title="Tên tài khoản *"
+            placeholder="Nhập tên tài khoản..."
             error={errorAccountName}
           />
           <Input
             getData={e => this.getData('password', e)}
-            title="Password *"
-            placeholder="Enter Password..."
+            title="Mật khẩu *"
+            placeholder="Nhập mật khẩu..."
             error={errorPassword}
             returnKeyType="go"
             secureTextEntry={true}
@@ -165,25 +165,51 @@ class SignUp extends Component {
           />
           <Input
             getData={e => this.getData('confirmPass', e)}
-            title="Confirm password *"
-            placeholder="Confirm password ..."
+            title="Xác nhận mật khẩu *"
+            placeholder="Xác nhận mật khẩu..."
             error={errorConfirmPass}
             returnKeyType="go"
             secureTextEntry={true}
             autoCorrect={false}
           />
 
-          <View style={style.styleSignUpButton}>
+          <View style={style.styleLoginButton}>
+            <TouchableWithoutFeedback onPress={this.onSignin}>
+              <Text
+                style={{
+                  ...style.button,
+                  backgroundColor: 'white',
+                  borderColor: 'blue',
+                  color: 'gray',
+                }}>
+                Đăng nhập
+              </Text>
+            </TouchableWithoutFeedback>
+
             <TouchableWithoutFeedback onPress={this.onHandleSubmit}>
-              <Text style={style.button}>Create Account</Text>
+              <Text
+                style={{
+                  ...style.button,
+                  backgroundColor: '#2bb6f9',
+                  borderColor: 'blue',
+                  color: 'white',
+                }}>
+                Đăng kí
+              </Text>
             </TouchableWithoutFeedback>
           </View>
 
           <View style={style.styleViewText}>
-            <Text style={style.styleTextBottom}>Already have an account?</Text>
-            <TouchableWithoutFeedback onPress={this.onLogIn}>
-              <Text style={style.styleButtonSignUp}>Login</Text>
-            </TouchableWithoutFeedback>
+            <Text style={style.styleTextBottom}>
+              Bằng việc xác nhận tạo tài khoản, bạn đã đồng ý với các
+              <TouchableWithoutFeedback onPress={this.onLogIn}>
+                <Text style={style.styleButtonCommit}>
+                  {' '}
+                  điều khoản quy định{' '}
+                </Text>
+              </TouchableWithoutFeedback>
+              của chúng tôi
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -202,17 +228,18 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    marginTop: 50,
     marginBottom: 50,
+    marginHorizontal: 20,
   },
   styleTextBottom: {
-    fontSize: 20,
+    fontSize: 17,
+    color: 'gray',
     textAlign: 'center',
   },
-  styleButtonSignUp: {
+  styleButtonCommit: {
     color: '#2bb6f9',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 17,
   },
   container: {
     justifyContent: 'center',
@@ -249,6 +276,13 @@ const style = StyleSheet.create({
   styleImage: {
     width: '100%',
     height: 300,
+  },
+  styleLoginButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
   },
 });
 
