@@ -98,12 +98,12 @@ export default class Filter extends Component {
             <TouchableOpacity
               style={styles.item}
               onPress={() => this.onPressItem(item)}>
-              <Text style={styles.title1}>{item.Title}</Text>
+              <Text style={[styles.title, styles.title1]}>{item.Title}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.item}
               onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.titleAuthor1, styles.titleSize1]}>
+              <Text style={[styles.titleAuthor, styles.titleSize1]}>
                 {item.Authors[0].Name === null
                   ? 'No name'
                   : item.Authors[0].Name}
@@ -115,7 +115,7 @@ export default class Filter extends Component {
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber1, styles.titleSize1]}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Shelf.BookCount}
                 </Text>
               </TouchableOpacity>
@@ -123,7 +123,7 @@ export default class Filter extends Component {
             <View style={styles.containerNumber1}>
               <Icon name="ios-bookmarks" size={30} color="#fc9619" />
               <TouchableOpacity style={styles.item}>
-                <Text style={[styles.titleNumber1, styles.titleSize1]}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Quantity} quyển
                 </Text>
               </TouchableOpacity>
@@ -131,7 +131,7 @@ export default class Filter extends Component {
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber1, styles.titleSize1]}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Price}
                 </Text>
               </TouchableOpacity>
@@ -244,11 +244,15 @@ export default class Filter extends Component {
 const styles = StyleSheet.create({
   type: {
     marginLeft: -16,
+    borderColor: '#d6d7da',
   },
   sort: {
     flex: 3,
     borderWidth: 1.5,
-    borderColor: '#d6d7da',
+    borderRightColor: 'white',
+    borderLeftColor: 'white',
+    borderTopColor: '#d6d7da',
+    borderBottomColor: '#d6d7da',
   },
   choose: {
     flex: 1,
@@ -328,18 +332,10 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   title1: {
-    fontSize: 30,
-    marginTop: 4,
-    color: '#4a4a4a',
-  },
-  titleSize1: {
     fontSize: 25,
   },
-  titleNumber1: {
-    opacity: 0.3,
-  },
-  titleAuthor1: {
-    opacity: 0.3,
+  titleSize1: {
+    fontSize: 20,
   },
   imageThumbnail1: {
     flex: 1,
