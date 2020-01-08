@@ -13,6 +13,7 @@ import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Filter from './Filter';
+import {Dropdown} from 'react-native-material-dropdown';
 
 Navigation.registerComponent('Filter', () => Filter);
 
@@ -29,69 +30,77 @@ export const onChangeScreenFilter = () => {
   });
 };
 
-export default class Sort extends Component {
+export default class Categories extends Component {
+  renderItem = item => {
+    console.log('item: ', item);
+    return (
+      <View>
+        <View style={styles.containerMain1}>
+          <View style={styles.containerBody1}>
+            <TouchableOpacity
+              style={styles.item1}
+              onPress={() => this.onPressItem(item)}>
+              <Dropdown
+                label={item.Name}
+                // data={item.SubCategories.map(cate => ({
+                //     this.renderItem1(cate.ParentCategory.Name)
+                // }));}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  renderItem1 = item => {
+    console.log('item: ', item);
+    return (
+      <View>
+        <View style={styles.containerMain1}>
+          <View style={styles.containerBody1}>
+            <TouchableOpacity
+              style={styles.item1}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={styles.title1}>{item.Name}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   render() {
     const i = 0;
-    const DATA = offlineData.Data.NewBooks;
+    // const DATA = offlineData.Data.References.Categories[0].SubCategories;
+    const DATA = offlineData.Data.References.Categories;
+    console.log('data', DATA);
+
+    // const result = DATA.map(person => ({
+    //   renderItem(result),
+    // }));
     return (
       <View>
         <View style={styles.header}>
           <View style={styles.back}>
             <TouchableOpacity style={styles.item}>
-              <Icon name="ios-arrow-back" size={30} color="#5f5f5f" />
+              <Icon name="ios-close" size={40} color="#5f5f5f" />
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.title}>Tháng tư và tuổi trẻ</Text>
+            <Text style={styles.title}>Thể loại</Text>
           </View>
           <View style={styles.search}>
             <TouchableOpacity style={styles.item}>
-              <Icon name="ios-search" size={30} color="#5f5f5f" />
+              <Icon name="ios-refresh" size={30} color="#5f5f5f" />
             </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.header}>
-          <View style={[styles.type, styles.sort]}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 2}}>
-                <Text style={styles.styleText}>Thể loại</Text>
-              </View>
-              <View style={{marginTop: 8}}>
-                <Icon name="ios-funnel" size={30} color="#5f5f5f" />
-              </View>
-            </View>
-          </View>
-          <View style={styles.sort}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 2}}>
-                <Text style={styles.styleText}>Sắp xếp</Text>
-              </View>
-              <View style={{flexDirection: 'row', marginTop: 8}}>
-                <Icon name="ios-arrow-round-down" size={30} color="#5f5f5f" />
-                <Icon name="ios-arrow-round-up" size={30} color="#5f5f5f" />
-              </View>
-            </View>
-          </View>
-          <View style={styles.choose}>
-            <View style={{marginTop: 8}}>
-              <TouchableOpacity
-                onPress={() => {
-                  // this.setState({check: true});
-                  onChangeScreenFilter();
-                }}>
-                <Text>
-                  <Icon name="ios-list" size={30} color="#5f5f5f" />
-                </Text>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
         <View style={[styles.container, styles.item]}>
           <FlatList
             // data={DATA.map(item => Object.assign({key: item.Id}, item))}
             data={DATA}
-            renderItem={this.renderItem}
+            renderItem={({item}) => this.renderItem(item)}
             keyExtractor={(item, index) => index}
             // onEndThread => load data
             // onRefresh
@@ -136,10 +145,6 @@ const styles = StyleSheet.create({
     flex: 2,
     marginHorizontal: 16,
   },
-  containerNumber1: {
-    flexDirection: 'row',
-    flex: 2,
-  },
   item1: {
     flex: 1,
   },
@@ -147,20 +152,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginTop: 4,
     color: '#4a4a4a',
-  },
-  titleSize1: {
-    fontSize: 25,
-  },
-  titleNumber1: {
-    opacity: 0.3,
-  },
-  titleAuthor1: {
-    opacity: 0.3,
-  },
-  imageThumbnail1: {
-    flex: 1,
-    height: 200,
-    borderRadius: 15,
   },
   search: {
     flex: 1,
@@ -170,9 +161,5 @@ const styles = StyleSheet.create({
   back: {
     flex: 1,
     marginTop: 8,
-  },
-  styleText: {
-    textAlign: 'center',
-    marginTop: 15,
   },
 });

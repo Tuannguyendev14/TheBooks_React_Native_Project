@@ -213,8 +213,6 @@ export default class Filter extends Component {
           keyExtractor={(item, index) => index}
           key={2}
           numColumns={2}
-          // onEndThread => load data
-          // onRefresh
         />
       </View>
     );
