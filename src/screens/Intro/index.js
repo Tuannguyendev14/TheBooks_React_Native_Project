@@ -53,7 +53,7 @@ class Intro extends Component {
   render() {
     var elm =
       this.state.key === 2 ? (
-        <TouchableWithoutFeedback onPress={this.onPressed}>
+        <TouchableWithoutFeedback onPress={this.onPressed} style={{width: 90}}>
           <Text type="regular" style={styles.button}>
             Bắt đầu
           </Text>
