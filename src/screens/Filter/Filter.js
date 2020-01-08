@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  BackHandler,
 } from 'react-native';
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
@@ -22,7 +21,7 @@ export default class Filter extends Component {
     };
   }
 
-  renderItem = ({item}) => {
+  renderItemHorizontal = ({item}) => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
@@ -74,7 +73,7 @@ export default class Filter extends Component {
     );
   };
 
-  renderItem1 = ({item}) => {
+  renderItemVertical = ({item}) => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
@@ -94,7 +93,7 @@ export default class Filter extends Component {
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
-          <View style={styles.containerBody1}>
+          <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
               onPress={() => this.onPressItem(item)}>
@@ -196,11 +195,9 @@ export default class Filter extends Component {
             </View>
           </View>
         </View>
-        {/* <View style={[styles.container, styles.item, {backgroundColor: 'red'}]}> */}
         {this.state.check === false
           ? this.displayScreenHorizontal()
           : this.displayScreenVertical()}
-        {/* </View> */}
       </View>
     );
   }
@@ -212,7 +209,7 @@ export default class Filter extends Component {
         <FlatList
           // data={DATA.map(item => Object.assign({key: item.Id}, item))}
           data={DATA}
-          renderItem={this.renderItem}
+          renderItem={this.renderItemHorizontal}
           keyExtractor={(item, index) => index}
           key={2}
           numColumns={2}
@@ -229,7 +226,7 @@ export default class Filter extends Component {
       <View>
         <FlatList
           data={DATA}
-          renderItem={this.renderItem1}
+          renderItem={this.renderItemVertical}
           keyExtractor={(item, index) => index}
         />
       </View>
@@ -265,9 +262,6 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     height: 50,
     flexDirection: 'row',
-    marginHorizontal: 16,
-  },
-  container: {
     marginHorizontal: 16,
   },
   containerMain: {
@@ -322,10 +316,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 10,
     flex: 2,
-  },
-  containerBody1: {
-    flex: 2,
-    marginHorizontal: 16,
   },
   containerNumber1: {
     flexDirection: 'row',
