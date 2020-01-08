@@ -18,18 +18,6 @@ export default class index extends Component {
     //console.log(dd[2].Medias[0].ImageUrl);
     console.log(dd);
   }
-  renderItem = ({item}) => {
-    return (
-      <>
-        <Book
-          image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-          name={offlineData.Data.NewBooks[item].Shelf.Name}
-          author={offlineData.Data.NewBooks[item].Authors[0].Name}
-          count={offlineData.Data.NewBooks[item].Shelf.BookCount}
-        />
-      </>
-    );
-  };
 
   changScreenShowAll = (data, title) => {
     Navigation.showModal({
@@ -52,6 +40,7 @@ export default class index extends Component {
   };
 
   render() {
+    const {Data} = offlineData.Data.NewBooks;
     return (
       <View>
         <View style={styles.topbar}>
@@ -88,14 +77,17 @@ export default class index extends Component {
             <FlatList
               style={styles.list}
               data={Object.keys(offlineData.Data.NewBooks)}
-              renderItem={({item}) => (
-                <Book
-                  image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-                  name={offlineData.Data.NewBooks[item].Shelf.Name}
-                  author={offlineData.Data.NewBooks[item].Authors[0].Name}
-                  count={offlineData.Data.NewBooks[item].Shelf.BookCount}
-                />
-              )}
+              renderItem={({item}) => {
+                return (
+                  <Book
+                    image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
+                    name={offlineData.Data.NewBooks[item].Shelf.Name}
+                    author={offlineData.Data.NewBooks[item].Authors[0].Name}
+                    count={offlineData.Data.NewBooks[item].Shelf.BookCount}
+                    title={offlineData.Data.NewBooks[item].Title}
+                  />
+                );
+              }}
               horizontal={true}
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator={false}
@@ -121,6 +113,7 @@ export default class index extends Component {
                   name={offlineData.Data.NewBooks[item].Shelf.Name}
                   author={offlineData.Data.NewBooks[item].Authors[0].Name}
                   count={offlineData.Data.NewBooks[item].Shelf.BookCount}
+                  title={offlineData.Data.NewBooks[item].Title}
                 />
               )}
               horizontal={true}
@@ -156,6 +149,7 @@ export default class index extends Component {
                     offlineData.Data.MostBorrowBooks[item].Authors[0].Name
                   }
                   count={offlineData.Data.MostBorrowBooks[item].Shelf.BookCount}
+                  title={offlineData.Data.NewBooks[item].Title}
                 />
               )}
               horizontal={true}

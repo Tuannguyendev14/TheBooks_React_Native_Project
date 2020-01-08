@@ -14,6 +14,7 @@ import Intro from '../screens/Intro';
 import Library from '../screens/Library';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
+import Detail from '../screens/Home/Detail';
 
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
@@ -46,6 +47,7 @@ export default () => {
   Navigation.registerComponent('Profile', () => Profile);
   Navigation.registerComponent('SignIn', () => SignIn);
   Navigation.registerComponent('SignUp', () => SignUp);
+  Navigation.registerComponent('Detail', () => Detail);
 };
 
 export const onChangeIntoMainScreen = () => {
