@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 class Book extends Component {
   render() {
     return (
@@ -24,11 +24,12 @@ class Book extends Component {
           <Text style={styles.author}>{this.props.author}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
-          <Icon name="ios-star" size={11} color="#fc9619" />
-          <Icon name="ios-star" size={11} color="#fc9619" />
-          <Icon name="ios-star" size={11} color="#fc9619" />
-          <Icon name="ios-star" size={11} color="#fc9619" />
-          <Icon name="ios-star" size={11} color="#979797" />
+          <Icon1 name="star" size={11} color="#fc9619" />
+          <Icon1 name="star" size={11} color="#fc9619" />
+          <Icon1 name="star" size={11} color="#fc9619" />
+          <Icon1 name="star" size={11} color="#fc9619" />
+          <Icon1 name="star" size={11} color="#979797" />
+
           <Text style={styles.bookCount}>{this.props.count}</Text>
         </TouchableOpacity>
       </View>

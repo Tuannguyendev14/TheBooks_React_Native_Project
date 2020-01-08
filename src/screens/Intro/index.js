@@ -11,7 +11,8 @@ import IntroViewer from './introViewer';
 import {Swiper, TouchableButton} from '../../component';
 import {Colors, Metrics} from '../../themers';
 import {onChangeIntoMainScreen} from '../../navigation';
-
+import {connect} from 'react-redux';
+import {getBook} from '../../redux/bookRedux/actions';
 import introData from '../../utils/dataSlide';
 
 const {width} = Dimensions.get('window');
@@ -34,6 +35,7 @@ class Intro extends Component {
   }
 
   componentDidMount() {
+    this.props.onGetBooks();
     if (this.state.key === 2) {
       this.setState({
         isShowButton: true,
@@ -83,11 +85,18 @@ class Intro extends Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => {
+  console.log('render:', state.bookReducer);
+  return {book: state.bookReducer};
+};
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetBooks: () => dispatch(getBook()),
+  };
+};
 
-export default Intro;
+export default connect(mapStateToProps, mapDispatchToProps)(Intro);
 
 const styles = StyleSheet.create({
   wrapper: {},

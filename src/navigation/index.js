@@ -2,7 +2,7 @@ import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home/index';
-
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import Book from '../component/Book';
 import Search from '../screens/Home/Search';
 import ShowAllBook from '../screens/Home/ShowAllBook';
@@ -22,7 +22,7 @@ import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
-
+import {prepareIcons} from '../utils/icon';
 function ReduxProvider(Component) {
   return props => (
     <Provider store={store}>
@@ -35,7 +35,7 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'Home',
+          name: 'App',
         },
       },
     });
@@ -97,6 +97,126 @@ Navigation.registerComponent(
   () => ReduxProvider(SignUp),
   () => SignUp,
 );
+export const onChangeIntoMainScreen1 = async function() {
+  console.log('click on chang');
+  const icons = await prepareIcons();
+  Navigation.setRoot({
+    root: {
+      bottomTabs: {
+        children: [
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: 'Home',
+                    options: {
+                      topBar: {
+                        title: {
+                          text: '',
+                          alignment: 'center',
+                        },
+                        visible: false,
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Home',
+                  icon: icons.first,
+                  testID: 'FIRST_TAB_BAR_BUTTON',
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: 'Order',
+                    options: {
+                      topBar: {
+                        title: {
+                          text: '',
+                          alignment: 'center',
+                        },
+                      },
+                    },
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Order',
+                  icon: iconPaper,
+                  testID: 'SECOND_TAB_BAR_BUTTON',
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: 'Notification',
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Notification',
+                  icon: iconPaper,
+                  testID: 'THIRST_TAB_BAR_BUTTON',
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: 'Library',
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Library',
+                  icon: iconPaper,
+                  testID: 'FOUR_TAB_BAR_BUTTON',
+                },
+              },
+            },
+          },
+          {
+            stack: {
+              children: [
+                {
+                  component: {
+                    name: 'Profile',
+                  },
+                },
+              ],
+              options: {
+                bottomTab: {
+                  text: 'Profile',
+                  icon: iconPaper,
+                  testID: 'FOUR_TAB_BAR_BUTTON',
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
+};
+
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
     root: {
@@ -167,7 +287,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Notification',
-                  icon: iconNotification,
+                  icon: profile_icon,
                   testID: 'THIRST_TAB_BAR_BUTTON',
                 },
               },
@@ -185,7 +305,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Library',
-                  icon: iconLibrary,
+                  icon: iconNotification,
                   testID: 'FOUR_TAB_BAR_BUTTON',
                 },
               },
@@ -203,7 +323,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Profile',
-                  icon: profile_icon,
+                  icon: iconLibrary,
                   testID: 'FOUR_TAB_BAR_BUTTON',
                 },
               },

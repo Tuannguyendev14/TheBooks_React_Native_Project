@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
 //const data = this.props.user.data.Data;
@@ -20,17 +20,17 @@ class index extends Component {
     super(props);
   }
   componentDidMount() {
-    var dataApi = this.props.onGetBooks();
-    console.log('full data', this.props.user.data.Data.NewBooks);
+    //this.props.onGetBooks();
+    console.log('full data: ', this.props.book.data.Data);
   }
   renderItem = ({item}) => {
     return (
       <>
         <Book
-          image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-          name={offlineData.Data.NewBooks[item].Shelf.Name}
-          author={offlineData.Data.NewBooks[item].Authors[0].Name}
-          count={offlineData.Data.NewBooks[item].Shelf.BookCount}
+          image={this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl}
+          name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
+          author={this.props.book.data.Data.NewBooks[item].Authors[0].Name}
+          count={this.props.book.data.Data.NewBooks[item].Shelf.BookCount}
         />
       </>
     );
@@ -61,11 +61,11 @@ class index extends Component {
       <View>
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
-            <Icon name="ios-menu" size={37} color="#5f5f5f" />
+            <Icon1 name="ic-menu" size={30} color="#5f5f5f" />
           </View>
           <View style={styles.search}>
-            <Icon
-              name="ios-search"
+            <Icon1
+              name="ic-search"
               size={30}
               color="#5f5f5f"
               onPress={() => this.changScreenSearch()}
@@ -76,13 +76,13 @@ class index extends Component {
           <View style={styles.main}>
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mới{'('} {this.props.user.data.Data.NewBooks.length} {')'}
+                Sách mới{'('} {this.props.book.data.Data.NewBooks.length} {')'}
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    this.props.user.data.Data.NewBooks,
+                    this.props.book.data.Data.NewBooks,
                     'Sách mới',
                   )
                 }>
@@ -91,18 +91,18 @@ class index extends Component {
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(this.props.user.data.Data.NewBooks)}
+              data={Object.keys(this.props.book.data.Data.NewBooks)}
               renderItem={({item}) => (
                 <Book
                   image={
-                    this.props.user.data.Data.NewBooks[item].Medias[0].ImageUrl
+                    this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl
                   }
-                  name={this.props.user.data.Data.NewBooks[item].Shelf.Name}
+                  name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
                   author={
-                    this.props.user.data.Data.NewBooks[item].Authors[0].Name
+                    this.props.book.data.Data.NewBooks[item].Authors[0].Name
                   }
                   count={
-                    this.props.user.data.Data.NewBooks[item].Shelf.BookCount
+                    this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
                 />
               )}
@@ -113,13 +113,13 @@ class index extends Component {
             <View style={styles.category}>
               <Text style={styles.text}>
                 Sách mượn nhiều{'('}{' '}
-                {this.props.user.data.Data.MostBorrowBooks.length} {')'}
+                {this.props.book.data.Data.MostBorrowBooks.length} {')'}
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    this.props.user.data.Data.MostBorrowBooks,
+                    this.props.book.data.Data.MostBorrowBooks,
                     'Sách mượn nhiều',
                   )
                 }>
@@ -128,22 +128,22 @@ class index extends Component {
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(this.props.user.data.Data.MostBorrowBooks)}
+              data={Object.keys(this.props.book.data.Data.MostBorrowBooks)}
               renderItem={({item}) => (
                 <Book
                   image={
-                    this.props.user.data.Data.MostBorrowBooks[item].Medias[0]
+                    this.props.book.data.Data.MostBorrowBooks[item].Medias[0]
                       .ImageUrl
                   }
                   name={
-                    this.props.user.data.Data.MostBorrowBooks[item].Shelf.Name
+                    this.props.book.data.Data.MostBorrowBooks[item].Shelf.Name
                   }
                   author={
-                    this.props.user.data.Data.MostBorrowBooks[item].Authors[0]
+                    this.props.book.data.Data.MostBorrowBooks[item].Authors[0]
                       .Name
                   }
                   count={
-                    this.props.user.data.Data.MostBorrowBooks[item].Shelf
+                    this.props.book.data.Data.MostBorrowBooks[item].Shelf
                       .BookCount
                   }
                 />
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     //paddingLeft: 80,
     color: '#1d9dd8',
     flex: 1,
+    marginBottom: 10,
   },
   category: {
     alignItems: 'center',
@@ -171,7 +172,8 @@ const styles = StyleSheet.create({
   },
   scroll: {
     padding: 10,
-    marginBottom: 90,
+    marginBottom: 65,
+    paddingBottom: 100,
   },
   bookCount: {
     color: '#ababab',
@@ -215,8 +217,8 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  //console.log('render:', state.bookReducer.data.Data.NewBooks);
-  return {user: state.bookReducer};
+  console.log('render:', state.bookReducer);
+  return {book: state.bookReducer};
 };
 
 const mapDispatchToProps = dispatch => {
