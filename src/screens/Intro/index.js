@@ -12,6 +12,7 @@ import {Swiper, TouchableButton} from '../../component';
 import {Colors, Metrics} from '../../themers';
 
 import introData from '../../utils/dataSlide';
+import {onChangeIntoMainScreen} from '../../navigation';
 
 const {width} = Dimensions.get('window');
 
@@ -44,6 +45,10 @@ class Intro extends Component {
     }
     console.log(this.state.key);
   }
+
+  onPressed = () => {
+    onChangeIntoMainScreen();
+  };
 
   render() {
     var elm =
