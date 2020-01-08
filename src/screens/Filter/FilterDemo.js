@@ -12,16 +12,24 @@ import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Filter from './Filter';
 
-export default class Filter2 extends Component {
-  constructor(props) {
-    super(props);
+Navigation.registerComponent('Filter', () => Filter);
 
-    this.state = {
-      check: false,
-    };
-  }
+export const onChangeScreenFilter = () => {
+  Navigation.push(this.props.componentId, {
+    component: {
+      name: 'Filter',
+      options: {
+        topBar: {
+          visible: false,
+        },
+      },
+    },
+  });
+};
 
+export default class FilterDemo extends Component {
   renderItem = ({item}) => {
     let star = [];
     let starOutline = [];
@@ -34,24 +42,24 @@ export default class Filter2 extends Component {
       );
     }
     return (
-      <>
-        <View style={styles.containerMain}>
-          <TouchableOpacity style={styles.item}>
+      <View>
+        <View style={styles.containerMain1}>
+          <TouchableOpacity style={styles.item1}>
             <Image
-              style={styles.imageThumbnail}
+              style={styles.imageThumbnail1}
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
-          <View style={styles.containerBody}>
+          <View style={styles.containerBody1}>
             <TouchableOpacity
-              style={styles.item}
+              style={styles.item1}
               onPress={() => this.onPressItem(item)}>
-              <Text style={styles.title}>{item.Title}</Text>
+              <Text style={styles.title1}>{item.Title}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.item}
+              style={styles.item1}
               onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.titleAuthor, styles.titleSize]}>
+              <Text style={[styles.titleAuthor1, styles.titleSize1]}>
                 {item.Authors[0].Name === null
                   ? 'No name'
                   : item.Authors[0].Name}
@@ -61,20 +69,42 @@ export default class Filter2 extends Component {
               {star}
               {starOutline}
               <TouchableOpacity
-                style={styles.item}
+                style={styles.item1}
                 onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize]}>
+                <Text style={[styles.titleNumber1, styles.titleSize1]}>
                   {item.Shelf.BookCount}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.containerNumber1}>
+              <Icon name="ios-bookmarks" size={30} color="#fc9619" />
+              <TouchableOpacity style={styles.item1}>
+                <Text style={[styles.titleNumber1, styles.titleSize1]}>
+                  {item.Quantity} quyển
+                </Text>
+              </TouchableOpacity>
+              <Icon name="ios-pricetag" size={30} color="#fc9619" />
+              <TouchableOpacity
+                style={styles.item1}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber1, styles.titleSize1]}>
+                  {item.Price}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
-      </>
+      </View>
     );
   };
 
-  demo() {
+  render() {
+    const i = 0;
+    const DATA = offlineData.Data.NewBooks;
+    // const result = DATA.map(person => ({
+    //   renderItem(result),
+    // }));
+    // console.log(result);
     return (
       <View>
         <View style={styles.header}>
@@ -119,8 +149,8 @@ export default class Filter2 extends Component {
             <View style={{marginTop: 8}}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({check: !this.state.check});
-                  // onChangeScreenFilter();
+                  // this.setState({check: true});
+                  onChangeScreenFilter();
                 }}>
                 <Text>
                   <Icon name="ios-list" size={30} color="#5f5f5f" />
@@ -129,51 +159,18 @@ export default class Filter2 extends Component {
             </View>
           </View>
         </View>
-        {/* <View style={[styles.container, styles.item, {backgroundColor: 'red'}]}> */}
-        {this.state.check === false
-          ? this.displayScreenHorizontal()
-          : this.displayScreenVertical()}
-        {/* </View> */}
+        <View style={[styles.container, styles.item]}>
+          <FlatList
+            // data={DATA.map(item => Object.assign({key: item.Id}, item))}
+            data={DATA}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => index}
+            // onEndThread => load data
+            // onRefresh
+          />
+        </View>
       </View>
     );
-  }
-
-  displayScreenHorizontal() {
-    const DATA = offlineData.Data.NewBooks;
-    return (
-      <View>
-        <FlatList
-          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
-          data={DATA}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index}
-          key={2}
-          numColumns={2}
-          // onEndThread => load data
-          // onRefresh
-        />
-      </View>
-    );
-  }
-
-  displayScreenVertical() {
-    const DATA = offlineData.Data.NewBooks;
-    return (
-      <View>
-        <FlatList
-          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
-          data={DATA}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index}
-          // onEndThread => load data
-          // onRefresh
-        />
-      </View>
-    );
-  }
-
-  render() {
-    return <View>{this.demo()}</View>;
   }
 }
 
@@ -202,39 +199,40 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: 16,
   },
-  containerMain: {
+  containerMain1: {
+    flexDirection: 'row',
+    marginVertical: 10,
     flex: 2,
-    marginVertical: 16,
   },
-  containerBody: {
+  containerBody1: {
     flex: 2,
     marginHorizontal: 16,
   },
-  containerNumber: {
+  containerNumber1: {
     flexDirection: 'row',
     flex: 2,
   },
-  item: {
+  item1: {
     flex: 1,
   },
-  title: {
-    fontSize: 20,
+  title1: {
+    fontSize: 30,
     marginTop: 4,
     color: '#4a4a4a',
   },
-  titleSize: {
-    fontSize: 15,
+  titleSize1: {
+    fontSize: 25,
   },
-  titleNumber: {
+  titleNumber1: {
     opacity: 0.3,
   },
-  titleAuthor: {
+  titleAuthor1: {
     opacity: 0.3,
   },
-  imageThumbnail: {
+  imageThumbnail1: {
     flex: 1,
     height: 200,
-    marginHorizontal: 16,
+    borderRadius: 15,
   },
   search: {
     flex: 1,

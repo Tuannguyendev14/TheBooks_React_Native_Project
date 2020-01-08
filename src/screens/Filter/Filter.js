@@ -12,24 +12,16 @@ import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Filter2 from './Filter2';
-
-Navigation.registerComponent('Filter2', () => Filter2);
-
-export const onChangeScreenFilter = () => {
-  Navigation.push(this.props.componentId, {
-    component: {
-      name: 'Filter2',
-      options: {
-        topBar: {
-          visible: false,
-        },
-      },
-    },
-  });
-};
 
 export default class Filter extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      check: false,
+    };
+  }
+
   renderItem = ({item}) => {
     let star = [];
     let starOutline = [];
@@ -42,7 +34,7 @@ export default class Filter extends Component {
       );
     }
     return (
-      <View>
+      <>
         <View style={styles.containerMain}>
           <TouchableOpacity style={styles.item}>
             <Image
@@ -76,10 +68,62 @@ export default class Filter extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.containerNumber}>
+          </View>
+        </View>
+      </>
+    );
+  };
+
+  renderItem1 = ({item}) => {
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < item.OverallStarRating; i++) {
+      star.push(<Icon name="ios-star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
+      starOutline.push(
+        <Icon name="ios-star-outline" size={20} color="#fc9619" />,
+      );
+    }
+    return (
+      <View>
+        <View style={styles.containerMain1}>
+          <TouchableOpacity style={styles.item}>
+            <Image
+              style={styles.imageThumbnail1}
+              source={{uri: item.Medias[0].ImageUrl}}
+            />
+          </TouchableOpacity>
+          <View style={styles.containerBody1}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={styles.title1}>{item.Title}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.titleAuthor1, styles.titleSize1]}>
+                {item.Authors[0].Name === null
+                  ? 'No name'
+                  : item.Authors[0].Name}
+              </Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              {star}
+              {starOutline}
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber1, styles.titleSize1]}>
+                  {item.Shelf.BookCount}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.containerNumber1}>
               <Icon name="ios-bookmarks" size={30} color="#fc9619" />
               <TouchableOpacity style={styles.item}>
-                <Text style={[styles.titleNumber, styles.titleSize]}>
+                <Text style={[styles.titleNumber1, styles.titleSize1]}>
                   {item.Quantity} quyển
                 </Text>
               </TouchableOpacity>
@@ -87,7 +131,7 @@ export default class Filter extends Component {
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize]}>
+                <Text style={[styles.titleNumber1, styles.titleSize1]}>
                   {item.Price}
                 </Text>
               </TouchableOpacity>
@@ -98,13 +142,7 @@ export default class Filter extends Component {
     );
   };
 
-  render() {
-    const i = 0;
-    const DATA = offlineData.Data.NewBooks;
-    // const result = DATA.map(person => ({
-    //   renderItem(result),
-    // }));
-    // console.log(result);
+  demo() {
     return (
       <View>
         <View style={styles.header}>
@@ -149,8 +187,7 @@ export default class Filter extends Component {
             <View style={{marginTop: 8}}>
               <TouchableOpacity
                 onPress={() => {
-                  // this.setState({check: true});
-                  onChangeScreenFilter();
+                  this.setState({check: !this.state.check});
                 }}>
                 <Text>
                   <Icon name="ios-list" size={30} color="#5f5f5f" />
@@ -159,18 +196,48 @@ export default class Filter extends Component {
             </View>
           </View>
         </View>
-        <View style={[styles.container, styles.item]}>
-          <FlatList
-            // data={DATA.map(item => Object.assign({key: item.Id}, item))}
-            data={DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => index}
-            // onEndThread => load data
-            // onRefresh
-          />
-        </View>
+        {/* <View style={[styles.container, styles.item, {backgroundColor: 'red'}]}> */}
+        {this.state.check === false
+          ? this.displayScreenHorizontal()
+          : this.displayScreenVertical()}
+        {/* </View> */}
       </View>
     );
+  }
+
+  displayScreenHorizontal() {
+    const DATA = offlineData.Data.NewBooks;
+    return (
+      <View>
+        <FlatList
+          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
+          data={DATA}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index}
+          key={2}
+          numColumns={2}
+          // onEndThread => load data
+          // onRefresh
+        />
+      </View>
+    );
+  }
+
+  displayScreenVertical() {
+    const DATA = offlineData.Data.NewBooks;
+    return (
+      <View>
+        <FlatList
+          data={DATA}
+          renderItem={this.renderItem1}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    );
+  }
+
+  render() {
+    return <View>{this.demo()}</View>;
   }
 }
 
@@ -200,9 +267,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   containerMain: {
-    flexDirection: 'row',
-    marginVertical: 10,
     flex: 2,
+    marginVertical: 16,
   },
   containerBody: {
     flex: 2,
@@ -216,12 +282,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
     marginTop: 4,
     color: '#4a4a4a',
   },
   titleSize: {
-    fontSize: 25,
+    fontSize: 15,
   },
   titleNumber: {
     opacity: 0.3,
@@ -232,7 +298,7 @@ const styles = StyleSheet.create({
   imageThumbnail: {
     flex: 1,
     height: 200,
-    borderRadius: 15,
+    marginHorizontal: 16,
   },
   search: {
     flex: 1,
@@ -246,5 +312,38 @@ const styles = StyleSheet.create({
   styleText: {
     textAlign: 'center',
     marginTop: 15,
+  },
+
+  containerMain1: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    flex: 2,
+  },
+  containerBody1: {
+    flex: 2,
+    marginHorizontal: 16,
+  },
+  containerNumber1: {
+    flexDirection: 'row',
+    flex: 2,
+  },
+  title1: {
+    fontSize: 30,
+    marginTop: 4,
+    color: '#4a4a4a',
+  },
+  titleSize1: {
+    fontSize: 25,
+  },
+  titleNumber1: {
+    opacity: 0.3,
+  },
+  titleAuthor1: {
+    opacity: 0.3,
+  },
+  imageThumbnail1: {
+    flex: 1,
+    height: 200,
+    borderRadius: 15,
   },
 });
