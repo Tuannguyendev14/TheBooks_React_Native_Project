@@ -2,6 +2,11 @@ import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home';
+
+import Book from '../component/Book';
+import Search from '../screens/Home/Search';
+import ShowAllBook from '../screens/Home/ShowAllBook';
+
 import Order from '../screens/Order';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
@@ -26,6 +31,11 @@ export default () => {
       },
     });
   });
+
+  Navigation.registerComponent('Search', () => Search);
+
+  Navigation.registerComponent('Book', () => Book);
+  Navigation.registerComponent('ShowAllBook', () => ShowAllBook);
 
   Navigation.registerComponent('App', () => App);
   Navigation.registerComponent('Intro', () => Intro);
@@ -55,6 +65,7 @@ export const onChangeIntoMainScreen = () => {
                           text: '',
                           alignment: 'center',
                         },
+                        visible: false,
                       },
                     },
                   },
