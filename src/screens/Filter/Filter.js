@@ -12,11 +12,37 @@ import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Filter2 from './Filter2';
+
+Navigation.registerComponent('Filter2', () => Filter2);
+
+export const onChangeScreenFilter = () => {
+  Navigation.push(this.props.componentId, {
+    component: {
+      name: 'Filter2',
+      options: {
+        topBar: {
+          visible: false,
+        },
+      },
+    },
+  });
+};
 
 export default class Filter extends Component {
   renderItem = ({item}) => {
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < item.OverallStarRating; i++) {
+      star.push(<Icon name="ios-star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
+      starOutline.push(
+        <Icon name="ios-star-outline" size={20} color="#fc9619" />,
+      );
+    }
     return (
-      <>
+      <View>
         <View style={styles.containerMain}>
           <TouchableOpacity style={styles.item}>
             <Image
@@ -40,11 +66,8 @@ export default class Filter extends Component {
               </Text>
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
-              <Icon name="ios-star" size={30} color="#fc9619" />
-              <Icon name="ios-star" size={30} color="#fc9619" />
-              <Icon name="ios-star" size={30} color="#fc9619" />
-              <Icon name="ios-star" size={30} color="#fc9619" />
-              <Icon name="ios-star-outline" size={30} color="#fc9619" />
+              {star}
+              {starOutline}
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
@@ -71,7 +94,7 @@ export default class Filter extends Component {
             </View>
           </View>
         </View>
-      </>
+      </View>
     );
   };
 
@@ -83,7 +106,7 @@ export default class Filter extends Component {
     // }));
     // console.log(result);
     return (
-      <>
+      <View>
         <View style={styles.header}>
           <View style={styles.back}>
             <TouchableOpacity style={styles.item}>
@@ -124,7 +147,15 @@ export default class Filter extends Component {
           </View>
           <View style={styles.choose}>
             <View style={{marginTop: 8}}>
-              <Icon name="ios-list" size={30} color="#5f5f5f" />
+              <TouchableOpacity
+                onPress={() => {
+                  // this.setState({check: true});
+                  onChangeScreenFilter();
+                }}>
+                <Text>
+                  <Icon name="ios-list" size={30} color="#5f5f5f" />
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -138,7 +169,7 @@ export default class Filter extends Component {
             // onRefresh
           />
         </View>
-      </>
+      </View>
     );
   }
 }

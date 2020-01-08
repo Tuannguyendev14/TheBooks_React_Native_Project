@@ -12,7 +12,6 @@ import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {FilterScreen} from '../../navigation';
 
 export default class Filter2 extends Component {
   constructor(props) {
@@ -22,6 +21,7 @@ export default class Filter2 extends Component {
       check: false,
     };
   }
+
   renderItem = ({item}) => {
     let star = [];
     let starOutline = [];
@@ -74,10 +74,9 @@ export default class Filter2 extends Component {
     );
   };
 
-  render() {
-    const DATA = offlineData.Data.NewBooks;
+  demo() {
     return (
-      <>
+      <View>
         <View style={styles.header}>
           <View style={styles.back}>
             <TouchableOpacity style={styles.item}>
@@ -120,7 +119,8 @@ export default class Filter2 extends Component {
             <View style={{marginTop: 8}}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({check: true});
+                  this.setState({check: !this.state.check});
+                  // onChangeScreenFilter();
                 }}>
                 <Text>
                   <Icon name="ios-list" size={30} color="#5f5f5f" />
@@ -129,19 +129,51 @@ export default class Filter2 extends Component {
             </View>
           </View>
         </View>
-        <View style={[styles.container, styles.item]}>
-          <FlatList
-            // data={DATA.map(item => Object.assign({key: item.Id}, item))}
-            data={DATA}
-            renderItem={this.renderItem}
-            keyExtractor={(item, index) => index}
-            numColumns={2}
-            // onEndThread => load data
-            // onRefresh
-          />
-        </View>
-      </>
+        {/* <View style={[styles.container, styles.item, {backgroundColor: 'red'}]}> */}
+        {this.state.check === false
+          ? this.displayScreenHorizontal()
+          : this.displayScreenVertical()}
+        {/* </View> */}
+      </View>
     );
+  }
+
+  displayScreenHorizontal() {
+    const DATA = offlineData.Data.NewBooks;
+    return (
+      <View>
+        <FlatList
+          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
+          data={DATA}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index}
+          key={2}
+          numColumns={2}
+          // onEndThread => load data
+          // onRefresh
+        />
+      </View>
+    );
+  }
+
+  displayScreenVertical() {
+    const DATA = offlineData.Data.NewBooks;
+    return (
+      <View>
+        <FlatList
+          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
+          data={DATA}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index}
+          // onEndThread => load data
+          // onRefresh
+        />
+      </View>
+    );
+  }
+
+  render() {
+    return <View>{this.demo()}</View>;
   }
 }
 
