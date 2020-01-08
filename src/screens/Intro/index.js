@@ -10,6 +10,7 @@ import {
 import IntroViewer from './introViewer';
 import {Swiper, TouchableButton} from '../../component';
 import {Colors, Metrics} from '../../themers';
+import {onChangeIntoMainScreen} from '../../navigation';
 
 import introData from '../../utils/dataSlide';
 
@@ -44,6 +45,10 @@ class Intro extends Component {
     }
     console.log(this.state.key);
   }
+
+  onPressed = () => {
+    onChangeIntoMainScreen();
+  };
 
   render() {
     var elm =
