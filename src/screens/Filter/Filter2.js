@@ -12,9 +12,27 @@ import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {FilterScreen} from '../../navigation';
 
 export default class Filter2 extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      check: false,
+    };
+  }
   renderItem = ({item}) => {
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < item.OverallStarRating; i++) {
+      star.push(<Icon name="ios-star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
+      starOutline.push(
+        <Icon name="ios-star-outline" size={20} color="#fc9619" />,
+      );
+    }
     return (
       <>
         <View style={styles.containerMain}>
@@ -40,11 +58,8 @@ export default class Filter2 extends Component {
               </Text>
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
-              <Icon name="ios-star" size={20} color="#fc9619" />
-              <Icon name="ios-star" size={20} color="#fc9619" />
-              <Icon name="ios-star" size={20} color="#fc9619" />
-              <Icon name="ios-star" size={20} color="#fc9619" />
-              <Icon name="ios-star-outline" size={20} color="#fc9619" />
+              {star}
+              {starOutline}
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
@@ -60,12 +75,7 @@ export default class Filter2 extends Component {
   };
 
   render() {
-    const i = 0;
     const DATA = offlineData.Data.NewBooks;
-    // const result = DATA.map(person => ({
-    //   renderItem(result),
-    // }));
-    // console.log(result);
     return (
       <>
         <View style={styles.header}>
@@ -108,7 +118,14 @@ export default class Filter2 extends Component {
           </View>
           <View style={styles.choose}>
             <View style={{marginTop: 8}}>
-              <Icon name="ios-list" size={30} color="#5f5f5f" />
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({check: true});
+                }}>
+                <Text>
+                  <Icon name="ios-list" size={30} color="#5f5f5f" />
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -155,6 +172,7 @@ const styles = StyleSheet.create({
   },
   containerMain: {
     flex: 2,
+    marginVertical: 16,
   },
   containerBody: {
     flex: 2,

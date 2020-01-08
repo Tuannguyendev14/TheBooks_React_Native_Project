@@ -55,9 +55,7 @@ export default class Filter extends Component {
             </View>
             <View style={styles.containerNumber}>
               <Icon name="ios-bookmarks" size={30} color="#fc9619" />
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
+              <TouchableOpacity style={styles.item}>
                 <Text style={[styles.titleNumber, styles.titleSize]}>
                   {item.Quantity} quyển
                 </Text>
@@ -172,6 +170,7 @@ const styles = StyleSheet.create({
   },
   containerMain: {
     flexDirection: 'row',
+    marginVertical: 10,
     flex: 2,
   },
   containerBody: {
