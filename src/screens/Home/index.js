@@ -47,25 +47,25 @@ export default class index extends Component {
     Navigation.showModal({
       component: {
         name: 'Search',
-        
       },
     });
   };
-
-   
 
   render() {
     return (
       <View>
         <View style={styles.topbar}>
-          <Icon name="ios-options" size={30} color="#5f5f5f" />
-          <Icon
-            style={styles.search}
-            name="ios-search"
-            size={30}
-            color="#5f5f5f"
-            onPress={() => this.changScreenSearch()}
-          />
+          <View style={{flex: 1}}>
+            <Icon name="ios-options" size={30} color="#5f5f5f" />
+          </View>
+          <View style={styles.search}>
+            <Icon
+              name="ios-search"
+              size={30}
+              color="#5f5f5f"
+              onPress={() => this.changScreenSearch()}
+            />
+          </View>
         </View>
         <ScrollView style={styles.scroll}>
           <View style={styles.main}>
@@ -194,9 +194,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     //color: 'red',
     //flex: 1,
+    marginHorizontal: 10,
   },
   search: {
-    marginLeft: 230,
+    // marginLeft: 230,
+
+    alignItems: 'flex-end',
   },
   list: {
     paddingTop: 5,

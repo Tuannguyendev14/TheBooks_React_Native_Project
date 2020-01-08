@@ -21,7 +21,6 @@ import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
 
-
 export default () => {
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
@@ -33,9 +32,8 @@ export default () => {
     });
   });
 
-
   Navigation.registerComponent('Search', () => Search);
- 
+
   Navigation.registerComponent('Book', () => Book);
   Navigation.registerComponent('ShowAllBook', () => ShowAllBook);
 
@@ -67,6 +65,7 @@ export const onChangeIntoMainScreen = () => {
                           text: '',
                           alignment: 'center',
                         },
+                        visible: false,
                       },
                     },
                   },
@@ -219,5 +218,4 @@ export const onSignUp = () => {
       },
     },
   });
-
 };

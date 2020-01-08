@@ -10,7 +10,7 @@ class Book extends Component {
           <Image
             source={{uri: this.props.image}}
             style={{
-              width: 150,
+              width: 170,
               height: 200,
               backgroundColor: 'red',
               marginHorizontal: 2,
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
   showflast: {
     //padding: 10,
     marginRight: 15,
-    width: 150,
+    // width: 190,
+    marginHorizontal: 10,
   },
   name: {
     color: '#4a4a4a',
