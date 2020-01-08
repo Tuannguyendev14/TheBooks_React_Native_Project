@@ -49,6 +49,7 @@ class Intro extends Component {
   onPressed = () => {
     onChangeIntoMainScreen();
   };
+
   render() {
     var elm =
       this.state.key === 2 ? (
