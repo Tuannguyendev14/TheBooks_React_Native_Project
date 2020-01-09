@@ -43,7 +43,9 @@ export default class Categories extends Component {
         <SafeAreaView>
           <View style={styles.header}>
             <View style={styles.back}>
-              <TouchableOpacity style={styles.item}>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={Navigation.dismissModal(this.props.componentId)}>
                 <Icon name="ios-close" size={40} color="#5f5f5f" />
               </TouchableOpacity>
             </View>
@@ -93,9 +95,5 @@ const styles = StyleSheet.create({
   },
   container1: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
-  },
-  text: {
-    fontSize: 42,
   },
 });

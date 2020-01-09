@@ -11,6 +11,7 @@ import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {onCategories} from '../../navigation';
 
 export default class Filter extends Component {
   constructor(props) {
@@ -162,14 +163,18 @@ export default class Filter extends Component {
 
         <View style={styles.header}>
           <View style={[styles.type, styles.sort]}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 2}}>
-                <Text style={styles.styleText}>Thể loại</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => onCategories()}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{flex: 2}}>
+                  <Text style={styles.styleText}>Thể loại</Text>
+                </View>
+                <View style={{marginTop: 8}}>
+                  <Icon name="ios-funnel" size={30} color="#5f5f5f" />
+                </View>
               </View>
-              <View style={{marginTop: 8}}>
-                <Icon name="ios-funnel" size={30} color="#5f5f5f" />
-              </View>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.sort}>
             <View style={{flexDirection: 'row'}}>
