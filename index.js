@@ -1,7 +1,4 @@
-/**
- * @format
- */
 
-import {FilterScreen} from './src/navigation';
+import App from './src/navigation';
+App();
 
-FilterScreen();
