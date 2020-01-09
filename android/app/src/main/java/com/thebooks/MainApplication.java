@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
 import com.reactnativenavigation.react.ReactGateway;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 import java.lang.reflect.InvocationTargetException;
 
@@ -40,8 +41,10 @@ public class MainApplication extends NavigationApplication {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
-        // eg. new VectorIconsPackage()
-        new MainReactPackage(), new RNCViewPagerPackage());
+      new VectorIconsPackage(),
+      new MainReactPackage(),
+      new RNCViewPagerPackage()
+  );
   }
 
   @Override
