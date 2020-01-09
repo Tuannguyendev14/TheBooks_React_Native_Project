@@ -9,24 +9,25 @@ import {
 } from 'react-native';
 import Input from '../../component/Input';
 import {onSignIn} from '../../navigation';
-
 import IconLogin from '../../../assets/images/Intro/slide1.png';
+import {connect} from 'react-redux';
+import {addUser} from '../../redux/userRedux/actions';
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
     this.state = {
-      userName: '',
-      email: '',
-      phone: '',
-      accountName: '',
-      password: '',
-      confirmPass: '',
-      errorUserName: '',
+      firstName: 'Nguyen Huu',
+      lastName: 'Tuan',
+      phoneNumber: '0779763016',
+      email: 'tuan.nguyen.106902@gmail.com',
+      password: 'tuannui123',
+      confirmPass: 'tuannui123',
+      errorFirstName: '',
+      errorLastName: '',
       errorEmail: '',
-      errorPhone: '',
-      errorAccountName: '',
+      errorPhoneNumber: '',
       errorPassword: '',
       errorConfirmPass: '',
     };
@@ -34,10 +35,10 @@ class SignUp extends Component {
 
   onRestart = () => {
     this.setState({
-      errorUserName: '',
+      errorFirstName: '',
+      errorLastName: '',
       errorEmail: '',
-      errorPhone: '',
-      errorAccountName: '',
+      errorPhoneNumber: '',
       errorPassword: '',
       errorConfirmPass: '',
     });
@@ -49,10 +50,10 @@ class SignUp extends Component {
 
   onHandleSubmit = event => {
     var {
-      userName,
+      firstName,
+      lastName,
+      phoneNumber,
       email,
-      accountName,
-      phone,
       password,
       confirmPass,
     } = this.state;
@@ -61,8 +62,23 @@ class SignUp extends Component {
 
     this.onRestart();
 
-    if (userName === '') {
-      this.setState({errorUserName: 'Enter user name!'});
+    if (firstName === '') {
+      this.setState({errorFirstName: 'Enter first name!'});
+    }
+    if (lastName === '') {
+      this.setState({errorLastName: 'Enter last name!'});
+    }
+    if (phoneNumber === '') {
+      this.setState({errorPhoneNumber: 'Enter phone number!'});
+    }
+    if (isNaN(phoneNumber)) {
+      this.setState({errorPhoneNumber: 'Phone number is not valid!'});
+    }
+    if (phoneNumber.length > 10) {
+      this.setState({errorPhoneNumber: 'Phone number is not valid!'});
+    }
+    if (phoneNumber.length < 10) {
+      this.setState({errorPhoneNumber: 'Phone number is not valid!'});
     }
     if (email === '') {
       this.setState({errorEmail: 'Enter email!'});
@@ -70,21 +86,7 @@ class SignUp extends Component {
     if (formatEmail.test(email) === false) {
       this.setState({errorEmail: 'Email is not valid!'});
     }
-    if (accountName === '') {
-      this.setState({errorAccountName: 'Enter user account!'});
-    }
-    if (phone === '') {
-      this.setState({errorPhone: 'Enter email!'});
-    }
-    if (isNaN(phone)) {
-      this.setState({errorPhone: 'Phone number is not valid!'});
-    }
-    if (phone.length > 10) {
-      this.setState({errorPhone: 'Phone number is not valid!'});
-    }
-    if (phone.length < 10) {
-      this.setState({errorPhone: 'Phone number is not valid!'});
-    }
+
     if (password === '') {
       this.setState({errorPassword: 'Enter password!'});
     }
@@ -99,12 +101,14 @@ class SignUp extends Component {
     }
 
     const data = {
-      username: userName,
-      email: email,
-      password: password,
-      name: accountName,
-      phoneNumber: phone,
+      FirstName: firstName,
+      LastName: lastName,
+      PhoneNumber: phoneNumber,
+      Email: email,
+      Password: password,
     };
+    // console.log(this.state);
+    this.props.register(data);
   };
 
   getData = (key, value) => {
@@ -115,10 +119,10 @@ class SignUp extends Component {
 
   render() {
     var {
-      errorPhone,
-      errorUserName,
+      errorFirstName,
+      errorLastName,
       errorEmail,
-      errorAccountName,
+      errorPhoneNumber,
       errorPassword,
       errorConfirmPass,
     } = this.state;
@@ -130,29 +134,29 @@ class SignUp extends Component {
         </View>
         <View style={style.container}>
           <Input
-            getData={e => this.getData('userName', e)}
-            title="Tên người dùng *"
-            placeholder="Nhập tên người dùng..."
-            error={errorUserName}
+            getData={e => this.getData('firstName', e)}
+            title="First name *"
+            placeholder="Enter first name..."
+            error={errorFirstName}
           />
           <Input
-            getData={e => this.getData('email', e)}
-            title="Email *"
-            placeholder="Nhập email..."
-            error={errorEmail}
+            getData={e => this.getData('lastName', e)}
+            title="Last name *"
+            placeholder="Enter last name..."
+            error={errorLastName}
           />
           <Input
-            getData={e => this.getData('phone', e)}
-            title="Số điện thoại *"
-            placeholder="Nhập số điện thoại..."
-            error={errorPhone}
+            getData={e => this.getData('phoneNumber', e)}
+            title="Phone number *"
+            placeholder="Enter phone number..."
+            error={errorPhoneNumber}
             keyboardType="numeric"
           />
           <Input
-            getData={e => this.getData('accountName', e)}
-            title="Tên tài khoản *"
-            placeholder="Nhập tên tài khoản..."
-            error={errorAccountName}
+            getData={e => this.getData('email', e)}
+            title="Email*"
+            placeholder="Enter email..."
+            error={errorEmail}
           />
           <Input
             getData={e => this.getData('password', e)}
@@ -165,15 +169,15 @@ class SignUp extends Component {
           />
           <Input
             getData={e => this.getData('confirmPass', e)}
-            title="Xác nhận mật khẩu *"
-            placeholder="Xác nhận mật khẩu..."
+            title="Confirm password *"
+            placeholder="Confirm password ..."
             error={errorConfirmPass}
             returnKeyType="go"
             secureTextEntry={true}
             autoCorrect={false}
           />
 
-          <View style={style.styleLoginButton}>
+          <View style={style.styleViewButton}>
             <TouchableWithoutFeedback onPress={this.onSignin}>
               <Text
                 style={{
@@ -277,17 +281,18 @@ const style = StyleSheet.create({
     width: '100%',
     height: 300,
   },
-  styleLoginButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    margin: 10,
-  },
 });
 
-const mapStateToProps = state => {};
+const mapStateToProps = state => {
+  return {
+    userData: state.user,
+  };
+};
 
-const mapDispatchToProps = (dispatch, props) => {};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    register: data => dispatch(addUser(data)),
+  };
+};
 
-export default SignUp;
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

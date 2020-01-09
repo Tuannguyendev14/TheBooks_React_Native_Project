@@ -76,7 +76,7 @@ class Intro extends Component {
         </View>
 
         <View style={styles.startButton}>
-          <Text style={{backgroundColor: 'white', padding: 10}}>{elm}</Text>
+          <Text style={this.state.key === 2 ? styles.button : ''}>{elm}</Text>
         </View>
       </SafeAreaView>
     );
@@ -91,6 +91,9 @@ export default Intro;
 
 const styles = StyleSheet.create({
   wrapper: {},
+  button1: {
+    backgroundColor: 'red',
+  },
 
   bottomContainer: {
     height: 90,
