@@ -1,8 +1,8 @@
 import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import App from '../../App';
-import Home from '../screens/Home';
-
+import Home from '../screens/Home/index';
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import Book from '../component/Book';
 import Search from '../screens/Home/Search';
 import ShowAllBook from '../screens/Home/ShowAllBook';
@@ -22,9 +22,9 @@ import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
-
 import {Provider} from 'react-redux';
 import store from '../redux/store';
+import {prepareIcons} from '../utils/icon';
 
 function ReduxProvider(Component) {
   return props => (
@@ -44,6 +44,7 @@ export default () => {
       },
     });
   });
+};
 
   Navigation.registerComponent(
     'App',
@@ -200,7 +201,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Notification',
-                  icon: iconNotification,
+                  icon: profile_icon,
                   testID: 'THIRST_TAB_BAR_BUTTON',
                 },
               },
@@ -218,7 +219,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Library',
-                  icon: iconLibrary,
+                  icon: iconNotification,
                   testID: 'FOUR_TAB_BAR_BUTTON',
                 },
               },
@@ -236,7 +237,7 @@ export const onChangeIntoMainScreen = () => {
               options: {
                 bottomTab: {
                   text: 'Profile',
-                  icon: profile_icon,
+                  icon: iconLibrary,
                   testID: 'FOUR_TAB_BAR_BUTTON',
                 },
               },

@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint",
+    "generateIconFontComponent": "./node_modules/.bin/generate-icon ./src/assets/thebook-appicon/styles.css --componentName=thebook-appicon --fontFamily=thebook-appicon > ./node_modules/react-native-vector-icons/thebook-appicon.js",
+    "copyIconFontToNodeModules": "copy src/assets/thebook-appicon/thebook-appicon.ttf node_modules/react-native-vector-icons/Fonts"
   },
   "dependencies": {
     "@react-native-community/viewpager": "^3.3.0",

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
+import {connect} from 'react-redux';
+import {getBook} from '../../redux/bookRedux/actions';
 import {
   Text,
   View,
@@ -9,14 +11,17 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
-export default class index extends Component {
+//const data = this.props.user.data.Data;
+class index extends Component {
+  constructor(props) {
+    super(props);
+  }
   componentDidMount() {
-    var dd = offlineData.Data.CommonSearch;
-    //console.log(dd[2].Medias[0].ImageUrl);
-    console.log(dd);
+    //this.props.onGetBooks();
+    console.log('full data: ', this.props.book.data.Data);
   }
 
   changScreenShowAll = (data, title) => {
@@ -45,11 +50,11 @@ export default class index extends Component {
       <View>
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
-            <Icon name="ios-options" size={30} color="#5f5f5f" />
+            <Icon1 name="ic-menu" size={30} color="#5f5f5f" />
           </View>
           <View style={styles.search}>
-            <Icon
-              name="ios-search"
+            <Icon1
+              name="ic-search"
               size={30}
               color="#5f5f5f"
               onPress={() => this.changScreenSearch()}
@@ -60,60 +65,35 @@ export default class index extends Component {
           <View style={styles.main}>
             <View style={styles.category}>
               <Text style={styles.text}>
-                Đọc nhiều{'('} {offlineData.Data.NewBooks.length} {')'}
+                Sách mới{'('} {this.props.book.data.Data.NewBooks.length} {')'}
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    offlineData.Data.NewBooks,
-                    'Đọc nhiều',
+                    this.props.book.data.Data.NewBooks,
+                    'Sách mới',
                   )
                 }>
                 Xem hết
               </Text>
             </View>
-
             <FlatList
               style={styles.list}
-              data={Object.keys(offlineData.Data.NewBooks)}
-              renderItem={({item}) => {
-                return (
-                  <Book
-                    image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-                    name={offlineData.Data.NewBooks[item].Shelf.Name}
-                    author={offlineData.Data.NewBooks[item].Authors[0].Name}
-                    count={offlineData.Data.NewBooks[item].Shelf.BookCount}
-                    title={offlineData.Data.NewBooks[item].Title}
-                  />
-                );
-              }}
-              horizontal={true}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-            />
-            <View style={styles.category}>
-              <Text style={styles.text}>
-                Sách mới{'('} {offlineData.Data.NewBooks.length} {')'}
-              </Text>
-              <Text
-                style={styles.showall}
-                onPress={() =>
-                  this.changScreenShowAll(offlineData.Data.NewBooks, 'Sách mới')
-                }>
-                Xem hết
-              </Text>
-            </View>
-            <FlatList
-              style={styles.list}
-              data={Object.keys(offlineData.Data.NewBooks)}
+              data={Object.keys(this.props.book.data.Data.NewBooks)}
               renderItem={({item}) => (
                 <Book
-                  image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
-                  name={offlineData.Data.NewBooks[item].Shelf.Name}
-                  author={offlineData.Data.NewBooks[item].Authors[0].Name}
-                  count={offlineData.Data.NewBooks[item].Shelf.BookCount}
-                  title={offlineData.Data.NewBooks[item].Title}
+                  image={
+                    this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl
+                  }
+                  name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
+                  author={
+                    this.props.book.data.Data.NewBooks[item].Authors[0].Name
+                  }
+                  count={
+                    this.props.book.data.Data.NewBooks[item].Shelf.BookCount
+                  }
+                title={this.props.book.data.Data.NewBooks[item].Title}
                 />
               )}
               horizontal={true}
@@ -122,14 +102,14 @@ export default class index extends Component {
             />
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mượn nhiều{'('} {offlineData.Data.MostBorrowBooks.length}{' '}
-                {')'}
+                Sách mượn nhiều{'('}{' '}
+                {this.props.book.data.Data.MostBorrowBooks.length} {')'}
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    offlineData.Data.MostBorrowBooks,
+                    this.props.book.data.Data.MostBorrowBooks,
                     'Sách mượn nhiều',
                   )
                 }>
@@ -138,18 +118,25 @@ export default class index extends Component {
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(offlineData.Data.MostBorrowBooks)}
+              data={Object.keys(this.props.book.data.Data.MostBorrowBooks)}
               renderItem={({item}) => (
                 <Book
                   image={
-                    offlineData.Data.MostBorrowBooks[item].Medias[0].ImageUrl
+                    this.props.book.data.Data.MostBorrowBooks[item].Medias[0]
+                      .ImageUrl
                   }
-                  name={offlineData.Data.MostBorrowBooks[item].Shelf.Name}
+                  name={
+                    this.props.book.data.Data.MostBorrowBooks[item].Shelf.Name
+                  }
                   author={
-                    offlineData.Data.MostBorrowBooks[item].Authors[0].Name
+                    this.props.book.data.Data.MostBorrowBooks[item].Authors[0]
+                      .Name
                   }
-                  count={offlineData.Data.MostBorrowBooks[item].Shelf.BookCount}
-                  title={offlineData.Data.MostBorrowBooks[item].Title}
+                  count={
+                    this.props.book.data.Data.MostBorrowBooks[item].Shelf
+                      .BookCount
+                  }
+                 title={this.props.book.data.Data.MostBorrowBooks[item].Title}
                 />
               )}
               horizontal={true}
@@ -168,6 +155,7 @@ const styles = StyleSheet.create({
     //paddingLeft: 80,
     color: '#1d9dd8',
     flex: 1,
+    marginBottom: 10,
   },
   category: {
     alignItems: 'center',
@@ -175,7 +163,8 @@ const styles = StyleSheet.create({
   },
   scroll: {
     padding: 10,
-    marginBottom: 90,
+    marginBottom: 65,
+    paddingBottom: 100,
   },
   bookCount: {
     color: '#ababab',
@@ -218,3 +207,15 @@ const styles = StyleSheet.create({
     width: 150,
   },
 });
+const mapStateToProps = state => {
+  console.log('render:', state.bookReducer);
+  return {book: state.bookReducer};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetBooks: () => dispatch(getBook()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(index);

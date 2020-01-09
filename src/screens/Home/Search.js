@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {Navigation} from 'react-native-navigation';
 
 import {
@@ -33,9 +33,9 @@ export default class Search extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <Icon
-          name="ios-close"
-          size={41}
+        <Icon1
+          name="ic-delete"
+          size={28}
           color="#5f5f5f"
           onPress={() => this.backMainScreen()}
         />

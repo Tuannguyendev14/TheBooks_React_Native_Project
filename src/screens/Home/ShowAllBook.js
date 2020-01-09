@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, FlatList} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import {Navigation} from 'react-native-navigation';
 
@@ -16,8 +16,8 @@ export default class ShowAllBook extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Icon
-          name="ios-arrow-dropleft"
+        <Icon1
+          name="ic-back"
           size={30}
           color="#5f5f5f"
           onPress={() => this.backMainScreen()}
@@ -47,7 +47,7 @@ export default class ShowAllBook extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 10,
     paddingBottom: 80,
   },
   title1: {
