@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {onSignUp} from './../../navigation';
 import {connect} from 'react-redux';
-
+import {logIn} from '../../redux/userRedux/actions';
 import {
   StyleSheet,
   View,
@@ -18,8 +18,9 @@ class SignIn extends Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
-      email: '',
-      password: '',
+      grant_type: 'password',
+      userName: 'tuan.nguyendev14@gmail.com',
+      password: 'tuannui123',
     };
   }
 
@@ -35,25 +36,29 @@ class SignIn extends Component {
   };
 
   onSignin = event => {
-    var {email, password} = this.state;
+    var {userName, password} = this.state;
     this.onRestart();
 
-    if (email === '') {
-      this.setState({errorEmail: 'Enter email!'});
+    if (userName === '') {
+      this.setState({errorUserName: 'Nhập tên tài khoản!'});
     }
     if (password === '') {
-      this.setState({errorPassword: 'Enter password!'});
+      this.setState({errorPassword: 'Nhập password!'});
     }
     if (password.length < 8) {
-      this.setState({errorPassword: 'Password is not valid!'});
+      this.setState({errorPassword: 'Pasword không hợp lệ!'});
     }
     if (password.length > 64) {
-      this.setState({errorPassword: 'Password is not valid!'});
+      this.setState({errorPassword: 'Pasword không hợp lệ!'});
     } else {
       var user = {
-        email: this.state.email,
+        grant_type: this.state.grant_type,
+        username: this.state.userName,
         password: this.state.password,
       };
+      // console.log(user);
+
+      this.props.onLogInUser(user);
     }
   };
 
@@ -64,7 +69,7 @@ class SignIn extends Component {
   };
 
   render() {
-    var {errorEmail, errorPassword} = this.state;
+    var {errorUserName, errorPassword} = this.state;
     return (
       <ScrollView style={style.styleScroll}>
         <View style={style.styleViewImage}>
@@ -73,13 +78,13 @@ class SignIn extends Component {
 
         <View style={style.styleViewInput}>
           <Input
-            getData={e => this.getData('email', e)}
-            title="Email*"
-            placeholder="Nhập email..."
+            getData={e => this.getData('userName', e)}
+            title="Tài khoản*"
+            placeholder="Nhập tài khoản..."
             autoCorrect={false}
             keyboardType="email-address"
             // onSubmitEditing={() => this.ref.txtPassword.focus()}
-            error={errorEmail}
+            error={errorUserName}
           />
           <Input
             getData={e => this.getData('password', e)}
@@ -176,8 +181,18 @@ const style = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {};
+const mapStateToProps = state => {
+  return {
+    userData: state.user,
+  };
+};
 
-const mapDispatchToProps = (dispatch, props) => {};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onLogInUser: user => {
+      dispatch(logIn(user));
+    },
+  };
+};
 
-export default SignIn;
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
