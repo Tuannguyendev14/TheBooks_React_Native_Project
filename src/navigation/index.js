@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home';
 
@@ -17,15 +17,15 @@ import SignUp from '../screens/SignUp';
 import Detail from '../screens/Home/Detail';
 import ShoppingCard from '../screens/ShoppingCard';
 import Filter from '../screens/Filter/Filter';
-import Categories from '../screens/Filter/Categories'; 
-import Sort from '../screens/Filter/Sort'; 
+import Categories from '../screens/Filter/Categories';
+import Sort from '../screens/Filter/Sort';
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
 
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from '../redux/store';
 
 function ReduxProvider(Component) {
@@ -130,10 +130,10 @@ export default () => {
     () => ReduxProvider(ShoppingCard),
     () => ShoppingCard,
   );
-  
-Navigation.registerComponent('Filter', () => Filter); 
-Navigation.registerComponent('Categories', () => Categories);
-Navigation.registerComponent('Sort', () => Sort);
+
+  Navigation.registerComponent('Filter', () => Filter);
+  Navigation.registerComponent('Categories', () => Categories);
+  Navigation.registerComponent('Sort', () => Sort);
 };
 
 export const onChangeIntoMainScreen = () => {

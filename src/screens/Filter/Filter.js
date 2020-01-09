@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {offlineData} from '../../utils/offlineData';
-import {Navigation} from 'react-native-navigation';
-import {connect} from 'react-redux';
+import { offlineData } from '../../utils/offlineData';
+import { Navigation } from 'react-native-navigation';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {onCategories} from '../../navigation';
+import { onCategories } from '../../navigation';
 
 export default class Filter extends Component {
   constructor(props) {
@@ -22,7 +22,7 @@ export default class Filter extends Component {
     };
   }
 
-  renderItemHorizontal = ({item}) => {
+  renderItemHorizontal = ({ item }) => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
@@ -39,7 +39,7 @@ export default class Filter extends Component {
           <TouchableOpacity style={styles.item}>
             <Image
               style={styles.imageThumbnail}
-              source={{uri: item.Medias[0].ImageUrl}}
+              source={{ uri: item.Medias[0].ImageUrl }}
             />
           </TouchableOpacity>
           <View style={styles.containerBody}>
@@ -57,7 +57,7 @@ export default class Filter extends Component {
                   : item.Authors[0].Name}
               </Text>
             </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               {star}
               {starOutline}
               <TouchableOpacity
@@ -74,7 +74,7 @@ export default class Filter extends Component {
     );
   };
 
-  renderItemVertical = ({item}) => {
+  renderItemVertical = ({ item }) => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
@@ -91,7 +91,7 @@ export default class Filter extends Component {
           <TouchableOpacity style={styles.item}>
             <Image
               style={styles.imageThumbnail1}
-              source={{uri: item.Medias[0].ImageUrl}}
+              source={{ uri: item.Medias[0].ImageUrl }}
             />
           </TouchableOpacity>
           <View style={styles.containerBody}>
@@ -109,7 +109,7 @@ export default class Filter extends Component {
                   : item.Authors[0].Name}
               </Text>
             </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               {star}
               {starOutline}
               <TouchableOpacity
@@ -148,7 +148,7 @@ export default class Filter extends Component {
         <View style={styles.header}>
           <View style={styles.back}>
             <TouchableOpacity style={styles.item}>
-              <Icon name="ios-arrow-back" size={30} color="#5f5f5f" />
+              <Icon name="ios-arrow-back" size={30} color="#5f5f5f" onPress={() => this.backMainScreen()} />
             </TouchableOpacity>
           </View>
           <View>
@@ -156,7 +156,7 @@ export default class Filter extends Component {
           </View>
           <View style={styles.search}>
             <TouchableOpacity style={styles.item}>
-              <Icon name="ios-search" size={30} color="#5f5f5f" />
+              <Icon name="ios-search" size={30} color="#5f5f5f" onPress={() => this.changScreenSearch()} />
             </TouchableOpacity>
           </View>
         </View>
@@ -166,32 +166,32 @@ export default class Filter extends Component {
             <TouchableOpacity
               style={styles.button}
               onPress={() => onCategories()}>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 2}}>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ flex: 2 }}>
                   <Text style={styles.styleText}>Thể loại</Text>
                 </View>
-                <View style={{marginTop: 8}}>
+                <View style={{ marginTop: 8 }}>
                   <Icon name="ios-funnel" size={30} color="#5f5f5f" />
                 </View>
               </View>
             </TouchableOpacity>
           </View>
           <View style={styles.sort}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 2}}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 2 }}>
                 <Text style={styles.styleText}>Sắp xếp</Text>
               </View>
-              <View style={{flexDirection: 'row', marginTop: 8}}>
+              <View style={{ flexDirection: 'row', marginTop: 8 }}>
                 <Icon name="ios-arrow-round-down" size={30} color="#5f5f5f" />
                 <Icon name="ios-arrow-round-up" size={30} color="#5f5f5f" />
               </View>
             </View>
           </View>
           <View style={styles.choose}>
-            <View style={{marginTop: 8}}>
+            <View style={{ marginTop: 8 }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({check: !this.state.check});
+                  this.setState({ check: !this.state.check });
                 }}>
                 <Text>
                   <Icon name="ios-list" size={30} color="#5f5f5f" />
@@ -206,6 +206,18 @@ export default class Filter extends Component {
       </View>
     );
   }
+
+  backMainScreen = () => {
+    Navigation.dismissAllModals();
+  };
+
+  changScreenSearch = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Search',
+      },
+    });
+  };
 
   displayScreenHorizontal() {
     const DATA = offlineData.Data.NewBooks;
