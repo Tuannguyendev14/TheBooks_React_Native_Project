@@ -93,7 +93,7 @@ class index extends Component {
                   count={
                     this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
-                title={this.props.book.data.Data.NewBooks[item].Title}
+                  title={this.props.book.data.Data.NewBooks[item].Title}
                 />
               )}
               horizontal={true}
@@ -136,7 +136,7 @@ class index extends Component {
                     this.props.book.data.Data.MostBorrowBooks[item].Shelf
                       .BookCount
                   }
-                 title={this.props.book.data.Data.MostBorrowBooks[item].Title}
+                  title={this.props.book.data.Data.MostBorrowBooks[item].Title}
                 />
               )}
               horizontal={true}
