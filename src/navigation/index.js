@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import Filter from '../screens/Filter/Filter';
 import Categories from '../screens/Filter/Categories';
 import Sort from '../screens/Filter/Sort';
