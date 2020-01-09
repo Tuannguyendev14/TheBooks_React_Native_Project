@@ -141,7 +141,7 @@ export default class Filter extends Component {
     );
   };
 
-  demo() {
+  main() {
     return (
       <View>
         <View style={styles.header}>
@@ -232,7 +232,7 @@ export default class Filter extends Component {
   }
 
   render() {
-    return <View>{this.demo()}</View>;
+    return <View>{this.main()}</View>;
   }
 }
 
