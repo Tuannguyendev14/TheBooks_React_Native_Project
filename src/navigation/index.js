@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home/index';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
@@ -22,9 +22,9 @@ import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from '../redux/store';
-import {prepareIcons} from '../utils/icon';
+import { prepareIcons } from '../utils/icon';
 
 function ReduxProvider(Component) {
   return props => (
@@ -46,90 +46,90 @@ export default () => {
   });
 };
 
-  Navigation.registerComponent(
-    'App',
-    () => ReduxProvider(App),
-    () => App,
-  );
+Navigation.registerComponent(
+  'App',
+  () => ReduxProvider(App),
+  () => App,
+);
 
-  Navigation.registerComponent(
-    'Search',
-    () => ReduxProvider(Search),
-    () => Search,
-  );
+Navigation.registerComponent(
+  'Search',
+  () => ReduxProvider(Search),
+  () => Search,
+);
 
-  Navigation.registerComponent(
-    'Book',
-    () => ReduxProvider(Book),
-    () => Book,
-  );
+Navigation.registerComponent(
+  'Book',
+  () => ReduxProvider(Book),
+  () => Book,
+);
 
-  Navigation.registerComponent(
-    'ShowAllBook',
-    () => ReduxProvider(ShowAllBook),
-    () => ShowAllBook,
-  );
+Navigation.registerComponent(
+  'ShowAllBook',
+  () => ReduxProvider(ShowAllBook),
+  () => ShowAllBook,
+);
 
-  Navigation.registerComponent(
-    'Intro',
-    () => ReduxProvider(Intro),
-    () => Intro,
-  );
+Navigation.registerComponent(
+  'Intro',
+  () => ReduxProvider(Intro),
+  () => Intro,
+);
 
-  Navigation.registerComponent(
-    'Library',
-    () => ReduxProvider(Library),
-    () => Library,
-  );
+Navigation.registerComponent(
+  'Library',
+  () => ReduxProvider(Library),
+  () => Library,
+);
 
-  Navigation.registerComponent(
-    'Home',
-    () => ReduxProvider(Home),
-    () => Home,
-  );
+Navigation.registerComponent(
+  'Home',
+  () => ReduxProvider(Home),
+  () => Home,
+);
 
-  Navigation.registerComponent(
-    'Order',
-    () => ReduxProvider(Order),
-    () => Order,
-  );
+Navigation.registerComponent(
+  'Order',
+  () => ReduxProvider(Order),
+  () => Order,
+);
 
-  Navigation.registerComponent(
-    'Notification',
-    () => ReduxProvider(Notification),
-    () => Notification,
-  );
+Navigation.registerComponent(
+  'Notification',
+  () => ReduxProvider(Notification),
+  () => Notification,
+);
 
-  Navigation.registerComponent(
-    'Profile',
-    () => ReduxProvider(Profile),
-    () => Profile,
-  );
+Navigation.registerComponent(
+  'Profile',
+  () => ReduxProvider(Profile),
+  () => Profile,
+);
 
-  Navigation.registerComponent(
-    'SignIn',
-    () => ReduxProvider(SignIn),
-    () => SignIn,
-  );
+Navigation.registerComponent(
+  'SignIn',
+  () => ReduxProvider(SignIn),
+  () => SignIn,
+);
 
-  Navigation.registerComponent(
-    'SignUp',
-    () => ReduxProvider(SignUp),
-    () => SignUp,
-  );
+Navigation.registerComponent(
+  'SignUp',
+  () => ReduxProvider(SignUp),
+  () => SignUp,
+);
 
-  Navigation.registerComponent(
-    'Detail',
-    () => ReduxProvider(Detail),
-    () => Detail,
-  );
+Navigation.registerComponent(
+  'Detail',
+  () => ReduxProvider(Detail),
+  () => Detail,
+);
 
-  Navigation.registerComponent(
-    'ShoppingCard',
-    () => ReduxProvider(ShoppingCard),
-    () => ShoppingCard,
-  );
-};
+Navigation.registerComponent(
+  'ShoppingCard',
+  () => ReduxProvider(ShoppingCard),
+  () => ShoppingCard,
+);
+
 
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
