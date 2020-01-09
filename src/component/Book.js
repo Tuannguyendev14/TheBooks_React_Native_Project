@@ -1,14 +1,52 @@
 import React, {Component} from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
+
+import {Navigation} from 'react-native-navigation';
+
+
 class Book extends Component {
+  onPress = (image, name, title, author, count) => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'Detail',
+              passProps: {
+                data: image,
+                name: name,
+                namebook: title,
+                authorName: author,
+                rank: count,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
+
   render() {
+    const {image, name, author, count, title} = this.props;
+
     return (
       <View style={styles.showflast}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.onPress(image, name, title, author, count)}>
           <Image
-            source={{uri: this.props.image}}
+            source={{uri: image}}
             style={{
               width: 150,
               height: 200,
@@ -18,12 +56,13 @@ class Book extends Component {
           />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={styles.name}>{this.props.name}</Text>
+          <Text style={styles.name}>{name}</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={styles.author}>{this.props.author}</Text>
+          <Text style={styles.author}>{author}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
+
           <Icon1 name="star" size={11} color="#fc9619" />
           <Icon1 name="star" size={11} color="#fc9619" />
           <Icon1 name="star" size={11} color="#fc9619" />
@@ -31,11 +70,20 @@ class Book extends Component {
           <Icon1 name="star" size={11} color="#979797" />
 
           <Text style={styles.bookCount}>{this.props.count}</Text>
+
+//           <Icon name="ios-star" size={11} color="#fc9619" />
+//           <Icon name="ios-star" size={11} color="#fc9619" />
+//           <Icon name="ios-star" size={11} color="#fc9619" />
+//           <Icon name="ios-star" size={11} color="#fc9619" />
+//           <Icon name="ios-star" size={11} color="#979797" />
+//           <Text style={styles.bookCount}>{count}</Text>
+
         </TouchableOpacity>
       </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
   bookCount: {
     color: '#ababab',
@@ -72,6 +120,7 @@ const styles = StyleSheet.create({
     // width: 190,
     marginHorizontal: 10,
     flex: 0.5,
+
   },
   name: {
     color: '#4a4a4a',

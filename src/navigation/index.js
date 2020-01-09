@@ -14,6 +14,8 @@ import Intro from '../screens/Intro';
 import Library from '../screens/Library';
 import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
+import Detail from '../screens/Home/Detail';
+import ShoppingCard from '../screens/ShoppingCard';
 
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
@@ -23,6 +25,7 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
+
 function ReduxProvider(Component) {
   return props => (
     <Provider store={store}>
@@ -30,6 +33,7 @@ function ReduxProvider(Component) {
     </Provider>
   );
 }
+
 export default () => {
   Navigation.events().registerAppLaunchedListener(() => {
     Navigation.setRoot({
@@ -42,179 +46,89 @@ export default () => {
   });
 };
 
-Navigation.registerComponent(
-  'Search',
-  () => ReduxProvider(Search),
-  () => Search,
-);
-Navigation.registerComponent(
-  'Home',
-  () => ReduxProvider(Home),
-  () => Home,
-);
-Navigation.registerComponent(
-  'ShowAllBook',
-  () => ReduxProvider(ShowAllBook),
-  () => ShowAllBook,
-);
-Navigation.registerComponent(
-  'App',
-  () => ReduxProvider(App),
-  () => App,
-);
-Navigation.registerComponent(
-  'Intro',
-  () => ReduxProvider(Intro),
-  () => Intro,
-);
-Navigation.registerComponent(
-  'Library',
-  () => ReduxProvider(Library),
-  () => Library,
-);
-Navigation.registerComponent(
-  'Order',
-  () => ReduxProvider(Order),
-  () => Order,
-);
-Navigation.registerComponent(
-  'Notification',
-  () => ReduxProvider(Notification),
-  () => Notification,
-);
-Navigation.registerComponent(
-  'Profile',
-  () => ReduxProvider(Profile),
-  () => Profile,
-);
-Navigation.registerComponent(
-  'SignIn',
-  () => ReduxProvider(SignIn),
-  () => SignIn,
-);
-Navigation.registerComponent(
-  'SignUp',
-  () => ReduxProvider(SignUp),
-  () => SignUp,
-);
-export const onChangeIntoMainScreen1 = async function() {
-  console.log('click on chang');
-  const icons = await prepareIcons();
-  Navigation.setRoot({
-    root: {
-      bottomTabs: {
-        children: [
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Home',
-                    options: {
-                      topBar: {
-                        title: {
-                          text: '',
-                          alignment: 'center',
-                        },
-                        visible: false,
-                      },
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Home',
-                  icon: icons.first,
-                  testID: 'FIRST_TAB_BAR_BUTTON',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Order',
-                    options: {
-                      topBar: {
-                        title: {
-                          text: '',
-                          alignment: 'center',
-                        },
-                      },
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Order',
-                  icon: iconPaper,
-                  testID: 'SECOND_TAB_BAR_BUTTON',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Notification',
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Notification',
-                  icon: iconPaper,
-                  testID: 'THIRST_TAB_BAR_BUTTON',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Library',
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Library',
-                  icon: iconPaper,
-                  testID: 'FOUR_TAB_BAR_BUTTON',
-                },
-              },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Profile',
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Profile',
-                  icon: iconPaper,
-                  testID: 'FOUR_TAB_BAR_BUTTON',
-                },
-              },
-            },
-          },
-        ],
-      },
-    },
-  });
+  Navigation.registerComponent(
+    'App',
+    () => ReduxProvider(App),
+    () => App,
+  );
+
+  Navigation.registerComponent(
+    'Search',
+    () => ReduxProvider(Search),
+    () => Search,
+  );
+
+  Navigation.registerComponent(
+    'Book',
+    () => ReduxProvider(Book),
+    () => Book,
+  );
+
+  Navigation.registerComponent(
+    'ShowAllBook',
+    () => ReduxProvider(ShowAllBook),
+    () => ShowAllBook,
+  );
+
+  Navigation.registerComponent(
+    'Intro',
+    () => ReduxProvider(Intro),
+    () => Intro,
+  );
+
+  Navigation.registerComponent(
+    'Library',
+    () => ReduxProvider(Library),
+    () => Library,
+  );
+
+  Navigation.registerComponent(
+    'Home',
+    () => ReduxProvider(Home),
+    () => Home,
+  );
+
+  Navigation.registerComponent(
+    'Order',
+    () => ReduxProvider(Order),
+    () => Order,
+  );
+
+  Navigation.registerComponent(
+    'Notification',
+    () => ReduxProvider(Notification),
+    () => Notification,
+  );
+
+  Navigation.registerComponent(
+    'Profile',
+    () => ReduxProvider(Profile),
+    () => Profile,
+  );
+
+  Navigation.registerComponent(
+    'SignIn',
+    () => ReduxProvider(SignIn),
+    () => SignIn,
+  );
+
+  Navigation.registerComponent(
+    'SignUp',
+    () => ReduxProvider(SignUp),
+    () => SignUp,
+  );
+
+  Navigation.registerComponent(
+    'Detail',
+    () => ReduxProvider(Detail),
+    () => Detail,
+  );
+
+  Navigation.registerComponent(
+    'ShoppingCard',
+    () => ReduxProvider(ShoppingCard),
+    () => ShoppingCard,
+  );
 };
 
 export const onChangeIntoMainScreen = () => {

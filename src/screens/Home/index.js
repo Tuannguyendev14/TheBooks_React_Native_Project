@@ -23,18 +23,6 @@ class index extends Component {
     //this.props.onGetBooks();
     console.log('full data: ', this.props.book.data.Data);
   }
-  renderItem = ({item}) => {
-    return (
-      <>
-        <Book
-          image={this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl}
-          name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
-          author={this.props.book.data.Data.NewBooks[item].Authors[0].Name}
-          count={this.props.book.data.Data.NewBooks[item].Shelf.BookCount}
-        />
-      </>
-    );
-  };
 
   changScreenShowAll = (data, title) => {
     Navigation.showModal({
@@ -57,6 +45,7 @@ class index extends Component {
   };
 
   render() {
+    const {Data} = offlineData.Data.NewBooks;
     return (
       <View>
         <View style={styles.topbar}>
@@ -104,6 +93,7 @@ class index extends Component {
                   count={
                     this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
+                title={this.props.book.data.Data.NewBooks[item].Title}
                 />
               )}
               horizontal={true}
@@ -146,6 +136,7 @@ class index extends Component {
                     this.props.book.data.Data.MostBorrowBooks[item].Shelf
                       .BookCount
                   }
+                 title={this.props.book.data.Data.MostBorrowBooks[item].Title}
                 />
               )}
               horizontal={true}
