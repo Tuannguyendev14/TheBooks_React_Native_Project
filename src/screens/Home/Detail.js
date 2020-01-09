@@ -9,11 +9,14 @@ import {
   TouchableOpacity,
   TextInput,
   TouchableWithoutFeedback,
+  AsyncStorage,
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
+import Comment from './components/comment';
+import {onSignIn} from '../../navigation';
 
 export default class Detail extends Component {
   constructor(props) {
@@ -48,6 +51,50 @@ export default class Detail extends Component {
           data: data,
           title: title,
         },
+      },
+    });
+  };
+
+  onAddToCard = () => {
+    this.onCheck();
+  };
+
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      console.log(parsed);
+      if (parsed === null) {
+        // this.onPress();
+        onSignIn();
+      } else {
+        this.onPress();
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  onPress = () => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'ShoppingCard',
+              passProps: {},
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
       },
     });
   };
@@ -88,52 +135,39 @@ export default class Detail extends Component {
           </View>
         </View>
         <ScrollView orientation="vertical">
-          <View
-            style={{
-              marginHorizontal: 80,
-              marginVertical: 5,
-            }}>
+          <View style={style.viewimage}>
             <Image source={{uri: this.props.data}} style={style.styleImage} />
           </View>
 
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginHorizontal: 15,
-              marginVertical: 20,
-            }}>
+          <View style={style.viewBookInfor}>
             <Text style={style.styleText}>{this.props.namebook}</Text>
-            <Text style={{color: 'gray', fontSize: 19}}>
-              {this.props.authorName}
-            </Text>
+            <Text style={style.author}>{this.props.authorName}</Text>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginHorizontal: 15,
-              marginVertical: -20,
-            }}>
-            <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Icon name="ios-star" size={25} color="#fc9619" />
-              <Icon name="ios-star" size={25} color="#fc9619" />
-              <Icon name="ios-star" size={25} color="#fc9619" />
-              <Icon name="ios-star" size={25} color="#fc9619" />
-              <Icon name="ios-star" size={25} color="#979797" />
-              <Text style={{margin: 20}}>{this.props.rank}</Text>
-            </TouchableOpacity>
+          <View style={style.viewRank}>
+            <View>
+              <TouchableOpacity style={style.rank}>
+                <Icon name="ios-star" size={25} color="#fc9619" />
+                <Icon name="ios-star" size={25} color="#fc9619" />
+                <Icon name="ios-star" size={25} color="#fc9619" />
+                <Icon name="ios-star" size={25} color="#fc9619" />
+                <Icon name="ios-star" size={25} color="#979797" />
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                margin: 20,
+              }}>
+              <Icon name="ios-pricetags" size={22} color="#fc9619" />
+              <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
+                {this.props.rank}
+              </Text>
+            </View>
           </View>
 
-          <View
-            style={{
-              marginHorizontal: 15,
-              marginVertical: 35,
-              flexDirection: 'column',
-            }}>
+          <View style={style.viewSameBook}>
             <View style={style.category}>
               <Text style={style.text}>Sách tương tự</Text>
               <Text
@@ -176,6 +210,22 @@ export default class Detail extends Component {
             </TouchableWithoutFeedback>
             <Text>{elmTaskForm}</Text>
           </View>
+          <Comment />
+          <Comment />
+          <Text
+            style={{
+              textAlign: 'center',
+              color: '#2bb6f9',
+              fontSize: 18,
+              marginVertical: 20,
+            }}>
+            Xem tất cả nhận xét
+          </Text>
+          <View>
+            <TouchableWithoutFeedback onPress={this.onAddToCard}>
+              <Text style={style.buttonAddToCard}>Thêm vào giỏ</Text>
+            </TouchableWithoutFeedback>
+          </View>
         </ScrollView>
       </View>
     );
@@ -202,20 +252,14 @@ const style = StyleSheet.create({
     color: '#1d9dd8',
     flex: 1,
   },
-  text: {
-    fontSize: 23,
-    paddingTop: 5,
-    flex: 3.5,
-  },
 
   container: {
     flex: 1,
     marginTop: 1,
   },
   category: {
-    alignItems: 'center',
     flexDirection: 'row',
-    marginHorizontal: 20,
+    marginHorizontal: 5,
   },
 
   topbar: {
@@ -225,12 +269,6 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 10,
     marginVertical: 15,
-  },
-  styleSignUpButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    flexDirection: 'row',
   },
   button: {
     borderWidth: 1.5,
@@ -244,5 +282,52 @@ const style = StyleSheet.create({
     color: '#2bb6f9',
     flex: 1,
     margin: 10,
+  },
+  styleText: {
+    fontSize: 20,
+  },
+  viewimage: {
+    marginHorizontal: 80,
+    marginVertical: 5,
+  },
+  viewBookInfor: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 15,
+    marginVertical: 20,
+  },
+  author: {
+    color: 'gray',
+    fontSize: 19,
+  },
+  viewRank: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 15,
+    marginVertical: -20,
+  },
+  rank: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20.5,
+    paddingTop: 5,
+    flex: 3.5,
+    marginVertical: 10,
+  },
+  buttonAddToCard: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 15,
+    textAlign: 'center',
+    backgroundColor: 'orange',
+    color: 'white',
+  },
+  viewSameBook: {
+    marginHorizontal: 15,
+    marginVertical: 35,
+    flexDirection: 'column',
   },
 });

@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
   showflast: {
     //padding: 10,
     marginRight: 15,
-    width: 150,
+    width: 170,
+    flex: 1,
   },
   name: {
     color: '#4a4a4a',

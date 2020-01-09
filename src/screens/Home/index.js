@@ -149,7 +149,7 @@ export default class index extends Component {
                     offlineData.Data.MostBorrowBooks[item].Authors[0].Name
                   }
                   count={offlineData.Data.MostBorrowBooks[item].Shelf.BookCount}
-                  title={offlineData.Data.NewBooks[item].Title}
+                  title={offlineData.Data.MostBorrowBooks[item].Title}
                 />
               )}
               horizontal={true}
