@@ -79,15 +79,15 @@ project.ext.react = [
     entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
 ]
-project.ext.vectoricons = [
-    iconFontNames: [ 
-        'Ionicons.ttf', 
-        'FontAwesome.ttf',
-        'thebook-appicon.ttf'
-    ] // Name of the font files you want to copy
-]
+// project.ext.vectoricons = [
+//     iconFontNames: [ 
+//         'Ionicons.ttf', 
+//         'FontAwesome.ttf',
+//         'thebook-appicon.ttf'
+//     ] // Name of the font files you want to copy
+// ]
 
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+// apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -208,7 +208,6 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-navigation')
-    implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_viewpager')
     
     if (enableHermes) {
@@ -233,3 +232,13 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 //         iconFontNames: [ 'Ionicons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
 // ]
 // apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+project.ext.vectoricons = [
+    iconFontNames: [ 
+        'Ionicons.ttf', 
+        'FontAwesome.ttf',
+        'thebook-appicon.ttf'
+    ] // Name of the font files you want to copy
+]
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

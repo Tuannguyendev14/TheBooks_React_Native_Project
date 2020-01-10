@@ -1,5 +1,4 @@
-package com.thebooks;
-import com.oblador.vectoricons.VectorIconsPackage;
+package com.thebooks;
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
