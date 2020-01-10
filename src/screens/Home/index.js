@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
+import React, {Component} from 'react';
+import {Navigation} from 'react-native-navigation';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { offlineData } from '../../utils/offlineData';
+import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
 export default class index extends Component {
   componentDidMount() {
@@ -60,16 +60,20 @@ export default class index extends Component {
         ],
       },
     });
-  }
-
+  };
 
   render() {
-    const { Data } = offlineData.Data.NewBooks;
+    const {Data} = offlineData.Data.NewBooks;
     return (
       <View>
         <View style={styles.topbar}>
-          <View style={{ flex: 1 }}>
-            <Icon name="ios-options" size={30} color="#5f5f5f" onPress={() => this.changScreenSearchFilter()} />
+          <View style={{flex: 1}}>
+            <Icon
+              name="ios-options"
+              size={30}
+              color="#5f5f5f"
+              onPress={() => this.changScreenSearchFilter()}
+            />
           </View>
           <View style={styles.search}>
             <Icon
@@ -101,7 +105,7 @@ export default class index extends Component {
             <FlatList
               style={styles.list}
               data={Object.keys(offlineData.Data.NewBooks)}
-              renderItem={({ item }) => {
+              renderItem={({item}) => {
                 return (
                   <Book
                     image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
@@ -131,7 +135,7 @@ export default class index extends Component {
             <FlatList
               style={styles.list}
               data={Object.keys(offlineData.Data.NewBooks)}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <Book
                   image={offlineData.Data.NewBooks[item].Medias[0].ImageUrl}
                   name={offlineData.Data.NewBooks[item].Shelf.Name}
@@ -163,7 +167,7 @@ export default class index extends Component {
             <FlatList
               style={styles.list}
               data={Object.keys(offlineData.Data.MostBorrowBooks)}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <Book
                   image={
                     offlineData.Data.MostBorrowBooks[item].Medias[0].ImageUrl
