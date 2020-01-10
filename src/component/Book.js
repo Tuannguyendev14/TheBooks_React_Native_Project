@@ -6,7 +6,6 @@ import Icon1 from 'react-native-vector-icons/thebook-appicon';
 
 import {Navigation} from 'react-native-navigation';
 
-
 class Book extends Component {
   onPress = (image, name, title, author, count) => {
     Navigation.showModal({
@@ -62,7 +61,6 @@ class Book extends Component {
           <Text style={styles.author}>{author}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
-
           <Icon1 name="star" size={11} color="#fc9619" />
           <Icon1 name="star" size={11} color="#fc9619" />
           <Icon1 name="star" size={11} color="#fc9619" />
@@ -70,14 +68,6 @@ class Book extends Component {
           <Icon1 name="star" size={11} color="#979797" />
 
           <Text style={styles.bookCount}>{this.props.count}</Text>
-
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#979797" />
-//           <Text style={styles.bookCount}>{count}</Text>
-
         </TouchableOpacity>
       </View>
     );
@@ -120,7 +110,6 @@ const styles = StyleSheet.create({
     // width: 190,
     marginHorizontal: 10,
     flex: 0.5,
-
   },
   name: {
     color: '#4a4a4a',
