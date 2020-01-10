@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigation } from 'react-native-navigation';
+import {Navigation} from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home/index';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
@@ -16,15 +16,17 @@ import SignIn from '../screens/SignIn';
 import SignUp from '../screens/SignUp';
 import Detail from '../screens/Home/Detail';
 import ShoppingCard from '../screens/ShoppingCard';
+import Filter from '../screens/Filter/Filter';
+import Categories from '../screens/Filter/Categories';
 
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import store from '../redux/store';
-import { prepareIcons } from '../utils/icon';
+import {prepareIcons} from '../utils/icon';
 
 function ReduxProvider(Component) {
   return props => (
@@ -130,120 +132,136 @@ Navigation.registerComponent(
   () => ShoppingCard,
 );
 
+Navigation.registerComponent('Filter', () => Filter);
+Navigation.registerComponent('Categories', () => Categories);
 
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
     root: {
-      bottomTabs: {
-        children: [
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Home',
-                    options: {
-                      topBar: {
-                        title: {
-                          text: '',
-                          alignment: 'center',
-                        },
-                        visible: false,
-                      },
-                    },
-                  },
-                },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Home',
-                  icon: books_icon,
-                  testID: 'FIRST_TAB_BAR_BUTTON',
-                },
-              },
-            },
+      sideMenu: {
+        left: {
+          component: {
+            name: 'Categories',
           },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Order',
-                    options: {
-                      topBar: {
-                        title: {
-                          text: '',
-                          alignment: 'center',
+        },
+        center: {
+          bottomTabs: {
+            children: [
+              {
+                stack: {
+                  children: [
+                    {
+                      component: {
+                        name: 'Home',
+                        options: {
+                          topBar: {
+                            title: {
+                              text: '',
+                              alignment: 'center',
+                            },
+                            visible: false,
+                          },
                         },
                       },
                     },
+                  ],
+                  options: {
+                    bottomTab: {
+                      text: 'Home',
+                      icon: books_icon,
+                      testID: 'FIRST_TAB_BAR_BUTTON',
+                    },
                   },
                 },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Order',
-                  icon: iconPaper,
-                  testID: 'SECOND_TAB_BAR_BUTTON',
-                },
               },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Notification',
+              {
+                stack: {
+                  children: [
+                    {
+                      component: {
+                        name: 'Order',
+                        options: {
+                          topBar: {
+                            title: {
+                              text: '',
+                              alignment: 'center',
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  options: {
+                    bottomTab: {
+                      text: 'Order',
+                      icon: iconPaper,
+                      testID: 'SECOND_TAB_BAR_BUTTON',
+                    },
                   },
                 },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Notification',
-                  icon: profile_icon,
-                  testID: 'THIRST_TAB_BAR_BUTTON',
-                },
               },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Library',
+              {
+                stack: {
+                  children: [
+                    {
+                      component: {
+                        name: 'Notification',
+                      },
+                    },
+                  ],
+                  options: {
+                    bottomTab: {
+                      text: 'Notification',
+                      icon: profile_icon,
+                      testID: 'THIRST_TAB_BAR_BUTTON',
+                    },
                   },
                 },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Library',
-                  icon: iconNotification,
-                  testID: 'FOUR_TAB_BAR_BUTTON',
-                },
               },
-            },
-          },
-          {
-            stack: {
-              children: [
-                {
-                  component: {
-                    name: 'Profile',
+              {
+                stack: {
+                  children: [
+                    {
+                      component: {
+                        name: 'Library',
+                      },
+                    },
+                  ],
+                  options: {
+                    bottomTab: {
+                      text: 'Library',
+                      icon: iconNotification,
+                      testID: 'FOUR_TAB_BAR_BUTTON',
+                    },
                   },
                 },
-              ],
-              options: {
-                bottomTab: {
-                  text: 'Profile',
-                  icon: iconLibrary,
-                  testID: 'FOUR_TAB_BAR_BUTTON',
+              },
+              {
+                stack: {
+                  children: [
+                    {
+                      component: {
+                        name: 'Profile',
+                      },
+                    },
+                  ],
+                  options: {
+                    bottomTab: {
+                      text: 'Profile',
+                      icon: iconLibrary,
+                      testID: 'FOUR_TAB_BAR_BUTTON',
+                    },
+                  },
                 },
               },
-            },
+            ],
           },
-        ],
+        },
+        right: {
+          component: {
+            name: 'Categories',
+          },
+        },
       },
     },
   });

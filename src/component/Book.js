@@ -6,9 +6,8 @@ import Icon1 from 'react-native-vector-icons/thebook-appicon';
 
 import {Navigation} from 'react-native-navigation';
 
-
 class Book extends Component {
-  onPress = (image, name, title, author, count) => {
+  onPress = (image, name, title, author, count, OverallStarRating) => {
     Navigation.showModal({
       stack: {
         children: [
@@ -21,6 +20,7 @@ class Book extends Component {
                 namebook: title,
                 authorName: author,
                 rank: count,
+                OverallStarRating: OverallStarRating,
               },
               options: {
                 topBar: {
@@ -39,8 +39,17 @@ class Book extends Component {
   };
 
   render() {
-    const {image, name, author, count, title} = this.props;
+    const {image, name, author, count, title, OverallStarRating} = this.props;
+    console.log('ooooo', OverallStarRating);
 
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < OverallStarRating; i++) {
+      star.push(<Icon1 name="star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - OverallStarRating; i++) {
+      starOutline.push(<Icon1 name="ic-star-pre" size={20} color="#fc9619" />);
+    }
     return (
       <View style={styles.showflast}>
         <TouchableOpacity
@@ -62,22 +71,9 @@ class Book extends Component {
           <Text style={styles.author}>{author}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
-
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#979797" />
-
+          {star}
+          {starOutline}
           <Text style={styles.bookCount}>{this.props.count}</Text>
-
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#fc9619" />
-//           <Icon name="ios-star" size={11} color="#979797" />
-//           <Text style={styles.bookCount}>{count}</Text>
-
         </TouchableOpacity>
       </View>
     );
@@ -120,7 +116,6 @@ const styles = StyleSheet.create({
     // width: 190,
     marginHorizontal: 10,
     flex: 0.5,
-
   },
   name: {
     color: '#4a4a4a',

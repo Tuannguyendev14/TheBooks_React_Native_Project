@@ -24,6 +24,7 @@ export default class Detail extends Component {
     this.state = {
       comment: '',
       isShowForm: true,
+      heartEmpty: false,
     };
   }
   backMainScreen = () => {
@@ -126,12 +127,25 @@ export default class Detail extends Component {
             />
           </View>
           <View style={style.search}>
-            <Icon
-              name="ios-heart-empty"
-              size={30}
-              color="#5f5f5f"
-              onPress={() => this.changScreenSearch()}
-            />
+            {this.state.heartEmpty === false ? (
+              <Icon
+                name="ios-heart"
+                size={30}
+                color="red"
+                onPress={() => {
+                  this.setState({heartEmpty: !this.state.heartEmpty});
+                }}
+              />
+            ) : (
+              <Icon
+                name="ios-heart-empty"
+                size={30}
+                color="#fc9619"
+                onPress={() => {
+                  this.setState({heartEmpty: !this.state.heartEmpty});
+                }}
+              />
+            )}
           </View>
         </View>
         <ScrollView orientation="vertical">
@@ -195,6 +209,9 @@ export default class Detail extends Component {
                   }
                   count={offlineData.Data.MostBorrowBooks[item].Shelf.BookCount}
                   title={offlineData.Data.NewBooks[item].Title}
+                  OverallStarRating={
+                    offlineData.Data.NewBooks[item].OverallStarRating
+                  }
                 />
               )}
               horizontal={true}
