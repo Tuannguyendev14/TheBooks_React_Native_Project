@@ -44,6 +44,29 @@ class index extends Component {
     });
   };
 
+  changScreenSearchFilter = () => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'Filter',
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
+
   render() {
     const {Data} = offlineData.Data.NewBooks;
     return (
@@ -51,6 +74,7 @@ class index extends Component {
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
             <Icon1 name="ic-menu" size={30} color="#5f5f5f" />
+
           </View>
           <View style={styles.search}>
             <Icon1
