@@ -8,41 +8,46 @@ import {
   StyleSheet,
 } from 'react-native';
 import ImageProfile from '../../../../assets/images/Home/anh.jpg';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 
 export default class comment extends Component {
   render() {
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < this.props.star; i++) {
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - this.props.star; i++) {
+      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
+    }
+
     return (
       <View style={styles.container}>
         <View style={styles.ViewControl}>
-          <Image source={ImageProfile} style={styles.image} />
+          <Image source={{uri: this.props.userImage}} style={styles.image} />
           <View style={styles.viewname}>
-            <Text>Kim Dung</Text>
+            <Text>{this.props.name}</Text>
             <TouchableOpacity style={styles.star}>
-              <Icon name="ios-star" size={18} color="#fc9619" />
-              <Icon name="ios-star" size={18} color="#fc9619" />
-              <Icon name="ios-star" size={18} color="#fc9619" />
-              <Icon name="ios-star" size={18} color="#fc9619" />
-              <Icon name="ios-star" size={18} color="#979797" />
+              {star}
+              {starOutline}
             </TouchableOpacity>
           </View>
           <View style={styles.viewbutton}>
             <View>
               <TouchableWithoutFeedback>
-                <Icon name="ios-create" size={30} color="" />
+                <Icon name="ic-edit-comment" size={25} color="" />
               </TouchableWithoutFeedback>
             </View>
             <View>
               <TouchableWithoutFeedback>
-                <Icon name="ios-trash" size={30} color="" />
+                <Icon name="ic-trash" size={25} color="" />
               </TouchableWithoutFeedback>
             </View>
           </View>
         </View>
         <View style={styles.viewcomment}>
-          <Text style={styles.textcomment}>
-            Sách hay, cần có thêm nhiều đầu sách như vậy hơn nửa để tuổi trẻ ít
-            bị tẩy não. Sách rất rất chi là hay
+          <Text style={styles.textcomment} numberOfLines={2}>
+            {this.props.comment}
           </Text>
         </View>
       </View>

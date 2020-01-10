@@ -1,10 +1,11 @@
-
+import {all} from 'redux-saga/effects';
 import userSagas from './userRedux/saga';
 import bookSagas from './bookRedux/saga';
-import {all} from 'redux-saga/effects';
+import commentSagas from './commentRedux/saga';
+import relatedBookSagas from './relatedBooksRedux/saga';
 
 function* rootSagas() {
-  yield all([...userSagas, ...bookSagas]);
+  yield all([...userSagas, ...bookSagas, ...commentSagas, ...relatedBookSagas]);
 }
 
 export default rootSagas;

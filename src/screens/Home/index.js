@@ -2,15 +2,7 @@ import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
