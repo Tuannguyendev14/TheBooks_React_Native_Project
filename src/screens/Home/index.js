@@ -74,7 +74,6 @@ class index extends Component {
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
             <Icon1 name="ic-menu" size={30} color="#5f5f5f" />
-
           </View>
           <View style={styles.search}>
             <Icon1
@@ -118,6 +117,7 @@ class index extends Component {
                     this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
                   title={this.props.book.data.Data.NewBooks[item].Title}
+                  idBook={this.props.book.data.Data.NewBooks[item].Id}
                 />
               )}
               horizontal={true}
@@ -161,6 +161,7 @@ class index extends Component {
                       .BookCount
                   }
                   title={this.props.book.data.Data.MostBorrowBooks[item].Title}
+                  idBook={this.props.book.data.Data.MostBorrowBooks[item].Id}
                 />
               )}
               horizontal={true}

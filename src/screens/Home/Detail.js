@@ -24,6 +24,7 @@ export default class Detail extends Component {
     this.state = {
       comment: '',
       isShowForm: true,
+      IdBook: '',
     };
   }
   backMainScreen = () => {
@@ -98,6 +99,13 @@ export default class Detail extends Component {
       },
     });
   };
+
+  componentDidMount() {
+    let idBook = this.props.IdBook;
+    this.setState({
+      IdBook: idBook,
+    });
+  }
 
   render() {
     console.log(this.state);
