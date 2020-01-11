@@ -127,6 +127,7 @@ class Detail extends Component {
     const commentData = this.props.comment.data;
     console.log('Comment', commentData);
 
+    console.log(this.props.namebook);
     const elmTaskForm =
       this.state.isShowForm === true ? (
         <TextInput
@@ -180,7 +181,9 @@ class Detail extends Component {
           <View style={style.viewBookInfor}>
             <Text style={style.styleText}>{this.props.namebook}</Text>
             <Text style={style.author}>{this.props.authorName}</Text>
-            {/* <Text>{commentData}</Text> */}
+            <Text style={style.author}>{this.props.IdBook}</Text>
+            <Text style={style.author}>{this.props.OverallStarRating}</Text>
+            {/* <Text style={style.author}>{this.props.IdBook}</Text> */}
           </View>
 
           <View style={style.viewRank}>
@@ -231,10 +234,7 @@ class Detail extends Component {
                   image={item.Medias[0].ImageUrl}
                   name={item.Shelf.Name}
                   author={item.Authors[0].Name}
-                  OverallStarRating={
-                    item.OverallStarRating
-                  }
-
+                  OverallStarRating={item.OverallStarRating}
                 />
               )}
               horizontal={true}

@@ -7,7 +7,7 @@ import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {Navigation} from 'react-native-navigation';
 
 class Book extends Component {
-  onPress = (image, name, title, author, count, OverallStarRating, idBook) => {
+  onPress = (image, name, title, author, count, idBook, OverallStarRating) => {
     Navigation.showModal({
       stack: {
         children: [
@@ -20,8 +20,8 @@ class Book extends Component {
                 namebook: title,
                 authorName: author,
                 rank: count,
-                OverallStarRating: OverallStarRating,
                 IdBook: idBook,
+                OverallStarRating: OverallStarRating,
               },
               options: {
                 topBar: {
@@ -40,8 +40,16 @@ class Book extends Component {
   };
 
   render() {
-    const {image, name, author, count, title, idBook, OverallStarRating} = this.props;
- 
+    const {
+      image,
+      name,
+      author,
+      count,
+      title,
+      idBook,
+      OverallStarRating,
+    } = this.props;
+
     let star = [];
     let starOutline = [];
     for (let i = 0; i < OverallStarRating; i++) {
@@ -54,7 +62,15 @@ class Book extends Component {
       <View style={styles.showflast}>
         <TouchableOpacity
           onPress={() =>
-            this.onPress(image, name, title, author, count, idBook)
+            this.onPress(
+              image,
+              name,
+              title,
+              author,
+              count,
+              idBook,
+              OverallStarRating,
+            )
           }>
           <Image
             source={{uri: image}}
@@ -71,11 +87,13 @@ class Book extends Component {
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.author}>{author}</Text>
+          <Text style={styles.author}>{idBook}</Text>
+          <Text style={styles.author}>{OverallStarRating}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
           {star}
           {starOutline}
-          <Text style={styles.bookCount}>{this.props.count}</Text>
+          <Text style={styles.bookCount}>{count}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -114,7 +132,7 @@ const styles = StyleSheet.create({
   },
   showflast: {
     width: 170,
-    marginVertical: 10,
+    marginVertical: 20,
   },
   name: {
     color: '#4a4a4a',

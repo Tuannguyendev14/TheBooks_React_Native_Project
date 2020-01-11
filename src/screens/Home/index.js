@@ -40,7 +40,7 @@ class index extends Component {
   changScreenFilter = () => {
     Navigation.showModal({
       component: {
-        name: 'Filter', 
+        name: 'Filter',
       },
     });
   };
@@ -100,13 +100,11 @@ class index extends Component {
                     this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
                   title={this.props.book.data.Data.NewBooks[item].Title}
-
                   OverallStarRating={
                     this.props.book.data.Data.NewBooks[item].OverallStarRating
                   }
-
+                  Price={this.props.book.data.Data.NewBooks[item].Price}
                   idBook={this.props.book.data.Data.NewBooks[item].Id}
-
                 />
               )}
               horizontal={true}
@@ -148,6 +146,9 @@ class index extends Component {
                   count={
                     this.props.book.data.Data.MostBorrowBooks[item].Shelf
                       .BookCount
+                  }
+                  OverallStarRating={
+                    this.props.book.data.Data.NewBooks[item].OverallStarRating
                   }
                   title={this.props.book.data.Data.MostBorrowBooks[item].Title}
                   idBook={this.props.book.data.Data.MostBorrowBooks[item].Id}
