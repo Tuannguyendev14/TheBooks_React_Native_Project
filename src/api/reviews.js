@@ -1,13 +1,9 @@
 import callApi from './utils';
 
-export const register = data => {
-  return callApi('/api/users', 'POST', data);
+export const getComments = idBook => {
+  return callApi(`/api/Reviews/?bookId=${idBook}`, 'GET');
 };
 
-// export const login = data => {
-//   return callApi('/api/Token', 'POST', data);
-// };
-
-// export const logout = () => {
-//   return callApi('/api/Token', 'DELETE');
-// };
+export const addComment = data => {
+  return callApi('/api/reviews', 'POST', data);
+};

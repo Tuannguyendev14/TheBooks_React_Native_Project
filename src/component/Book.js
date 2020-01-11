@@ -109,10 +109,8 @@ const styles = StyleSheet.create({
   },
   showflast: {
     //padding: 10,
-    marginRight: 15,
-    // width: 190,
-    marginHorizontal: 10,
-    flex: 0.5,
+    width: 170,
+    marginVertical: 10,
   },
   name: {
     color: '#4a4a4a',
