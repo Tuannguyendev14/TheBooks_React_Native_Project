@@ -16,12 +16,23 @@ import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {List} from 'react-native-paper';
-// import Constants from 'expo-constants';
 
 export default class Categories extends Component {
   constructor(props) {
     super(props);
   }
+
+
+  componentDidMount() {
+    const DATA = offlineData.Data.References.Categories;
+    console.log('Log at Categories', DATA);
+    return (
+      <View>
+        <Text>aa</Text>
+      </View>
+    );
+  }
+
 
   renderItem = DATA => {
     return DATA.map(item => (
@@ -39,7 +50,8 @@ export default class Categories extends Component {
     console.log('data', DATA);
 
     return (
-      <View>
+
+      <View style={{backgroundColor: 'white', flex: 1}}>
         <SafeAreaView>
           <View style={styles.header}>
             <View style={styles.back}>

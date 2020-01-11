@@ -28,7 +28,7 @@ export default class Search extends Component {
   };
 
   backMainScreen = () => {
-    Navigation.dismissAllModals();
+    Navigation.dismissModal(this.props.componentId);
   };
   render() {
     return (

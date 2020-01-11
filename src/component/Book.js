@@ -7,7 +7,7 @@ import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {Navigation} from 'react-native-navigation';
 
 class Book extends Component {
-  onPress = (image, name, title, author, count, idBook) => {
+  onPress = (image, name, title, author, count, OverallStarRating, idBook) => {
     Navigation.showModal({
       stack: {
         children: [
@@ -20,6 +20,7 @@ class Book extends Component {
                 namebook: title,
                 authorName: author,
                 rank: count,
+                OverallStarRating: OverallStarRating,
                 IdBook: idBook,
               },
               options: {
@@ -39,8 +40,16 @@ class Book extends Component {
   };
 
   render() {
-    const {image, name, author, count, title, idBook} = this.props;
-
+    const {image, name, author, count, title, idBook, OverallStarRating} = this.props;
+ 
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < OverallStarRating; i++) {
+      star.push(<Icon1 name="star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - OverallStarRating; i++) {
+      starOutline.push(<Icon1 name="ic-star-pre" size={20} color="#fc9619" />);
+    }
     return (
       <View style={styles.showflast}>
         <TouchableOpacity
@@ -64,12 +73,8 @@ class Book extends Component {
           <Text style={styles.author}>{author}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#fc9619" />
-          <Icon1 name="star" size={11} color="#979797" />
-
+          {star}
+          {starOutline}
           <Text style={styles.bookCount}>{this.props.count}</Text>
         </TouchableOpacity>
       </View>
@@ -108,7 +113,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   showflast: {
-    //padding: 10,
     width: 170,
     marginVertical: 10,
   },

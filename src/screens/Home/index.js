@@ -6,6 +6,7 @@ import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
+
 //const data = this.props.user.data.Data;
 class index extends Component {
   constructor(props) {
@@ -36,25 +37,10 @@ class index extends Component {
     });
   };
 
-  changScreenSearchFilter = () => {
+  changScreenFilter = () => {
     Navigation.showModal({
-      stack: {
-        children: [
-          {
-            component: {
-              name: 'Filter',
-              options: {
-                topBar: {
-                  title: {
-                    text: '',
-                    alignment: 'center',
-                  },
-                  visible: false,
-                },
-              },
-            },
-          },
-        ],
+      component: {
+        name: 'Filter', 
       },
     });
   };
@@ -65,7 +51,12 @@ class index extends Component {
       <View>
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
-            <Icon1 name="ic-menu" size={30} color="#5f5f5f" />
+            <Icon1
+              name="ic-menu"
+              size={30}
+              color="#5f5f5f"
+              onPress={() => this.changScreenFilter()}
+            />
           </View>
           <View style={styles.search}>
             <Icon1
@@ -109,7 +100,13 @@ class index extends Component {
                     this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
                   title={this.props.book.data.Data.NewBooks[item].Title}
+
+                  OverallStarRating={
+                    this.props.book.data.Data.NewBooks[item].OverallStarRating
+                  }
+
                   idBook={this.props.book.data.Data.NewBooks[item].Id}
+
                 />
               )}
               horizontal={true}

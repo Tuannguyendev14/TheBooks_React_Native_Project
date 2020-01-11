@@ -7,11 +7,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { offlineData } from '../../utils/offlineData';
-import { Navigation } from 'react-native-navigation';
-import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { onCategories } from '../../navigation';
+
+import {offlineData} from '../../utils/offlineData';
+import {Navigation} from 'react-native-navigation';
+import {connect} from 'react-redux';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 
 export default class Filter extends Component {
   constructor(props) {
@@ -22,26 +22,27 @@ export default class Filter extends Component {
     };
   }
 
-  renderItemHorizontal = ({ item }) => {
+  renderItemHorizontal = ({item}) => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
-      star.push(<Icon name="ios-star" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - item.OverallStarRating; i++) {
-      starOutline.push(
-        <Icon name="ios-star-outline" size={20} color="#fc9619" />,
-      );
+      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
+    
+    
     return (
       <>
         <View style={styles.containerMain}>
           <TouchableOpacity style={styles.item}>
             <Image
               style={styles.imageThumbnail}
-              source={{ uri: item.Medias[0].ImageUrl }}
+              source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
+      
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
@@ -57,7 +58,8 @@ export default class Filter extends Component {
                   : item.Authors[0].Name}
               </Text>
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row' }}>
+
+            <View style={{flexDirection: 'row'}}>
               {star}
               {starOutline}
               <TouchableOpacity
@@ -74,16 +76,14 @@ export default class Filter extends Component {
     );
   };
 
-  renderItemVertical = ({ item }) => {
+  renderItemVertical = ({item}) => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
-      star.push(<Icon name="ios-star" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - item.OverallStarRating; i++) {
-      starOutline.push(
-        <Icon name="ios-star-outline" size={20} color="#fc9619" />,
-      );
+      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
     return (
       <View>
@@ -91,9 +91,10 @@ export default class Filter extends Component {
           <TouchableOpacity style={styles.item}>
             <Image
               style={styles.imageThumbnail1}
-              source={{ uri: item.Medias[0].ImageUrl }}
+              source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
+      
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
@@ -108,10 +109,12 @@ export default class Filter extends Component {
                   ? 'No name'
                   : item.Authors[0].Name}
               </Text>
+
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               {star}
               {starOutline}
+
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
@@ -121,13 +124,14 @@ export default class Filter extends Component {
               </TouchableOpacity>
             </View>
             <View style={styles.containerNumber1}>
-              <Icon name="ios-bookmarks" size={30} color="#fc9619" />
+              <Icon name="ic-book-1" size={20} color="#fc9619" />
               <TouchableOpacity style={styles.item}>
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Quantity} quyển
                 </Text>
+
               </TouchableOpacity>
-              <Icon name="ios-pricetag" size={30} color="#fc9619" />
+              <Icon name="ic-price" size={18} color="#fc9619" />
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
@@ -142,13 +146,23 @@ export default class Filter extends Component {
     );
   };
 
+
+  backMainScreen = () => {
+    Navigation.dismissModal(this.props.componentId);
+  };
+
   main() {
     return (
       <View>
         <View style={styles.header}>
           <View style={styles.back}>
             <TouchableOpacity style={styles.item}>
-              <Icon name="ios-arrow-back" size={30} color="#5f5f5f" onPress={() => this.backMainScreen()} />
+              <Icon
+                name="ic-back"
+                size={30}
+                color="#5f5f5f"
+                onPress={() => this.backMainScreen()}
+              />
             </TouchableOpacity>
           </View>
           <View>
@@ -156,7 +170,13 @@ export default class Filter extends Component {
           </View>
           <View style={styles.search}>
             <TouchableOpacity style={styles.item}>
-              <Icon name="ios-search" size={30} color="#5f5f5f" onPress={() => this.changScreenSearch()} />
+              <Icon
+                name="ic-search"
+                size={30}
+                color="#5f5f5f"
+                onPress={() => this.changScreenSearch()}
+              />
+
             </TouchableOpacity>
           </View>
         </View>
@@ -165,36 +185,39 @@ export default class Filter extends Component {
           <View style={[styles.type, styles.sort]}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => onCategories()}>
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 2 }}>
+              onPress={() => this.changScreenCategories()}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{flex: 2}}>
                   <Text style={styles.styleText}>Thể loại</Text>
                 </View>
-                <View style={{ marginTop: 8 }}>
-                  <Icon name="ios-funnel" size={30} color="#5f5f5f" />
+                <View style={{marginTop: 8}}>
+                  <Icon name="filter" size={30} color="#5f5f5f" />
                 </View>
               </View>
             </TouchableOpacity>
           </View>
           <View style={styles.sort}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 2 }}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 2}}>
                 <Text style={styles.styleText}>Sắp xếp</Text>
               </View>
-              <View style={{ flexDirection: 'row', marginTop: 8 }}>
-                <Icon name="ios-arrow-round-down" size={30} color="#5f5f5f" />
-                <Icon name="ios-arrow-round-up" size={30} color="#5f5f5f" />
+              <View style={{flexDirection: 'row', marginTop: 8}}>
+                <Icon name="select" size={30} color="#5f5f5f" />
               </View>
             </View>
           </View>
           <View style={styles.choose}>
-            <View style={{ marginTop: 8 }}>
+            <View style={{marginTop: 8}}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({ check: !this.state.check });
+                  this.setState({check: !this.state.check});
                 }}>
                 <Text>
-                  <Icon name="ios-list" size={30} color="#5f5f5f" />
+                  {this.state.check === false ? (
+                    <Icon name="ic-filter-change-2" size={30} color="#5f5f5f" />
+                  ) : (
+                    <Icon name="ic-filter-change" size={30} color="#5f5f5f" />
+                  )}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -207,8 +230,12 @@ export default class Filter extends Component {
     );
   }
 
-  backMainScreen = () => {
-    Navigation.dismissAllModals();
+  changScreenCategories = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Categories',
+      },
+    });
   };
 
   changScreenSearch = () => {
@@ -330,6 +357,7 @@ const styles = StyleSheet.create({
   containerMain1: {
     flexDirection: 'row',
     marginHorizontal: 10,
+    marginVertical: 25,
     flex: 2,
   },
   containerNumber1: {

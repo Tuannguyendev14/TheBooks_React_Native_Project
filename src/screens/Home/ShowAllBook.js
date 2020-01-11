@@ -34,6 +34,7 @@ export default class ShowAllBook extends Component {
                 name={this.props.data[item].Shelf.Name}
                 author={this.props.data[item].Authors[0].Name}
                 count={this.props.data[item].Shelf.BookCount}
+                OverallStarRating={this.props.data[item].OverallStarRating}
               />
             )}
             numColumns={2}

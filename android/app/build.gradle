@@ -79,6 +79,7 @@ project.ext.react = [
     entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
 ]
+ 
 
 apply from: "../../node_modules/react-native/react.gradle"
 
@@ -200,7 +201,6 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-navigation')
-    implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_viewpager')
     
     if (enableHermes) {
@@ -221,10 +221,6 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
-
-
-// apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle");
-
 project.ext.vectoricons = [
     iconFontNames: [ 
         'Ionicons.ttf', 
@@ -234,3 +230,4 @@ project.ext.vectoricons = [
 ]
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
