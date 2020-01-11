@@ -2,15 +2,7 @@ import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
@@ -48,7 +40,7 @@ class index extends Component {
   changScreenFilter = () => {
     Navigation.showModal({
       component: {
-        name: 'Filter',
+        name: 'Filter', 
       },
     });
   };
@@ -108,9 +100,13 @@ class index extends Component {
                     this.props.book.data.Data.NewBooks[item].Shelf.BookCount
                   }
                   title={this.props.book.data.Data.NewBooks[item].Title}
+
                   OverallStarRating={
                     this.props.book.data.Data.NewBooks[item].OverallStarRating
                   }
+
+                  idBook={this.props.book.data.Data.NewBooks[item].Id}
+
                 />
               )}
               horizontal={true}
@@ -154,6 +150,7 @@ class index extends Component {
                       .BookCount
                   }
                   title={this.props.book.data.Data.MostBorrowBooks[item].Title}
+                  idBook={this.props.book.data.Data.MostBorrowBooks[item].Id}
                 />
               )}
               horizontal={true}

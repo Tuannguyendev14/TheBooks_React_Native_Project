@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
@@ -30,6 +31,8 @@ export default class Filter extends Component {
     for (let i = 0; i < 5 - item.OverallStarRating; i++) {
       starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
+    
+    
     return (
       <>
         <View style={styles.containerMain}>
@@ -39,6 +42,7 @@ export default class Filter extends Component {
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
+      
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
@@ -54,6 +58,7 @@ export default class Filter extends Component {
                   : item.Authors[0].Name}
               </Text>
             </TouchableOpacity>
+
             <View style={{flexDirection: 'row'}}>
               {star}
               {starOutline}
@@ -89,6 +94,7 @@ export default class Filter extends Component {
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
+      
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
@@ -103,10 +109,12 @@ export default class Filter extends Component {
                   ? 'No name'
                   : item.Authors[0].Name}
               </Text>
+
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
               {star}
               {starOutline}
+
               <TouchableOpacity
                 style={styles.item}
                 onPress={() => this.onPressItem(item)}>
@@ -121,6 +129,7 @@ export default class Filter extends Component {
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Quantity} quyển
                 </Text>
+
               </TouchableOpacity>
               <Icon name="ic-price" size={18} color="#fc9619" />
               <TouchableOpacity
@@ -136,6 +145,7 @@ export default class Filter extends Component {
       </View>
     );
   };
+
 
   backMainScreen = () => {
     Navigation.dismissModal(this.props.componentId);
@@ -166,6 +176,7 @@ export default class Filter extends Component {
                 color="#5f5f5f"
                 onPress={() => this.changScreenSearch()}
               />
+
             </TouchableOpacity>
           </View>
         </View>

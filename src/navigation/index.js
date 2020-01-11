@@ -18,7 +18,7 @@ import Detail from '../screens/Home/Detail';
 import ShoppingCard from '../screens/ShoppingCard';
 import Filter from '../screens/Filter/Filter';
 import Categories from '../screens/Filter/Categories';
-
+import Sort from '../screens/Filter/Sort';
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
@@ -134,6 +134,17 @@ Navigation.registerComponent(
 
 Navigation.registerComponent('Filter', () => Filter);
 Navigation.registerComponent('Categories', () => Categories);
+
+Navigation.registerComponent(
+  'ShoppingCard',
+  () => ReduxProvider(ShoppingCard),
+  () => ShoppingCard,
+);
+
+Navigation.registerComponent('Filter', () => Filter);
+Navigation.registerComponent('Categories', () => Categories);
+Navigation.registerComponent('Sort', () => Sort);
+
 
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({

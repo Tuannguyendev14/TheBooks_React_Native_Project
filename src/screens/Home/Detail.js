@@ -17,14 +17,18 @@ import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
 import Comment from './components/comment';
 import {onSignIn} from '../../navigation';
+import {connect} from 'react-redux';
+import {getComment} from '../../redux/commentRedux/actions';
+import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
 
-export default class Detail extends Component {
+class Detail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       comment: '',
       isShowForm: true,
       heartEmpty: false,
+      IdBook: '',
     };
   }
   backMainScreen = () => {
@@ -100,8 +104,28 @@ export default class Detail extends Component {
     });
   };
 
+  componentDidMount() {
+    let idBook = this.props.IdBook;
+    this.props.onGetComment(idBook);
+    this.props.onGetRelatedBooks(idBook);
+  }
+
+  renderItem = DATA => {
+    return DATA.map(item => (
+      <View>
+        <Comment
+          name={item.UserName}
+          userImage={item.UrlImageUser}
+          comment={item.Content}
+        />
+      </View>
+    ));
+  };
+
   render() {
-    console.log(this.state);
+    const relatedBooks = this.props.relatedBooks.data.RelatedBooks;
+    const commentData = this.props.comment.data;
+    console.log('Comment', commentData);
 
     const elmTaskForm =
       this.state.isShowForm === true ? (
@@ -156,6 +180,7 @@ export default class Detail extends Component {
           <View style={style.viewBookInfor}>
             <Text style={style.styleText}>{this.props.namebook}</Text>
             <Text style={style.author}>{this.props.authorName}</Text>
+            {/* <Text>{commentData}</Text> */}
           </View>
 
           <View style={style.viewRank}>
@@ -195,23 +220,21 @@ export default class Detail extends Component {
                 Xem hết
               </Text>
             </View>
+            {/* <View style={[style.container, style.item]}>
+              {this.renderItem(relatedBooks)}
+            </View> */}
             <FlatList
               style={style.list}
-              data={Object.keys(offlineData.Data.MostBorrowBooks)}
+              data={relatedBooks}
               renderItem={({item}) => (
                 <Book
-                  image={
-                    offlineData.Data.MostBorrowBooks[item].Medias[0].ImageUrl
-                  }
-                  name={offlineData.Data.MostBorrowBooks[item].Shelf.Name}
-                  author={
-                    offlineData.Data.MostBorrowBooks[item].Authors[0].Name
-                  }
-                  count={offlineData.Data.MostBorrowBooks[item].Shelf.BookCount}
-                  title={offlineData.Data.NewBooks[item].Title}
+                  image={item.Medias[0].ImageUrl}
+                  name={item.Shelf.Name}
+                  author={item.Authors[0].Name}
                   OverallStarRating={
-                    offlineData.Data.NewBooks[item].OverallStarRating
+                    item.OverallStarRating
                   }
+
                 />
               )}
               horizontal={true}
@@ -227,8 +250,22 @@ export default class Detail extends Component {
             </TouchableWithoutFeedback>
             <Text>{elmTaskForm}</Text>
           </View>
-          <Comment />
-          <Comment />
+
+          {/* <View>{this.renderItem(commentData)}</View> */}
+          <FlatList
+            data={commentData}
+            renderItem={({item}) => (
+              <Comment
+                name={item.UserName}
+                userImage={item.UrlImageUser}
+                comment={item.Content}
+                star={item.StarRating}
+              />
+            )}
+            // horizontal={true}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
           <Text
             style={{
               textAlign: 'center',
@@ -302,6 +339,7 @@ const style = StyleSheet.create({
   },
   styleText: {
     fontSize: 20,
+    textAlign: 'center',
   },
   viewimage: {
     marginHorizontal: 80,
@@ -310,6 +348,7 @@ const style = StyleSheet.create({
   viewBookInfor: {
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
     marginHorizontal: 15,
     marginVertical: 20,
   },
@@ -348,3 +387,19 @@ const style = StyleSheet.create({
     flexDirection: 'column',
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    comment: state.comment,
+    relatedBooks: state.relatedBook,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetComment: idBook => dispatch(getComment(idBook)),
+    onGetRelatedBooks: idBook => dispatch(getRelatedBooks(idBook)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
