@@ -20,6 +20,7 @@ import {onSignIn} from '../../navigation';
 import {connect} from 'react-redux';
 import {getComment} from '../../redux/commentRedux/actions';
 import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
+import CommentModal from './CommentModal';
 
 class Detail extends Component {
   constructor(props) {
@@ -122,12 +123,15 @@ class Detail extends Component {
     ));
   };
 
+  onShowForm = () => {
+    this.refs.addModal.showAddModal();
+  };
+
   render() {
     const relatedBooks = this.props.relatedBooks.data.RelatedBooks;
     const commentData = this.props.comment.data;
-    console.log('Comment', commentData);
+    console.log('relatedBooks', relatedBooks);
 
-    console.log(this.props.namebook);
     const elmTaskForm =
       this.state.isShowForm === true ? (
         <TextInput
@@ -280,6 +284,7 @@ class Detail extends Component {
               <Text style={style.buttonAddToCard}>Thêm vào giỏ</Text>
             </TouchableWithoutFeedback>
           </View>
+          <CommentModal ref={'addModal'} parentFlatList={this} />
         </ScrollView>
       </View>
     );

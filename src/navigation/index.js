@@ -27,6 +27,7 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
+import CommentModal from '../screens/Home/CommentModal';
 
 function ReduxProvider(Component) {
   return props => (
@@ -141,10 +142,15 @@ Navigation.registerComponent(
   () => ShoppingCard,
 );
 
+Navigation.registerComponent(
+  'CommentModal',
+  () => ReduxProvider(CommentModal),
+  () => CommentModal,
+);
+
 Navigation.registerComponent('Filter', () => Filter);
 Navigation.registerComponent('Categories', () => Categories);
 Navigation.registerComponent('Sort', () => Sort);
-
 
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({

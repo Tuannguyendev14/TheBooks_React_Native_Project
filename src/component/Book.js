@@ -87,8 +87,6 @@ class Book extends Component {
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.author}>{author}</Text>
-          <Text style={styles.author}>{idBook}</Text>
-          <Text style={styles.author}>{OverallStarRating}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
           {star}
