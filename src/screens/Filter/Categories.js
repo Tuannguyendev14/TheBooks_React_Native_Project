@@ -14,25 +14,13 @@ import {
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import {List} from 'react-native-paper';
 
 export default class Categories extends Component {
   constructor(props) {
     super(props);
   }
-
-
-  componentDidMount() {
-    const DATA = offlineData.Data.References.Categories;
-    console.log('Log at Categories', DATA);
-    return (
-      <View>
-        <Text>aa</Text>
-      </View>
-    );
-  }
-
 
   renderItem = DATA => {
     return DATA.map(item => (
@@ -45,20 +33,35 @@ export default class Categories extends Component {
       </View>
     ));
   };
+
+  backMainScreen = () => {
+    Navigation.dismissModal(this.props.componentId);
+  };
+
+  changScreenSearch = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Search',
+      },
+    });
+  };
+
   render() {
     const DATA = offlineData.Data.References.Categories;
     console.log('data', DATA);
 
     return (
-
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View>
         <SafeAreaView>
           <View style={styles.header}>
             <View style={styles.back}>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={Navigation.dismissModal(this.props.componentId)}>
-                <Icon name="ios-close" size={40} color="#5f5f5f" />
+              <TouchableOpacity style={styles.item}>
+                <Icon
+                  name="ic-back"
+                  size={30}
+                  color="#5f5f5f"
+                  onPress={() => this.backMainScreen()}
+                />
               </TouchableOpacity>
             </View>
             <View>
@@ -66,7 +69,12 @@ export default class Categories extends Component {
             </View>
             <View style={styles.search}>
               <TouchableOpacity style={styles.item}>
-                <Icon name="ios-refresh" size={30} color="#5f5f5f" />
+                <Icon
+                  name="ic-search"
+                  size={30}
+                  color="#5f5f5f"
+                  onPress={() => this.changScreenSearch()}
+                />
               </TouchableOpacity>
             </View>
           </View>
@@ -107,5 +115,9 @@ const styles = StyleSheet.create({
   },
   container1: {
     flex: 1,
+    // marginTop: Constants.statusBarHeight,
+  },
+  text: {
+    fontSize: 42,
   },
 });

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -31,8 +31,7 @@ export default class Filter extends Component {
     for (let i = 0; i < 5 - item.OverallStarRating; i++) {
       starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
-    
-    
+
     return (
       <>
         <View style={styles.containerMain}>
@@ -42,7 +41,7 @@ export default class Filter extends Component {
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
-      
+
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
@@ -94,7 +93,7 @@ export default class Filter extends Component {
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
-      
+
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
@@ -109,7 +108,6 @@ export default class Filter extends Component {
                   ? 'No name'
                   : item.Authors[0].Name}
               </Text>
-
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
               {star}
@@ -129,7 +127,6 @@ export default class Filter extends Component {
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Quantity} quyển
                 </Text>
-
               </TouchableOpacity>
               <Icon name="ic-price" size={18} color="#fc9619" />
               <TouchableOpacity
@@ -145,7 +142,6 @@ export default class Filter extends Component {
       </View>
     );
   };
-
 
   backMainScreen = () => {
     Navigation.dismissModal(this.props.componentId);
@@ -176,33 +172,44 @@ export default class Filter extends Component {
                 color="#5f5f5f"
                 onPress={() => this.changScreenSearch()}
               />
-
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.header}>
           <View style={[styles.type, styles.sort]}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.changScreenCategories()}>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 2}}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 2}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenCategories()}>
                   <Text style={styles.styleText}>Thể loại</Text>
-                </View>
-                <View style={{marginTop: 8}}>
-                  <Icon name="filter" size={30} color="#5f5f5f" />
-                </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+              <View style={{marginTop: 8}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenCategories()}>
+                  <Icon name="filter" size={30} color="#5f5f5f" />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
           <View style={styles.sort}>
             <View style={{flexDirection: 'row'}}>
               <View style={{flex: 2}}>
-                <Text style={styles.styleText}>Sắp xếp</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenSort()}>
+                  <Text style={styles.styleText}>Sắp xếp</Text>
+                </TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', marginTop: 8}}>
-                <Icon name="select" size={30} color="#5f5f5f" />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenSort()}>
+                  <Icon name="select" size={30} color="#5f5f5f" />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -238,6 +245,14 @@ export default class Filter extends Component {
     });
   };
 
+  changScreenSort = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Sort',
+      },
+    });
+  };
+
   changScreenSearch = () => {
     Navigation.showModal({
       component: {
@@ -251,7 +266,6 @@ export default class Filter extends Component {
     return (
       <View>
         <FlatList
-          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
           data={DATA}
           renderItem={this.renderItemHorizontal}
           keyExtractor={(item, index) => index}

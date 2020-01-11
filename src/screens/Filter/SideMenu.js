@@ -10,6 +10,7 @@ import {
   Picker,
   ScrollView,
   SafeAreaView,
+  TextInput,
 } from 'react-native';
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
@@ -17,22 +18,20 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import {List} from 'react-native-paper';
 
-export default class Sort extends Component {
+export default class SideMenu extends Component {
   constructor(props) {
     super(props);
   }
 
-  backMainScreen = () => {
-    Navigation.dismissModal(this.props.componentId);
-  };
-
-  changScreenSearch = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Search',
-      },
-    });
-  };
+  componentDidMount() {
+    const DATA = offlineData.Data.References.Categories;
+    console.log('Log at Categories', DATA);
+    return (
+      <View>
+        <Text>aa</Text>
+      </View>
+    );
+  }
 
   renderItem = DATA => {
     return DATA.map(item => (
@@ -50,33 +49,20 @@ export default class Sort extends Component {
     console.log('data', DATA);
 
     return (
-      <View>
+      <View style={{backgroundColor: 'white', flex: 1}}>
         <SafeAreaView>
-        <View style={styles.header}>
-            <View style={styles.back}>
-              <TouchableOpacity style={styles.item}>
-                <Icon
-                  name="ic-back"
-                  size={30}
-                  color="#5f5f5f"
-                  onPress={() => this.backMainScreen()}
-                />
-              </TouchableOpacity>
+          <View style={styles.header}>
+            <View
+              style={{flexDirection: 'row', flex: 2, borderTopColor: 'red'}}>
+              <TextInput placeholder="Tìm thể loại" />
             </View>
             <View>
-              <Text style={styles.title}>Sắp xếp</Text>
-            </View>
-            <View style={styles.search}>
-              <TouchableOpacity style={styles.item}>
-                <Icon
-                  name="ic-search"
-                  size={30}
-                  color="#5f5f5f"
-                  onPress={() => this.changScreenSearch()}
-                />
+              <TouchableOpacity style={{marginTop: 12, alignItems: 'flex-end'}}>
+                <Icon name="ic-search" size={20} color="#5f5f5f" />
               </TouchableOpacity>
             </View>
           </View>
+
           <ScrollView>
             <View style={[styles.container, styles.item]}>
               {this.renderItem(DATA)}
@@ -113,9 +99,5 @@ const styles = StyleSheet.create({
   },
   container1: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
-  },
-  text: {
-    fontSize: 42,
   },
 });

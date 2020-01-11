@@ -27,6 +27,7 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
+import SideMenu from './../screens/Filter/SideMenu';
 
 function ReduxProvider(Component) {
   return props => (
@@ -132,9 +133,6 @@ Navigation.registerComponent(
   () => ShoppingCard,
 );
 
-Navigation.registerComponent('Filter', () => Filter);
-Navigation.registerComponent('Categories', () => Categories);
-
 Navigation.registerComponent(
   'ShoppingCard',
   () => ReduxProvider(ShoppingCard),
@@ -144,7 +142,7 @@ Navigation.registerComponent(
 Navigation.registerComponent('Filter', () => Filter);
 Navigation.registerComponent('Categories', () => Categories);
 Navigation.registerComponent('Sort', () => Sort);
-
+Navigation.registerComponent('SideMenu', () => SideMenu);
 
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
@@ -152,7 +150,7 @@ export const onChangeIntoMainScreen = () => {
       sideMenu: {
         left: {
           component: {
-            name: 'Categories',
+            name: 'SideMenu',
           },
         },
         center: {
