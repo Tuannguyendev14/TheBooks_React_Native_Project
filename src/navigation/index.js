@@ -28,6 +28,10 @@ import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
 import SideMenu from './../screens/Filter/SideMenu';
+import SearchDemo from '../screens/Filter/Search';
+import SearchBar from './../screens/Search/index.d';
+
+import TestSearch from '../screens/TestSearch';
 
 function ReduxProvider(Component) {
   return props => (
@@ -48,6 +52,12 @@ export default () => {
     });
   });
 };
+
+Navigation.registerComponent('SearchDemo', () => SearchDemo);
+
+Navigation.registerComponent('SearchBar', () => SearchBar);
+
+Navigation.registerComponent('TestSearch', () => TestSearch);
 
 Navigation.registerComponent(
   'App',

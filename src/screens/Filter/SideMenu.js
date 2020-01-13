@@ -21,6 +21,10 @@ import {List} from 'react-native-paper';
 export default class SideMenu extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      ticker: false,
+      name: '',
+    };
   }
 
   componentDidMount() {
@@ -34,11 +38,36 @@ export default class SideMenu extends Component {
   }
 
   renderItem = DATA => {
+    console.log('state: ', this.state);
+
     return DATA.map(item => (
       <View>
         <List.Accordion title={item.Name}>
           {item.SubCategories.map(listItem => (
-            <List.Item style={{marginHorizontal: 10}} title={listItem.Name} />
+            <View style={{flexDirection: 'row', flex: 1}}>
+              <View style={{flex: 1}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      ticker: !this.state.ticker,
+                      name: listItem.Name,
+                    });
+                  }}>
+                  <List.Item
+                    id={item.Id}
+                    style={{marginHorizontal: 10}}
+                    title={listItem.Name}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                {this.state.name === listItem.Name ? (
+                  <Icon name="ic-tick" size={20} color="#5f5f5f" />
+                ) : (
+                  <Text></Text>
+                )}
+              </View>
+            </View>
           ))}
         </List.Accordion>
       </View>
@@ -63,9 +92,14 @@ export default class SideMenu extends Component {
             </View>
           </View>
 
-          <ScrollView>
+          <ScrollView style={{marginVertical: 70, marginTop: -10}}>
             <View style={[styles.container, styles.item]}>
               {this.renderItem(DATA)}
+            </View>
+            <View style={[styles.container, styles.item]}>
+              <TouchableOpacity style={styles.button} onPress={this.onPress}>
+                <Text> Tìm kiếm </Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -99,5 +133,10 @@ const styles = StyleSheet.create({
   },
   container1: {
     flex: 1,
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
   },
 });

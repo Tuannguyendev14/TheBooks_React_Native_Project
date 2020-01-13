@@ -249,6 +249,9 @@ export default class Filter extends Component {
     Navigation.showModal({
       component: {
         name: 'Sort',
+        passProps: {
+          data: data,
+        },
       },
     });
   };
