@@ -7,7 +7,7 @@ import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {Navigation} from 'react-native-navigation';
 
 class Book extends Component {
-  onPress = (image, name, title, author, count, idBook, OverallStarRating) => {
+  onPress = idBook => {
     Navigation.showModal({
       stack: {
         children: [
@@ -15,13 +15,7 @@ class Book extends Component {
             component: {
               name: 'Detail',
               passProps: {
-                data: image,
-                name: name,
-                namebook: title,
-                authorName: author,
-                rank: count,
                 IdBook: idBook,
-                OverallStarRating: OverallStarRating,
               },
               options: {
                 topBar: {
@@ -60,18 +54,7 @@ class Book extends Component {
     }
     return (
       <View style={styles.showflast}>
-        <TouchableOpacity
-          onPress={() =>
-            this.onPress(
-              image,
-              name,
-              title,
-              author,
-              count,
-              idBook,
-              OverallStarRating,
-            )
-          }>
+        <TouchableOpacity onPress={() => this.onPress(idBook)}>
           <Image
             source={{uri: image}}
             style={{
@@ -131,6 +114,7 @@ const styles = StyleSheet.create({
   showflast: {
     width: 170,
     marginVertical: 20,
+    marginLeft: 10,
   },
   name: {
     color: '#4a4a4a',

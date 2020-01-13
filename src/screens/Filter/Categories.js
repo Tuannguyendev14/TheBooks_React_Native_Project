@@ -22,7 +22,6 @@ export default class Categories extends Component {
     super(props);
   }
 
-
   componentDidMount() {
     const DATA = offlineData.Data.References.Categories;
     console.log('Log at Categories', DATA);
@@ -32,7 +31,6 @@ export default class Categories extends Component {
       </View>
     );
   }
-
 
   renderItem = DATA => {
     return DATA.map(item => (
@@ -50,7 +48,6 @@ export default class Categories extends Component {
     console.log('data', DATA);
 
     return (
-
       <View style={{backgroundColor: 'white', flex: 1}}>
         <SafeAreaView>
           <View style={styles.header}>

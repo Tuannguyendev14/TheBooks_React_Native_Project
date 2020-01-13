@@ -1,13 +1,4 @@
-import {
-  ADD_USER,
-  ADD_USER_SUCCESS,
-  ADD_USER_FAILURE,
-  LOG_IN,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT,
-  LOGOUT_SUCCESS,
-} from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
 const initialState = {
   data: {},
@@ -17,30 +8,30 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_USER:
+    case types.ADD_USER:
       return {...state, loading: true};
 
-    case ADD_USER_SUCCESS:
+    case types.ADD_USER_SUCCESS:
       console.log('ok');
       return {...state, data: action.payload, loading: false};
 
-    case ADD_USER_FAILURE:
+    case types.ADD_USER_FAILURE:
       return {
         ...state,
         error: action.payload,
         loading: false,
       };
 
-    case LOG_IN:
+    case types.LOG_IN:
       return {...state, loading: true};
 
-    case LOGIN_SUCCESS:
+    case types.LOGIN_SUCCESS:
       return {...state, data: action.payload, loading: false};
 
-    case LOGIN_FAILURE:
+    case types.LOGIN_FAILURE:
       return {...state, error: action.payload, loading: false};
 
-    case LOGOUT_SUCCESS:
+    case types.LOGOUT_SUCCESS:
       return {...initialState};
 
     default:

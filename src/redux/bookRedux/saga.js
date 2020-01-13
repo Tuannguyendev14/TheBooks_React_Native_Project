@@ -1,19 +1,30 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
-import {GET_BOOK_FAILURE, getBookSuccess} from './actions';
-import {onChangeIntoMainScreen} from '../../navigation';
-import {getBook} from '../../api/book';
+import {getBookFailure, getBookSuccess, getBookDetailSuccess} from './actions';
+import {getBook, getBookDetail} from '../../api/book';
+import {GET_BOOK, GET_BOOK_DETAIL} from '../constants/actionTypes';
 
 export function* getBookSaga() {
   try {
     const response = yield call(getBook);
-    const data = response.data;
-    yield put(getBookSuccess(data));
-    // onChangeIntoMainScreen(response.data);
-    console.log('response.data ', response);
+    const bookData = response.data.Data;
+    yield put(getBookSuccess(bookData));
+    // console.log('response.data ', bookData);
   } catch (error) {
-    yield put({type: GET_BOOK_FAILURE, payload: error});
+    yield put({type: getBookFailure, payload: error});
   }
 }
 
-const bookSagas = () => [takeLatest('GET_BOOK', getBookSaga)];
+export function* getBookDetailSaga({idBook}) {
+  try {
+    const response = yield call(getBookDetail, idBook);
+    const bookDetailData = response.data;
+    // console.log('bookDetailData', bookDetailData);
+    yield put(getBookDetailSuccess(bookDetailData));
+  } catch (error) {}
+}
+
+const bookSagas = () => [
+  takeLatest(GET_BOOK, getBookSaga),
+  takeLatest(GET_BOOK_DETAIL, getBookDetailSaga),
+];
 export default bookSagas();

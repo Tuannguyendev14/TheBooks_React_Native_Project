@@ -7,26 +7,27 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
 } from 'react-native';
-import ImageProfile from '../../../../assets/images/Home/anh.jpg';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 
 export default class comment extends Component {
   render() {
+    const {starRating, userImage, name, comment} = this.props;
+
     let star = [];
     let starOutline = [];
-    for (let i = 0; i < this.props.star; i++) {
+    for (let i = 0; i < starRating; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
-    for (let i = 0; i < 5 - this.props.star; i++) {
+    for (let i = 0; i < 5 - starRating; i++) {
       starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
 
     return (
       <View style={styles.container}>
         <View style={styles.ViewControl}>
-          <Image source={{uri: this.props.userImage}} style={styles.image} />
+          <Image source={{uri: userImage}} style={styles.image} />
           <View style={styles.viewname}>
-            <Text>{this.props.name}</Text>
+            <Text>{name}</Text>
             <TouchableOpacity style={styles.star}>
               {star}
               {starOutline}
@@ -47,7 +48,7 @@ export default class comment extends Component {
         </View>
         <View style={styles.viewcomment}>
           <Text style={styles.textcomment} numberOfLines={2}>
-            {this.props.comment}
+            {comment}
           </Text>
         </View>
       </View>

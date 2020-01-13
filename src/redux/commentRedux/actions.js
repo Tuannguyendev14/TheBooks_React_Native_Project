@@ -20,3 +20,25 @@ export const getCommentFailure = error => {
     payload: error,
   };
 };
+
+export const addComment = (commentData, userToken) => {
+  return {
+    type: types.ADD_COMMENT,
+    commentData,
+    userToken,
+  };
+};
+
+export const addCommentSuccess = response => {
+  return {
+    type: types.ADD_COMMENT_SUCCESS,
+    payload: response,
+  };
+};
+
+export const addCommentFailure = error => {
+  return {
+    type: types.ADD_COMMENT_FAILURE,
+    payload: error,
+  };
+};

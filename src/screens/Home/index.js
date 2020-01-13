@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
 import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
-import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
+import {get} from 'lodash';
 
 //const data = this.props.user.data.Data;
 class index extends Component {
@@ -14,7 +14,7 @@ class index extends Component {
   }
   componentDidMount() {
     //this.props.onGetBooks();
-    console.log('full data: ', this.props.book.data.Data);
+    // console.log('full data: ', this.props.book);
   }
 
   changScreenShowAll = (data, title) => {
@@ -46,7 +46,9 @@ class index extends Component {
   };
 
   render() {
-    const {Data} = offlineData.Data.NewBooks;
+    const newBooks = this.props.book.data.NewBooks;
+    const mostBorrowBooks = this.props.book.data.MostBorrowBooks;
+
     return (
       <View>
         <View style={styles.topbar}>
@@ -71,40 +73,26 @@ class index extends Component {
           <View style={styles.main}>
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mới{'('} {this.props.book.data.Data.NewBooks.length} {')'}
+                Sách mới ({get(newBooks, 'length')})
               </Text>
               <Text
                 style={styles.showall}
-                onPress={() =>
-                  this.changScreenShowAll(
-                    this.props.book.data.Data.NewBooks,
-                    'Sách mới',
-                  )
-                }>
+                onPress={() => this.changScreenShowAll(newBooks, 'Sách mới')}>
                 Xem hết
               </Text>
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(this.props.book.data.Data.NewBooks)}
+              data={newBooks}
               renderItem={({item}) => (
                 <Book
-                  image={
-                    this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl
-                  }
-                  name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
-                  author={
-                    this.props.book.data.Data.NewBooks[item].Authors[0].Name
-                  }
-                  count={
-                    this.props.book.data.Data.NewBooks[item].Shelf.BookCount
-                  }
-                  title={this.props.book.data.Data.NewBooks[item].Title}
-                  OverallStarRating={
-                    this.props.book.data.Data.NewBooks[item].OverallStarRating
-                  }
-                  Price={this.props.book.data.Data.NewBooks[item].Price}
-                  idBook={this.props.book.data.Data.NewBooks[item].Id}
+                  image={item.Medias[0].ImageUrl}
+                  name={item.Shelf.Name}
+                  author={item.Authors[0].Name}
+                  count={item.Shelf.BookCount}
+                  title={item.Title}
+                  OverallStarRating={item.OverallStarRating}
+                  idBook={item.Id}
                 />
               )}
               horizontal={true}
@@ -113,45 +101,29 @@ class index extends Component {
             />
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mượn nhiều{'('}{' '}
-                {this.props.book.data.Data.MostBorrowBooks.length} {')'}
+                Sách mượn nhiều ({get(mostBorrowBooks, 'length')})
               </Text>
+
               <Text
                 style={styles.showall}
                 onPress={() =>
-                  this.changScreenShowAll(
-                    this.props.book.data.Data.MostBorrowBooks,
-                    'Sách mượn nhiều',
-                  )
+                  this.changScreenShowAll(mostBorrowBooks, 'Sách mượn nhiều')
                 }>
                 Xem hết
               </Text>
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(this.props.book.data.Data.MostBorrowBooks)}
+              data={mostBorrowBooks}
               renderItem={({item}) => (
                 <Book
-                  image={
-                    this.props.book.data.Data.MostBorrowBooks[item].Medias[0]
-                      .ImageUrl
-                  }
-                  name={
-                    this.props.book.data.Data.MostBorrowBooks[item].Shelf.Name
-                  }
-                  author={
-                    this.props.book.data.Data.MostBorrowBooks[item].Authors[0]
-                      .Name
-                  }
-                  count={
-                    this.props.book.data.Data.MostBorrowBooks[item].Shelf
-                      .BookCount
-                  }
-                  OverallStarRating={
-                    this.props.book.data.Data.NewBooks[item].OverallStarRating
-                  }
-                  title={this.props.book.data.Data.MostBorrowBooks[item].Title}
-                  idBook={this.props.book.data.Data.MostBorrowBooks[item].Id}
+                  image={item.Medias[0].ImageUrl}
+                  name={item.Shelf.Name}
+                  author={item.Authors[0].Name}
+                  count={item.Shelf.BookCount}
+                  OverallStarRating={item.OverallStarRating}
+                  title={item.Title}
+                  idBook={item.Id}
                 />
               )}
               horizontal={true}
@@ -167,10 +139,9 @@ class index extends Component {
 const styles = StyleSheet.create({
   showall: {
     alignItems: 'flex-end',
-    //paddingLeft: 80,
     color: '#1d9dd8',
     flex: 1,
-    marginBottom: 10,
+    fontSize: 15,
   },
   category: {
     alignItems: 'center',
@@ -203,7 +174,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   text: {
-    fontSize: 25.5,
+    fontSize: 22,
     paddingTop: 5,
     flex: 3.5,
   },
@@ -223,7 +194,6 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  console.log('render:', state.bookReducer);
   return {book: state.bookReducer};
 };
 

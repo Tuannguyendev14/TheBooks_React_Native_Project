@@ -12,15 +12,18 @@ import {
   AsyncStorage,
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
+import {get} from 'lodash';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {offlineData} from '../../utils/offlineData';
+import IconStar from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import Comment from './components/comment';
 import {onSignIn} from '../../navigation';
 import {connect} from 'react-redux';
-import {getComment} from '../../redux/commentRedux/actions';
+import {getComment, addComment} from '../../redux/commentRedux/actions';
 import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
+import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
+import ImageProfile from '../../../assets/images/Home/anh.jpg';
 
 class Detail extends Component {
   constructor(props) {
@@ -30,23 +33,11 @@ class Detail extends Component {
       isShowForm: true,
       heartEmpty: false,
       IdBook: '',
+      userToken: '',
     };
   }
   backMainScreen = () => {
     Navigation.dismissAllModals();
-  };
-
-  // Dong mo form , xet gia tri nguoc lai
-  onShowForm = () => {
-    if (this.state.isShowForm) {
-      this.setState({
-        isShowForm: true,
-      });
-    } else {
-      this.setState({
-        isShowForm: !this.state.isShowForm,
-      });
-    }
   };
 
   changScreenShowAll = (data, title) => {
@@ -69,7 +60,7 @@ class Detail extends Component {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-      console.log(parsed);
+      console.log('user', parsed);
       if (parsed === null) {
         // this.onPress();
         onSignIn();
@@ -109,40 +100,49 @@ class Detail extends Component {
     let idBook = this.props.IdBook;
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
+    this.props.onGetBookDetail(idBook);
   }
 
-  renderItem = DATA => {
-    return DATA.map(item => (
-      <View>
-        <Comment
-          name={item.UserName}
-          userImage={item.UrlImageUser}
-          comment={item.Content}
-        />
-      </View>
-    ));
+  onShowForm = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+
+      if (parsed === null) {
+        onSignIn();
+      } else {
+        this.refs.addModal.showAddModal();
+        this.setState({
+          userToken: parsed.Token.access_token,
+        });
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
 
-  onShowForm = () => {
-    this.refs.addModal.showAddModal();
+  refreshCommentList = () => {
+    this.refs.FlatList.scrollToEnd();
+  };
+
+  onSubmitComment = commentData => {
+    let userToken = this.state.userToken;
+    this.props.onAddComment(commentData, userToken);
   };
 
   render() {
     const relatedBooks = this.props.relatedBooks.data.RelatedBooks;
     const commentData = this.props.comment.data;
-    console.log('relatedBooks', relatedBooks);
+    const bookDetail = this.props.books;
 
-    const elmTaskForm =
-      this.state.isShowForm === true ? (
-        <TextInput
-          style={style.styleTextInput}
-          value={this.state.comment}
-          placeholder={'Viết nhận xét cho cuốn sách này'}
-          onChangeText={text => this.setState({comment: text})}
-        />
-      ) : (
-        ''
-      );
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < bookDetail.OverallStarRating; i++) {
+      star.push(<IconStar name="star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
+      starOutline.push(<IconStar name="star" size={20} color="#979797" />);
+    }
 
     return (
       <View style={style.container}>
@@ -179,25 +179,24 @@ class Detail extends Component {
         </View>
         <ScrollView orientation="vertical">
           <View style={style.viewimage}>
-            <Image source={{uri: this.props.data}} style={style.styleImage} />
+            <Image
+              source={{uri: get(bookDetail, 'Medias.0.ImageUrl')}}
+              style={style.styleImage}
+            />
           </View>
 
           <View style={style.viewBookInfor}>
-            <Text style={style.styleText}>{this.props.namebook}</Text>
-            <Text style={style.author}>{this.props.authorName}</Text>
-            <Text style={style.author}>{this.props.IdBook}</Text>
-            <Text style={style.author}>{this.props.OverallStarRating}</Text>
-            {/* <Text style={style.author}>{this.props.IdBook}</Text> */}
+            <Text style={style.styleText}>{get(bookDetail, 'Title')}</Text>
+            <Text style={style.author}>
+              {get(bookDetail, 'Authors.0.Name')}
+            </Text>
           </View>
 
           <View style={style.viewRank}>
             <View>
               <TouchableOpacity style={style.rank}>
-                <Icon name="ios-star" size={25} color="#fc9619" />
-                <Icon name="ios-star" size={25} color="#fc9619" />
-                <Icon name="ios-star" size={25} color="#fc9619" />
-                <Icon name="ios-star" size={25} color="#fc9619" />
-                <Icon name="ios-star" size={25} color="#979797" />
+                {star}
+                {starOutline}
               </TouchableOpacity>
             </View>
 
@@ -208,9 +207,15 @@ class Detail extends Component {
               }}>
               <Icon name="ios-pricetags" size={22} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
-                {this.props.rank}
+                {bookDetail.TotalReview}
               </Text>
             </View>
+          </View>
+
+          <View style={style.viewdescription}>
+            <Text numberOfLines={3} style={style.description}>
+              {bookDetail.Content}
+            </Text>
           </View>
 
           <View style={style.viewSameBook}>
@@ -219,26 +224,24 @@ class Detail extends Component {
               <Text
                 style={style.showall}
                 onPress={() =>
-                  this.changScreenShowAll(
-                    offlineData.Data.NewBooks,
-                    'Đọc nhiều',
-                  )
+                  this.changScreenShowAll(relatedBooks, 'Sách liên quan')
                 }>
                 Xem hết
               </Text>
             </View>
-            {/* <View style={[style.container, style.item]}>
-              {this.renderItem(relatedBooks)}
-            </View> */}
+
             <FlatList
               style={style.list}
               data={relatedBooks}
               renderItem={({item}) => (
                 <Book
-                  image={item.Medias[0].ImageUrl}
-                  name={item.Shelf.Name}
-                  author={item.Authors[0].Name}
-                  OverallStarRating={item.OverallStarRating}
+                  image={get(item, 'Medias.0.ImageUrl')}
+                  name={get(item, 'Shelf.Name')}
+                  author={get(item, 'Authors.0.Name')}
+                  count={get(item, 'Shelf.BookCount')}
+                  title={get(item, 'Title')}
+                  OverallStarRating={get(item, 'OverallStarRating')}
+                  idBook={get(item, 'Id')}
                 />
               )}
               horizontal={true}
@@ -247,23 +250,22 @@ class Detail extends Component {
             />
           </View>
 
-          <View style={{marginHorizontal: 20}}>
+          <View style={{marginBottom: 20, margin: 20}}>
             <Text style={style.text}>Nhận xét</Text>
             <TouchableWithoutFeedback onPress={this.onShowForm}>
               <Text style={style.button}>Viết nhận xét cho cuốn sách này</Text>
             </TouchableWithoutFeedback>
-            <Text>{elmTaskForm}</Text>
           </View>
 
-          {/* <View>{this.renderItem(commentData)}</View> */}
           <FlatList
+            ref={'FlatList'}
             data={commentData}
             renderItem={({item}) => (
               <Comment
                 name={item.UserName}
                 userImage={item.UrlImageUser}
                 comment={item.Content}
-                star={item.StarRating}
+                starRating={item.StarRating}
               />
             )}
             // horizontal={true}
@@ -284,8 +286,13 @@ class Detail extends Component {
               <Text style={style.buttonAddToCard}>Thêm vào giỏ</Text>
             </TouchableWithoutFeedback>
           </View>
-          <CommentModal ref={'addModal'} parentFlatList={this} />
         </ScrollView>
+        <CommentModal
+          ref={'addModal'}
+          parentFlatList={this}
+          IdBook={bookDetail.Id}
+          onSubmitComment={this.onSubmitComment}
+        />
       </View>
     );
   }
@@ -391,10 +398,19 @@ const style = StyleSheet.create({
     marginVertical: 35,
     flexDirection: 'column',
   },
+  description: {
+    fontSize: 15,
+    color: 'gray',
+  },
+  viewdescription: {
+    margin: 10,
+    marginTop: 20,
+  },
 });
 
 const mapStateToProps = state => {
   return {
+    books: state.bookReducer.detailBook,
     comment: state.comment,
     relatedBooks: state.relatedBook,
   };
@@ -404,6 +420,9 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetComment: idBook => dispatch(getComment(idBook)),
     onGetRelatedBooks: idBook => dispatch(getRelatedBooks(idBook)),
+    onGetBookDetail: idBook => dispatch(getBookDetail(idBook)),
+    onAddComment: (commentData, userToken) =>
+      dispatch(addComment(commentData, userToken)),
   };
 };
 

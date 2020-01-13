@@ -9,15 +9,14 @@ import {
   TouchableOpacity,
   View,
   Textarea,
+  TouchableWithoutFeedback,
+  AsyncStorage,
 } from 'react-native';
 
-//npm install react-native-modalbox@latest --save
 import Modal from 'react-native-modalbox';
-import Icon from 'react-native-vector-icons/Ionicons';
-
-//npm i react-native-button
-import Button from 'react-native-button';
-// import flatListData from './FlatListData';
+import Icon from 'react-native-vector-icons/thebook-appicon';
+import {onSignIn} from '../../navigation';
+import {connect} from 'react-redux';
 
 var screen = Dimensions.get('window');
 
@@ -25,8 +24,14 @@ class CommentModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newFoodName: '',
-      newDescription: '',
+      star1: false,
+      star2: false,
+      star3: false,
+      star4: false,
+      star5: false,
+      rank: '0',
+      comment: '',
+      userId: '',
     };
   }
 
@@ -34,7 +39,102 @@ class CommentModal extends Component {
     this.refs.myModal.open();
   };
 
+  onResetStar = () => {
+    this.setState({
+      rank: '',
+      star1: false,
+      star2: false,
+      star3: false,
+      star4: false,
+      star5: false,
+    });
+  };
+
+  onClickStar1 = () => {
+    this.onResetStar();
+    this.setState({
+      rank: 1,
+      star1: true,
+    });
+  };
+
+  onClickStar2 = () => {
+    this.onResetStar();
+    this.setState({
+      rank: 2,
+      star1: true,
+      star2: true,
+    });
+  };
+  onClickStar3 = () => {
+    this.onResetStar();
+    this.setState({
+      rank: 3,
+      star1: true,
+      star2: true,
+      star3: true,
+    });
+  };
+  onClickStar4 = () => {
+    this.onResetStar();
+    this.setState({
+      rank: 4,
+      star1: true,
+      star2: true,
+      star3: true,
+      star4: true,
+    });
+  };
+  onClickStar5 = () => {
+    this.onResetStar();
+    this.setState({
+      rank: 5,
+      star1: true,
+      star2: true,
+      star3: true,
+      star4: true,
+      star5: true,
+    });
+  };
+
+  onSubmit = () => {
+    let {userId, comment, rank} = this.state;
+    let IdBook = this.props.IdBook;
+    if (comment === '') {
+      alert('Nhập nội dung đánh giá');
+    } else {
+      var commentData = {
+        BookId: IdBook,
+        UserId: userId,
+        Content: comment,
+        StarRating: rank,
+      };
+      this.props.onSubmitComment(commentData);
+      this.props.parentFlatList.refreshCommentList();
+      this.refs.myModal.close();
+    }
+  };
+
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      let UserId = parsed.Data.Id;
+      this.setState({
+        userId: UserId,
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  componentDidMount() {
+    this.onCheck();
+  }
+
   render() {
+    const {star1, star2, star3, star4, star5} = this.state;
+
     return (
       <Modal
         ref={'myModal'}
@@ -44,48 +144,81 @@ class CommentModal extends Component {
         <Text style={style.styleTitle}>Đánh giá</Text>
 
         <View style={style.rank}>
-          <Icon name="ios-star" size={30} color="#fc9619" />
-          <Icon name="ios-star" size={30} color="#fc9619" />
-          <Icon name="ios-star" size={30} color="#fc9619" />
-          <Icon name="ios-star" size={30} color="#fc9619" />
-          <Icon name="ios-star" size={30} color="#979797" />
+          <TouchableWithoutFeedback onPress={this.onClickStar1}>
+            <Icon
+              name="star"
+              size={30}
+              style={
+                star1 === true
+                  ? style.colorStarActive
+                  : style.colorStarDisActive
+              }
+            />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={this.onClickStar2}>
+            <Icon
+              name="star"
+              size={30}
+              style={
+                star2 === true
+                  ? style.colorStarActive
+                  : style.colorStarDisActive
+              }
+            />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={this.onClickStar3}>
+            <Icon
+              name="star"
+              size={30}
+              style={
+                star3 === true
+                  ? style.colorStarActive
+                  : style.colorStarDisActive
+              }
+            />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={this.onClickStar4}>
+            <Icon
+              name="star"
+              size={30}
+              style={
+                star4 === true
+                  ? style.colorStarActive
+                  : style.colorStarDisActive
+              }
+            />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={this.onClickStar5}>
+            <Icon
+              name="star"
+              size={30}
+              style={
+                star5 === true
+                  ? style.colorStarActive
+                  : style.colorStarDisActive
+              }
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         <View>
-          <TextInput
-            style={style.styleTextInput}
-            placeholder="Enter food name"
-            value={this.state.newFoodName}
-            onChangeText={text => this.setState({newFoodName: text})}
-          />
-          {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> ); } } */}
+          <Text style={style.styleTitle}>Bình luận </Text>
         </View>
 
-        {/* <Button
-          style={style.styleButtonAdd}
-          onPress={() => {
-            if (
-              this.state.newFoodName.length == 0 ||
-              this.state.newDescription.length == 0
-            ) {
-              alert('Enter name & description!');
-              return;
-            }
-            const newKey = this.generateKey(24);
-            const newFood = {
-              key: newKey,
-              name: this.state.newFoodName,
-              imageUrl:
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTULo0hDbX8PTvrSg8hvPB7mFG5cPgnymlNIoj4Y_tFpVSukASl&sg',
-              description: this.state.newDescription,
-            };
+        <TextInput
+          style={style.textArea}
+          underlineColorAndroid="transparent"
+          placeholder="Nhập nội dung nhận xét ở đây ..."
+          placeholderTextColor="grey"
+          numberOfLines={3}
+          multiline={true}
+          value={this.state.comment}
+          onChangeText={text => this.setState({comment: text})}
+        />
 
-            // flatListData.push(newFood);
-            this.props.parentFlatList.refreshFlatList(newKey);
-            this.refs.myModal.close();
-          }}>
-          Save
-        </Button> */}
+        <TouchableWithoutFeedback onPress={this.onSubmit}>
+          <Text style={style.styleButtonAdd}>Gửi nhận xét</Text>
+        </TouchableWithoutFeedback>
       </Modal>
     );
   }
@@ -95,11 +228,9 @@ const style = StyleSheet.create({
   styleModal: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: Platform.OS === 'ios' ? 30 : 0,
     shadowRadius: 40,
     width: screen.width - 80,
-    height: 380,
-    marginTop: 90,
+    height: 400,
   },
   styleTitle: {
     fontSize: 25,
@@ -110,32 +241,30 @@ const style = StyleSheet.create({
   rank: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 25,
-  },
-  styleTextInput: {
-    height: 40,
-    borderBottomColor: 'gray',
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-    marginBottom: 10,
-    borderBottomWidth: 1,
+    marginVertical: 20,
   },
   styleButtonAdd: {
     fontSize: 18,
     color: 'white',
-    padding: 8,
-    marginLeft: 70,
-    marginRight: 70,
-    marginTop: 10,
-    height: 40,
+    padding: 10,
+    height: 50,
     borderRadius: 6,
-    backgroundColor: 'green',
+    backgroundColor: 'orange',
+  },
+
+  textArea: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    height: 100,
+    marginVertical: 20,
+    width: 300,
+  },
+  colorStarDisActive: {
+    color: '#979797',
+  },
+  colorStarActive: {
+    color: '#fc9619',
   },
 });
 
 export default CommentModal;
-
-// ; import { Container, Header, Content, Textarea, Form } from "native-base"; export default class TextArea extends Component { render() { return (
-
-//     <Textarea rowSpan={5} bordered placeholder="Textarea" /> ); } } {%- language name="Vue Native", type="vue" -%} {%- endcodetabs %}
