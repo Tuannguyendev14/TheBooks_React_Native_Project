@@ -20,3 +20,10 @@ export const GET_COMMENT_FAILURE = 'GET_COMMENT_FAILURE';
 //Related Books
 export const GET_RELATED_BOOK = 'GET_RELATED_BOOK';
 export const GET_RELATED_BOOK_SUCCESS = 'GET_RELATED_BOOK_SUCCESS';
+//add card
+export const ADD_CARD = 'ADD_CARD';
+export const ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS';
+export const ADD_CARD_FAILURE = 'ADD_CARD_FAILURE';
+export const GET_CARD = 'GET_CARD';
+export const GET_CARD_SUCCESS = 'GET_CARD_SUCCESS';
+export const GET_CARD_FAILURE = 'GET_CARD_FAILURE';

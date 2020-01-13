@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Image,
@@ -7,12 +7,12 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import {connect} from 'react-redux';
-import {getBook} from '../../redux/bookRedux/actions';
+import { connect } from 'react-redux';
+import { getBook } from '../../redux/bookRedux/actions';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import Book from '../ShoppingCard/components/bookOrder';
-import {Navigation} from 'react-native-navigation';
-import {List} from 'react-native-paper';
+import { Navigation } from 'react-native-navigation';
+import { List } from 'react-native-paper';
 class ShoppingCard extends Component {
   render() {
     return (
@@ -31,7 +31,7 @@ class ShoppingCard extends Component {
           <FlatList
             style={styles.list}
             data={Object.keys(this.props.book.data.Data.NewBooks)}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <Book
                 image={
                   this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = state => {
   console.log('render:', state.bookReducer);
-  return {book: state.bookReducer};
+  return { book: state.bookReducer };
 };
 
 const mapDispatchToProps = dispatch => {
