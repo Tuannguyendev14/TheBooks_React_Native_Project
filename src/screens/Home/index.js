@@ -3,18 +3,13 @@ import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
 import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import {get} from 'lodash';
 
-//const data = this.props.user.data.Data;
 class index extends Component {
   constructor(props) {
     super(props);
-  }
-  componentDidMount() {
-    //this.props.onGetBooks();
-    // console.log('full data: ', this.props.book);
   }
 
   changScreenShowAll = (data, title) => {
@@ -45,6 +40,10 @@ class index extends Component {
     });
   };
 
+  componentDidMount() {
+    this.props.onGetBooks();
+  }
+
   render() {
     const newBooks = this.props.book.data.NewBooks;
     const mostBorrowBooks = this.props.book.data.MostBorrowBooks;
@@ -53,7 +52,7 @@ class index extends Component {
       <View>
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
-            <Icon1
+            <Icon
               name="ic-menu"
               size={30}
               color="#5f5f5f"
@@ -61,7 +60,7 @@ class index extends Component {
             />
           </View>
           <View style={styles.search}>
-            <Icon1
+            <Icon
               name="ic-search"
               size={30}
               color="#5f5f5f"
@@ -161,13 +160,9 @@ const styles = StyleSheet.create({
     paddingTop: 20.5,
     fontSize: 10.5,
     flexDirection: 'row',
-    //color: 'red',
-    //flex: 1,
     marginHorizontal: 10,
   },
   search: {
-    // marginLeft: 230,
-
     alignItems: 'flex-end',
   },
   list: {
@@ -189,7 +184,6 @@ const styles = StyleSheet.create({
   author: {
     color: '#ababab',
     fontSize: 16,
-    //maxWidth: 150,
     width: 150,
   },
 });
@@ -202,5 +196,4 @@ const mapDispatchToProps = dispatch => {
     onGetBooks: () => dispatch(getBook()),
   };
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(index);

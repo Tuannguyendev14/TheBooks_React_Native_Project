@@ -6,12 +6,82 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   StyleSheet,
+  AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/thebook-appicon';
+import {Navigation} from 'react-native-navigation';
 
 export default class comment extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowButton: false,
+    };
+  }
+
+  componentWillMount() {
+    this.onCheckUserId();
+  }
+
+  onCheckUserId = () => {
+    let userId = this.props.userId;
+    let userIdMember = this.props.userIdMember;
+
+    if (userId === userIdMember) {
+      this.setState({
+        isShowButton: true,
+      });
+    } else {
+      this.setState({
+        isShowButton: false,
+      });
+    }
+  };
+
+  onDeleteComment = () => {
+    alert('xoa');
+  };
+
+  onEditComment = (Id, userId, comment, starRating) => {
+    this.props.parentFlatList.refs.updateModal.showEditModal(
+      Id,
+      userId,
+      comment,
+      starRating,
+    );
+  };
+
   render() {
-    const {starRating, userImage, name, comment} = this.props;
+    const isShowButton = this.state.isShowButton;
+    const {
+      starRating,
+      userImage,
+      name,
+      comment,
+      userIdMember,
+      userId,
+      Id,
+    } = this.props;
+
+    const showButton = isShowButton ? (
+      <View style={styles.viewbutton}>
+        <View style={{margin: 10}}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              this.onEditComment(Id, userId, comment, starRating);
+            }}>
+            <Icon name="ic-edit-comment" size={25} color="" />
+          </TouchableWithoutFeedback>
+        </View>
+        <View>
+          <TouchableWithoutFeedback onPress={this.onDeleteComment}>
+            <Icon name="ic-trash" size={25} color="" />
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+    ) : (
+      <Text />
+    );
 
     let star = [];
     let starOutline = [];
@@ -33,18 +103,8 @@ export default class comment extends Component {
               {starOutline}
             </TouchableOpacity>
           </View>
-          <View style={styles.viewbutton}>
-            <View>
-              <TouchableWithoutFeedback>
-                <Icon name="ic-edit-comment" size={25} color="" />
-              </TouchableWithoutFeedback>
-            </View>
-            <View>
-              <TouchableWithoutFeedback>
-                <Icon name="ic-trash" size={25} color="" />
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
+
+          {showButton}
         </View>
         <View style={styles.viewcomment}>
           <Text style={styles.textcomment} numberOfLines={2}>
@@ -77,10 +137,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   viewbutton: {
-    alignItems: 'flex-end',
+    alignItems: 'center',
     flex: 2,
     flexDirection: 'row',
-    marginHorizontal: 10,
   },
   viewcomment: {
     marginVertical: 15,

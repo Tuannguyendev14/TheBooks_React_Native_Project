@@ -20,7 +20,7 @@ import {connect} from 'react-redux';
 
 var screen = Dimensions.get('window');
 
-class CommentModal extends Component {
+class UpdateModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,11 +32,22 @@ class CommentModal extends Component {
       rank: '0',
       comment: '',
       userId: '',
+      Id: '',
+      idBook: '',
     };
   }
 
-  showAddModal = () => {
+  showEditModal = (Id, userId, comment, starRating) => {
+    let idBook = this.props.IdBook;
     this.refs.myModal.open();
+
+    this.setState({
+      Id: Id,
+      idBook: idBook,
+      userId: userId,
+      rank: starRating,
+      comment: comment,
+    });
   };
 
   onResetStar = () => {
@@ -97,20 +108,19 @@ class CommentModal extends Component {
     });
   };
 
-  onSubmit = () => {
-    let {userId, comment, rank} = this.state;
-    let IdBook = this.props.IdBook;
+  onEditComment = () => {
+    let {Id, idBook, userId, comment, rank} = this.state;
     if (comment === '') {
       alert('Nhập nội dung đánh giá');
     } else {
-      var commentData = {
-        BookId: IdBook,
+      var updateCommentData = {
+        BookId: idBook,
         UserId: userId,
         Content: comment,
         StarRating: rank,
       };
-      this.props.onSubmitComment(commentData);
-      this.props.parentFlatList.refreshCommentList();
+      this.props.onUpdateComment(updateCommentData, Id);
+      //   this.props.parentFlatList.refreshCommentList();
       this.refs.myModal.close();
     }
   };
@@ -134,7 +144,7 @@ class CommentModal extends Component {
 
   render() {
     const {star1, star2, star3, star4, star5} = this.state;
-
+    console.log(this.state);
     return (
       <Modal
         ref={'myModal'}
@@ -216,7 +226,7 @@ class CommentModal extends Component {
           onChangeText={text => this.setState({comment: text})}
         />
 
-        <TouchableWithoutFeedback onPress={this.onSubmit}>
+        <TouchableWithoutFeedback onPress={this.onEditComment}>
           <Text style={style.styleButtonAdd}>Gửi nhận xét</Text>
         </TouchableWithoutFeedback>
       </Modal>
@@ -267,4 +277,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default CommentModal;
+export default UpdateModal;

@@ -12,7 +12,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import {get} from 'lodash';
+import {get, find, take} from 'lodash';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconStar from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
@@ -24,6 +24,7 @@ import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
 import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
 import ImageProfile from '../../../assets/images/Home/anh.jpg';
+import UpdateModal from './UpdateModal';
 
 class Detail extends Component {
   constructor(props) {
@@ -34,6 +35,8 @@ class Detail extends Component {
       heartEmpty: false,
       IdBook: '',
       userToken: '',
+      userId: '',
+      isShowAllComment: false,
     };
   }
   backMainScreen = () => {
@@ -53,22 +56,20 @@ class Detail extends Component {
   };
 
   onAddToCard = () => {
-    this.onCheck();
+    this.onCheckAddToCard();
   };
 
-  onCheck = async () => {
+  onCheckAddToCard = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-      console.log('user', parsed);
       if (parsed === null) {
-        // this.onPress();
         onSignIn();
       } else {
         this.onPress();
       }
     } catch (error) {
-      alert(error);
+      // alert(error);
     }
   };
 
@@ -101,23 +102,46 @@ class Detail extends Component {
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
     this.props.onGetBookDetail(idBook);
+    this.onCheckToken();
   }
 
   onShowForm = async () => {
+    await this.onCheck();
+    let userId = this.state.userId;
+    const commentData = this.props.comment.data;
+
+    const result = find(commentData, ['UserId', userId]);
+    if (result === undefined) {
+      this.refs.addModal.showAddModal();
+    } else {
+      alert('Bạn đã bình luận cuốn sách này');
+    }
+  };
+
+  onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-
       if (parsed === null) {
         onSignIn();
-      } else {
-        this.refs.addModal.showAddModal();
-        this.setState({
+      }
+    } catch (error) {
+      // alert(error);
+    }
+  };
+
+  onCheckToken = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      if (parsed != null) {
+        await this.setState({
+          userId: parsed.Data.Id,
           userToken: parsed.Token.access_token,
         });
       }
     } catch (error) {
-      alert(error);
+      // alert(error);
     }
   };
 
@@ -128,6 +152,20 @@ class Detail extends Component {
   onSubmitComment = commentData => {
     let userToken = this.state.userToken;
     this.props.onAddComment(commentData, userToken);
+  };
+
+  onUpdateComment = (commentData, Id) => {
+    let userToken = this.state.userToken;
+    this.props.onUpdateComment(commentData, Id, userToken);
+    console.log('commentData', commentData);
+    console.log('Id', Id);
+    console.log('userToken', userToken);
+  };
+
+  onShowAllComment = () => {
+    this.setState({
+      isShowAllComment: !this.state.isShowAllComment,
+    });
   };
 
   render() {
@@ -259,28 +297,29 @@ class Detail extends Component {
 
           <FlatList
             ref={'FlatList'}
-            data={commentData}
+            data={take(
+              commentData,
+              this.state.isShowAllComment ? commentData.length : 2,
+            )}
             renderItem={({item}) => (
               <Comment
                 name={item.UserName}
                 userImage={item.UrlImageUser}
                 comment={item.Content}
                 starRating={item.StarRating}
+                userIdMember={item.UserId}
+                Id={item.Id}
+                userId={this.state.userId}
+                parentFlatList={this}
               />
             )}
             // horizontal={true}
             keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
-          <Text
-            style={{
-              textAlign: 'center',
-              color: '#2bb6f9',
-              fontSize: 18,
-              marginVertical: 20,
-            }}>
-            Xem tất cả nhận xét
-          </Text>
+          <TouchableWithoutFeedback onPress={this.onShowAllComment}>
+            <Text style={style.textComment}>Xem tất cả nhận xét</Text>
+          </TouchableWithoutFeedback>
           <View>
             <TouchableWithoutFeedback onPress={this.onAddToCard}>
               <Text style={style.buttonAddToCard}>Thêm vào giỏ</Text>
@@ -292,6 +331,12 @@ class Detail extends Component {
           parentFlatList={this}
           IdBook={bookDetail.Id}
           onSubmitComment={this.onSubmitComment}
+        />
+        <UpdateModal
+          ref={'updateModal'}
+          parentFlatList={this}
+          IdBook={bookDetail.Id}
+          onUpdateComment={this.onUpdateComment}
         />
       </View>
     );
@@ -405,6 +450,12 @@ const style = StyleSheet.create({
   viewdescription: {
     margin: 10,
     marginTop: 20,
+  },
+  textComment: {
+    textAlign: 'center',
+    color: '#2bb6f9',
+    fontSize: 18,
+    marginVertical: 20,
   },
 });
 

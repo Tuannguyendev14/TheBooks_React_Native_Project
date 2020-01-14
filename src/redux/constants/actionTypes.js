@@ -12,10 +12,18 @@ export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 
-//Comment
+//Get Comment
 export const GET_COMMENT = 'GET_COMMENT';
 export const GET_COMMENT_SUCCESS = 'GET_COMMENT_SUCCESS';
 export const GET_COMMENT_FAILURE = 'GET_COMMENT_FAILURE';
+
+//Get comment by id
+export const GET_COMMENT_DETAIL = 'GET_COMMENT_DETAIL';
+export const GET_COMMENT_DETAIL_SUCCESS = 'GET_COMMENT_DETAIL_SUCCESS';
+
+// Update comment
+export const UPDATE_COMMENT = 'UPDATE_COMMENT';
+export const UPDATE_COMMENT_SUCCESS = 'UPDATE_COMMENT_SUCCESS';
 
 //Add a comment on book
 export const ADD_COMMENT = 'ADD_COMMENT';

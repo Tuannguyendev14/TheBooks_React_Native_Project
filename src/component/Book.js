@@ -50,7 +50,7 @@ class Book extends Component {
       star.push(<Icon1 name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - OverallStarRating; i++) {
-      starOutline.push(<Icon1 name="ic-star-pre" size={20} color="#fc9619" />);
+      starOutline.push(<Icon1 name="star" size={20} color="#979797" />);
     }
     return (
       <View style={styles.showflast}>
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     width: 170,
     marginVertical: 20,
     marginLeft: 10,
+    height: 300,
   },
   name: {
     color: '#4a4a4a',

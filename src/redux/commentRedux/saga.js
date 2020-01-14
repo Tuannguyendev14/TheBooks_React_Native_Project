@@ -5,10 +5,12 @@ import {
   addCommentSuccess,
   addCommentFailure,
 } from './actions';
-import {GET_COMMENT, ADD_COMMENT} from '../constants/actionTypes';
-import {getComments, addComment} from '../../api/reviews';
-// import {onChangeIntoMainScreen, onSignIn} from '../../navigation';
-import {AsyncStorage} from 'react-native';
+import {
+  GET_COMMENT,
+  ADD_COMMENT,
+  GET_COMMENT_DETAIL,
+} from '../constants/actionTypes';
+import {getComments, addComment, getCommentDetail} from '../../api/reviews';
 
 export function* addCommentSaga(commentData) {
   try {
@@ -17,12 +19,11 @@ export function* addCommentSaga(commentData) {
       commentData.commentData,
       commentData.userToken,
     );
-    console.log(response);
-    // const data = response.data;
-    // yield put(addCommentSuccess(data));
+    const data = response.data.Data;
+    yield put(addCommentSuccess(data));
   } catch (error) {
-    console.log('error', error.toJSON());
-    yield put(addCommentFailure({error}));
+    let response = error.response.data.Message;
+    yield put(addCommentFailure(response));
   }
 }
 
@@ -36,9 +37,19 @@ export function* getCommentSaga({idBook}) {
   }
 }
 
+export function* getCommentDetailSaga({Id}) {
+  try {
+    const response = yield call(getCommentDetail, Id);
+    // const bookDetailData = response.data;
+    console.log('CommentDetailData', response);
+    // yield put(getBookDetailSuccess(bookDetailData));
+  } catch (error) {}
+}
+
 const commentSagas = () => [
   takeLatest(GET_COMMENT, getCommentSaga),
   takeLatest(ADD_COMMENT, addCommentSaga),
+  takeLatest(GET_COMMENT_DETAIL, getCommentDetailSaga),
 ];
 
 export default commentSagas();

@@ -5,6 +5,13 @@ export const getComments = idBook => {
 };
 
 export const addComment = (data, Token) => {
-  console.log('Data' + data, 'Tokem' + Token);
   return callApi('/api/reviews', 'POST', data, Token);
+};
+
+export const getCommentDetail = (Id, Token) => {
+  return callApi(`/api/reviews/${Id}`, 'GET', Token);
+};
+
+export const updateComment = (Id, data, Token) => {
+  return callApi(`/api/reviews/${Id}`, 'PUT', data, Token);
 };

@@ -13,7 +13,6 @@ import {
   AsyncStorage,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {List} from 'react-native-paper';

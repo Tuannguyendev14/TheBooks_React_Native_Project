@@ -24,7 +24,6 @@ export default class Categories extends Component {
 
   componentDidMount() {
     const DATA = offlineData.Data.References.Categories;
-    console.log('Log at Categories', DATA);
     return (
       <View>
         <Text>aa</Text>
@@ -45,7 +44,6 @@ export default class Categories extends Component {
   };
   render() {
     const DATA = offlineData.Data.References.Categories;
-    console.log('data', DATA);
 
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
