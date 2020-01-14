@@ -27,19 +27,7 @@ export default class SideMenu extends Component {
     };
   }
 
-  componentDidMount() {
-    const DATA = offlineData.Data.References.Categories;
-    console.log('Log at Categories', DATA);
-    return (
-      <View>
-        <Text>aa</Text>
-      </View>
-    );
-  }
-
   renderItem = DATA => {
-    console.log('state: ', this.state);
-
     return DATA.map(item => (
       <View>
         <List.Accordion title={item.Name}>
@@ -50,8 +38,12 @@ export default class SideMenu extends Component {
                   onPress={() => {
                     this.setState({
                       ticker: !this.state.ticker,
-                      name: listItem.Name,
                     });
+                    this.state.ticker === false ? (
+                      <Text>{this.setState({name: listItem.Name})}</Text>
+                    ) : (
+                      <Text>{this.setState({name: ''})}</Text>
+                    );
                   }}>
                   <List.Item
                     id={item.Id}
@@ -61,7 +53,8 @@ export default class SideMenu extends Component {
                 </TouchableOpacity>
               </View>
               <View>
-                {this.state.name === listItem.Name && this.state.ticker === true ? (
+                {this.state.name === listItem.Name &&
+                this.state.ticker === true ? (
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
                 ) : (
                   <Text></Text>
@@ -72,6 +65,22 @@ export default class SideMenu extends Component {
         </List.Accordion>
       </View>
     ));
+  };
+
+  changScreenSearch = data => {
+    Navigation.showModal({
+      component: {
+        name: 'Filter',
+        passProps: {
+          name: this.state.name,
+        },
+      },
+    });
+  };
+  onPress = () => {
+    {
+      this.state.name === '' ? null : this.changScreenSearch();
+    }
   };
   render() {
     const DATA = offlineData.Data.References.Categories;

@@ -22,129 +22,184 @@ export default class Filter extends Component {
     };
   }
 
-  renderItemHorizontal = ({item}) => {
+  backMainScreen = () => {
+    Navigation.dismissModal(this.props.componentId);
+  };
+
+  countStar = item => {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < item.OverallStarRating; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - item.OverallStarRating; i++) {
-      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
+      star.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
+    return star;
+  };
 
+  changScreenCategories = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Categories',
+      },
+    });
+  };
+
+  changScreenSort = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Sort',
+        passProps: {
+          data: data,
+        },
+      },
+    });
+  };
+
+  changScreenSearch = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Search',
+      },
+    });
+  };
+
+  displayScreenHorizontal() {
+    const DATA = offlineData.Data.MostBorrowBooks;
     return (
-      <>
-        <View style={styles.containerMain}>
-          <TouchableOpacity style={styles.item}>
-            <Image
-              style={styles.imageThumbnail}
-              source={{uri: item.Medias[0].ImageUrl}}
-            />
-          </TouchableOpacity>
+      <View>
+        <FlatList
+          data={DATA}
+          renderItem={this.renderItemHorizontal}
+          keyExtractor={(item, index) => index}
+          key={2}
+          numColumns={2}
+        />
+      </View>
+    );
+  }
 
-          <View style={styles.containerBody}>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={styles.title}>{item.Title}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.titleAuthor, styles.titleSize]}>
-                {item.Authors[0].Name === null
-                  ? 'No name'
-                  : item.Authors[0].Name}
-              </Text>
-            </TouchableOpacity>
+  displayScreenVertical() {
+    const DATA = offlineData.Data.MostBorrowBooks;
+    return (
+      <View>
+        <FlatList
+          data={DATA}
+          renderItem={this.renderItemVertical}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
+    );
+  }
 
-            <View style={{flexDirection: 'row'}}>
-              {star}
-              {starOutline}
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize]}>
-                  {item.Shelf.BookCount}
-                </Text>
+  renderItemHorizontal = ({item}) => {
+    return item.Categories.map(listItem => (
+      <View>
+        {this.props.name === listItem.Name ? (
+          <View>
+            <View style={styles.containerMain}>
+              <TouchableOpacity style={styles.item}>
+                <Image
+                  style={styles.imageThumbnail}
+                  source={{uri: item.Medias[0].ImageUrl}}
+                />
               </TouchableOpacity>
+              <View style={styles.containerBody}>
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => this.onPressItem(item)}>
+                  <Text style={styles.title}>{item.Shelf.Name}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => this.onPressItem(item)}>
+                  <Text style={[styles.titleAuthor, styles.titleSize]}>
+                    {item.Authors[0].Name === null
+                      ? 'No name'
+                      : item.Authors[0].Name}
+                  </Text>
+                </TouchableOpacity>
+                <View style={{flexDirection: 'row'}}>
+                  {this.countStar(item)}
+                  <TouchableOpacity
+                    style={styles.item}
+                    onPress={() => this.onPressItem(item)}>
+                    <Text style={[styles.titleNumber, styles.titleSize]}>
+                      {item.Shelf.BookCount}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-      </>
-    );
+        ) : null}
+      </View>
+    ));
   };
 
   renderItemVertical = ({item}) => {
-    let star = [];
-    let starOutline = [];
-    for (let i = 0; i < item.OverallStarRating; i++) {
-      star.push(<Icon name="star" size={20} color="#fc9619" />);
-    }
-    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
-      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
-    }
-    return (
+    return item.Categories.map(listItem => (
       <View>
-        <View style={styles.containerMain1}>
-          <TouchableOpacity style={styles.item}>
-            <Image
-              style={styles.imageThumbnail1}
-              source={{uri: item.Medias[0].ImageUrl}}
-            />
-          </TouchableOpacity>
-
-          <View style={styles.containerBody}>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.title, styles.title1]}>{item.Title}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.titleAuthor, styles.titleSize1]}>
-                {item.Authors[0].Name === null
-                  ? 'No name'
-                  : item.Authors[0].Name}
-              </Text>
-            </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
-              {star}
-              {starOutline}
-
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize1]}>
-                  {item.Shelf.BookCount}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.containerNumber1}>
-              <Icon name="ic-book-1" size={20} color="#fc9619" />
+        {this.props.name === listItem.Name ? (
+          <View>
+            <View style={styles.containerMain1}>
               <TouchableOpacity style={styles.item}>
-                <Text style={[styles.titleNumber, styles.titleSize1]}>
-                  {item.Quantity} quyển
-                </Text>
+                <Image
+                  style={styles.imageThumbnail1}
+                  source={{uri: item.Medias[0].ImageUrl}}
+                />
               </TouchableOpacity>
-              <Icon name="ic-price" size={18} color="#fc9619" />
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize1]}>
-                  {item.Price}
-                </Text>
-              </TouchableOpacity>
+
+              <View style={styles.containerBody}>
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => this.onPressItem(item)}>
+                  <Text style={[styles.title, styles.title1]}>
+                    {item.Title}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => this.onPressItem(item)}>
+                  <Text style={[styles.titleAuthor, styles.titleSize1]}>
+                    {item.Authors[0].Name === null
+                      ? 'No name'
+                      : item.Authors[0].Name}
+                  </Text>
+                </TouchableOpacity>
+                <View style={{flexDirection: 'row'}}>
+                  {this.countStar(item)}
+                  <TouchableOpacity
+                    style={styles.item}
+                    onPress={() => this.onPressItem(item)}>
+                    <Text style={[styles.titleNumber, styles.titleSize1]}>
+                      {item.Shelf.BookCount}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.containerNumber1}>
+                  <Icon name="ic-book-1" size={20} color="#fc9619" />
+                  <TouchableOpacity style={styles.item}>
+                    <Text style={[styles.titleNumber, styles.titleSize1]}>
+                      {item.Quantity} quyển
+                    </Text>
+                  </TouchableOpacity>
+                  <Icon name="ic-price" size={18} color="#fc9619" />
+                  <TouchableOpacity
+                    style={styles.item}
+                    onPress={() => this.onPressItem(item)}>
+                    <Text style={[styles.titleNumber, styles.titleSize1]}>
+                      {item.Price}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
+        ) : null}
       </View>
-    );
-  };
-
-  backMainScreen = () => {
-    Navigation.dismissModal(this.props.componentId);
+    ));
   };
 
   main() {
@@ -162,7 +217,7 @@ export default class Filter extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.title}>Tháng tư và tuổi trẻ</Text>
+            <Text style={styles.title}>{this.props.name}</Text>
           </View>
           <View style={styles.search}>
             <TouchableOpacity style={styles.item}>
@@ -183,7 +238,7 @@ export default class Filter extends Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => this.changScreenCategories()}>
-                  <Text style={styles.styleText}>Thể loại</Text>
+                  <Text style={styles.styleText}>{this.props.name}</Text>
                 </TouchableOpacity>
               </View>
               <View style={{marginTop: 8}}>
@@ -237,61 +292,6 @@ export default class Filter extends Component {
     );
   }
 
-  changScreenCategories = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Categories',
-      },
-    });
-  };
-
-  changScreenSort = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Sort',
-        passProps: {
-          data: data,
-        },
-      },
-    });
-  };
-
-  changScreenSearch = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Search',
-      },
-    });
-  };
-
-  displayScreenHorizontal() {
-    const DATA = offlineData.Data.NewBooks;
-    return (
-      <View>
-        <FlatList
-          data={DATA}
-          renderItem={this.renderItemHorizontal}
-          keyExtractor={(item, index) => index}
-          key={2}
-          numColumns={2}
-        />
-      </View>
-    );
-  }
-
-  displayScreenVertical() {
-    const DATA = offlineData.Data.NewBooks;
-    return (
-      <View>
-        <FlatList
-          data={DATA}
-          renderItem={this.renderItemVertical}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
-    );
-  }
-
   render() {
     return <View>{this.main()}</View>;
   }
@@ -325,14 +325,13 @@ const styles = StyleSheet.create({
   },
   containerMain: {
     flex: 2,
-    marginVertical: 16,
   },
   containerBody: {
     flex: 2,
     marginHorizontal: 16,
   },
   containerNumber: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     flex: 2,
   },
   item: {
@@ -354,8 +353,9 @@ const styles = StyleSheet.create({
   },
   imageThumbnail: {
     flex: 1,
-    height: 200,
-    marginHorizontal: 16,
+    width: 190,
+    height: 230,
+    marginHorizontal: 10,
   },
   search: {
     flex: 1,

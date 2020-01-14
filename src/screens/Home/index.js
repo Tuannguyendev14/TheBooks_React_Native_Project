@@ -40,7 +40,7 @@ class index extends Component {
   changScreenFilter = () => {
     Navigation.showModal({
       component: {
-        name: 'Filter',
+        name: 'SideMenu',
       },
     });
   };

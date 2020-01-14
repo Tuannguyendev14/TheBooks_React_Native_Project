@@ -20,14 +20,48 @@ import {List} from 'react-native-paper';
 export default class Categories extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      ticker: false,
+      name: '',
+    };
   }
 
   renderItem = DATA => {
+    console.log('state: ', this.state);
+
     return DATA.map(item => (
       <View>
         <List.Accordion title={item.Name}>
           {item.SubCategories.map(listItem => (
-            <List.Item style={{marginHorizontal: 10}} title={listItem.Name} />
+            <View style={{flexDirection: 'row', flex: 1}}>
+              <View style={{flex: 1}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      ticker: !this.state.ticker,
+                    });
+                    this.state.ticker === false ? (
+                      <Text>{this.setState({name: listItem.Name})}</Text>
+                    ) : (
+                      <Text>{this.setState({name: ''})}</Text>
+                    );
+                  }}>
+                  <List.Item
+                    id={item.Id}
+                    style={{marginHorizontal: 10}}
+                    title={listItem.Name}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                {this.state.name === listItem.Name &&
+                this.state.ticker === true ? (
+                  <Icon name="ic-tick" size={20} color="#5f5f5f" />
+                ) : (
+                  <Text></Text>
+                )}
+              </View>
+            </View>
           ))}
         </List.Accordion>
       </View>
@@ -38,12 +72,21 @@ export default class Categories extends Component {
     Navigation.dismissModal(this.props.componentId);
   };
 
-  changScreenSearch = () => {
+  changScreenSearch = data => {
     Navigation.showModal({
       component: {
-        name: 'Search',
+        name: 'Filter',
+        passProps: {
+          name: this.state.name,
+        },
       },
     });
+  };
+  onPress = () => {
+    console.log('name: ', this.state.name);
+    {
+      this.state.name === '' ? null : this.changScreenSearch();
+    }
   };
 
   render() {
@@ -79,9 +122,14 @@ export default class Categories extends Component {
             </View>
           </View>
 
-          <ScrollView>
+          <ScrollView style={{marginVertical: 70, marginTop: -10}}>
             <View style={[styles.container, styles.item]}>
               {this.renderItem(DATA)}
+            </View>
+            <View style={[styles.container, styles.item]}>
+              <TouchableOpacity style={styles.button} onPress={this.onPress}>
+                <Text> Tìm kiếm </Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -91,6 +139,11 @@ export default class Categories extends Component {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+  },
   header: {
     borderColor: 'red',
     height: 50,
@@ -115,7 +168,6 @@ const styles = StyleSheet.create({
   },
   container1: {
     flex: 1,
-    // marginTop: Constants.statusBarHeight,
   },
   text: {
     fontSize: 42,

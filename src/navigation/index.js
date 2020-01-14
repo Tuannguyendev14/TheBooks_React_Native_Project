@@ -28,10 +28,9 @@ import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
 import SideMenu from './../screens/Filter/SideMenu';
-import SearchDemo from '../screens/Filter/Search';
-import SearchBar from './../screens/Search/index.d';
 
-import TestSearch from '../screens/TestSearch';
+import TestSearch from '../screens/Filter/Search';
+// import TodoListComponent from './../screens/SortDemo/TodoListComponent';
 
 function ReduxProvider(Component) {
   return props => (
@@ -46,16 +45,14 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'App',
+          name: 'TestSearch',
         },
       },
     });
   });
 };
 
-Navigation.registerComponent('SearchDemo', () => SearchDemo);
-
-Navigation.registerComponent('SearchBar', () => SearchBar);
+// Navigation.registerComponent('TodoListComponent', () => TodoListComponent);
 
 Navigation.registerComponent('TestSearch', () => TestSearch);
 
@@ -158,6 +155,7 @@ export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
     root: {
       sideMenu: {
+        id: 'sideMenu',
         left: {
           component: {
             name: 'SideMenu',
