@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   View,
@@ -11,17 +11,16 @@ import {
   TouchableWithoutFeedback,
   AsyncStorage,
 } from 'react-native';
-import { Navigation } from 'react-native-navigation';
+import {Navigation} from 'react-native-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { offlineData } from '../../utils/offlineData';
+import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
 import Comment from './components/comment';
-import { onSignIn } from '../../navigation';
-import { connect } from 'react-redux';
-import { getComment } from '../../redux/commentRedux/actions';
-import { getRelatedBooks } from '../../redux/relatedBooksRedux/actions';
-import { addCard } from '../../redux/cardRedux/action';
-
+import {onSignIn} from '../../navigation';
+import {connect} from 'react-redux';
+import {getComment} from '../../redux/commentRedux/actions';
+import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
+import {addCard, getCard} from '../../redux/cardRedux/action';
 
 class Detail extends Component {
   constructor(props) {
@@ -69,68 +68,66 @@ class Detail extends Component {
   onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
-      console.log('token:', parsed.Token.access_token);
+      console.log('idbasket:', idbasket);
       if (parsed === null) {
         // this.onPress();
         onSignIn();
       } else {
-
-        //this.onPress(parsed.Data.Id);
-        let data = {
-          "BookId": this.props.IdBook,
-          "Quantity": 1,
-          "UserId": parsed.Data.Id,
-        }
-        this.props.onAddCard(data);
-        console.log('book data', data)
-        console.log('run');
+        this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
+        // let data = {
+        //   BookId: this.props.IdBook,
+        //   Quantity: 1,
+        //   UserId: parsed.Data.Id,
+        // };
+        // this.props.onAddCard(data, parsed.Token.access_token);
       }
     } catch (error) {
       alert(error);
     }
   };
 
-  onPress = userId => {
+  onPress = (userId, token, idbasket) => {
     let data = {
-      "BookId": this.props.IdBook,
-      "Quantity": 1,
-      "UserId": userId
-    }
-    this.props.onAddCard(data);
-    console.log('book data', data)
-    // Navigation.showModal({
-    //   stack: {
-    //     children: [
-    //       {
-    //         component: {
-    //           name: 'ShoppingCard',
-    //           passProps: {
-    //             bookId: this.props.bookId,
-    //             userId: userId,
-    //           },
-    //           options: {
-    //             topBar: {
-    //               title: {
-    //                 text: '',
-    //                 alignment: 'center',
-    //               },
-    //               visible: false,
-    //             },
-    //           },
-    //         },
-    //       },
-    //     ],
-    //   },
-    // });
+      BookId: this.props.IdBook,
+      Quantity: 1,
+      UserId: userId,
+    };
+    //this.props.onAddCard(data, token);
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'ShoppingCard',
+              passProps: {
+                token: token,
+                idbasket: idbasket,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
   };
 
+  getCard = (id, token) => {
+    this.props.onGetCard(id, token);
+  };
   componentDidMount() {
     let idBook = this.props.IdBook;
-    console.log(idBook);
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
-
   }
 
   renderItem = DATA => {
@@ -148,7 +145,6 @@ class Detail extends Component {
   render() {
     const relatedBooks = this.props.relatedBooks.data.RelatedBooks;
     const commentData = this.props.comment.data;
-    console.log('Comment', commentData);
 
     console.log(this.props.namebook);
     const elmTaskForm =
@@ -157,16 +153,16 @@ class Detail extends Component {
           style={style.styleTextInput}
           value={this.state.comment}
           placeholder={'Viết nhận xét cho cuốn sách này'}
-          onChangeText={text => this.setState({ comment: text })}
+          onChangeText={text => this.setState({comment: text})}
         />
       ) : (
-          ''
-        );
+        ''
+      );
 
     return (
       <View style={style.container}>
         <View style={style.topbar}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <Icon
               name="ios-arrow-back"
               size={30}
@@ -181,24 +177,24 @@ class Detail extends Component {
                 size={30}
                 color="red"
                 onPress={() => {
-                  this.setState({ heartEmpty: !this.state.heartEmpty });
+                  this.setState({heartEmpty: !this.state.heartEmpty});
                 }}
               />
             ) : (
-                <Icon
-                  name="ios-heart-empty"
-                  size={30}
-                  color="#fc9619"
-                  onPress={() => {
-                    this.setState({ heartEmpty: !this.state.heartEmpty });
-                  }}
-                />
-              )}
+              <Icon
+                name="ios-heart-empty"
+                size={30}
+                color="#fc9619"
+                onPress={() => {
+                  this.setState({heartEmpty: !this.state.heartEmpty});
+                }}
+              />
+            )}
           </View>
         </View>
         <ScrollView orientation="vertical">
           <View style={style.viewimage}>
-            <Image source={{ uri: this.props.data }} style={style.styleImage} />
+            <Image source={{uri: this.props.data}} style={style.styleImage} />
           </View>
 
           <View style={style.viewBookInfor}>
@@ -226,7 +222,7 @@ class Detail extends Component {
                 margin: 20,
               }}>
               <Icon name="ios-pricetags" size={22} color="#fc9619" />
-              <Text style={{ fontSize: 17, marginLeft: 5, marginTop: -2 }}>
+              <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {this.props.rank}
               </Text>
             </View>
@@ -252,7 +248,7 @@ class Detail extends Component {
             <FlatList
               style={style.list}
               data={relatedBooks}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <Book
                   image={item.Medias[0].ImageUrl}
                   name={item.Shelf.Name}
@@ -266,7 +262,7 @@ class Detail extends Component {
             />
           </View>
 
-          <View style={{ marginHorizontal: 20 }}>
+          <View style={{marginHorizontal: 20}}>
             <Text style={style.text}>Nhận xét</Text>
             <TouchableWithoutFeedback onPress={this.onShowForm}>
               <Text style={style.button}>Viết nhận xét cho cuốn sách này</Text>
@@ -277,7 +273,7 @@ class Detail extends Component {
           {/* <View>{this.renderItem(commentData)}</View> */}
           <FlatList
             data={commentData}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <Comment
                 name={item.UserName}
                 userImage={item.UrlImageUser}
@@ -423,8 +419,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetComment: idBook => dispatch(getComment(idBook)),
     onGetRelatedBooks: idBook => dispatch(getRelatedBooks(idBook)),
-    onAddCard: data => dispatch(addCard(data)),
-    //onAddCard: data => dispatch(addCard(data)),
+    onAddCard: (data, token) => dispatch(addCard(data, token)),
+    onGetCard: (idbasket, token) => dispatch(getCard(idbasket, token)),
   };
 };
 

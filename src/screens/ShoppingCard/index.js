@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Image,
@@ -7,14 +7,21 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { getBook } from '../../redux/bookRedux/actions';
+import {connect} from 'react-redux';
+import {getBook} from '../../redux/bookRedux/actions';
+import {getCard} from '../../redux/cardRedux/action';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import Book from '../ShoppingCard/components/bookOrder';
-import { Navigation } from 'react-native-navigation';
-import { List } from 'react-native-paper';
+import {Navigation} from 'react-native-navigation';
+import {List} from 'react-native-paper';
 class ShoppingCard extends Component {
+  componentDidMount() {
+    this.props.onGetCard(this.props.idbasket, this.props.token);
+    //console.log('card:', this.props.card.data.Data.Items);
+  }
   render() {
+    const card = this.props.card.data.Data.Items;
+    console.log('cc', card);
     return (
       <View style={styles.container}>
         <View style={styles.top}>
@@ -28,21 +35,17 @@ class ShoppingCard extends Component {
           />
         </View>
         <View style={styles.center}>
+          <Text>Card</Text>
           <FlatList
             style={styles.list}
-            data={Object.keys(this.props.book.data.Data.NewBooks)}
-            renderItem={({ item }) => (
+            data={card}
+            renderItem={({item}) => (
               <Book
-                image={
-                  this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl
-                }
-                name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
-                author={
-                  this.props.book.data.Data.NewBooks[item].Authors[0].Name
-                }
-                count={this.props.book.data.Data.NewBooks[item].Shelf.BookCount}
-                title={this.props.book.data.Data.NewBooks[item].Title}
-                id={this.props.book.data.Data.NewBooks[item].Medias[0].Id}
+                image={item.Book.Medias[0].ImageUrl}
+                name={item.Book.Publishers[0].Name}
+                author={item.Book.Authors[0].Name}
+                count={item.Book.Quantity}
+                //id={item.Book.}
               />
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -90,13 +93,17 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  console.log('render:', state.bookReducer);
-  return { book: state.bookReducer };
+  //console.log('card:', state.CardReducer);
+  return {
+    book: state.bookReducer,
+    card: state.CardReducer,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onGetBooks: () => dispatch(getBook()),
+    onGetCard: (idbasket, token) => dispatch(getCard(idbasket, token)),
   };
 };
 

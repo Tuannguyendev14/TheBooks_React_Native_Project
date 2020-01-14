@@ -145,7 +145,6 @@ Navigation.registerComponent('Filter', () => Filter);
 Navigation.registerComponent('Categories', () => Categories);
 Navigation.registerComponent('Sort', () => Sort);
 
-
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
     root: {
