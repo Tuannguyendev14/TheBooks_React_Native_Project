@@ -61,7 +61,7 @@ export default class SideMenu extends Component {
                 </TouchableOpacity>
               </View>
               <View>
-                {this.state.name === listItem.Name ? (
+                {this.state.name === listItem.Name && this.state.ticker === true ? (
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
                 ) : (
                   <Text></Text>

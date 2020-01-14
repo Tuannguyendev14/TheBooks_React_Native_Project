@@ -374,8 +374,9 @@ const styles = StyleSheet.create({
   containerMain1: {
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginVertical: 25,
-    flex: 2,
+    marginVertical: 35,
+    marginTop: -7,
+    flex: 1,
   },
   containerNumber1: {
     flexDirection: 'row',
