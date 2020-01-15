@@ -55,7 +55,7 @@ class Book extends Component {
       } else {
         let data = {
           BookId: this.props.id,
-          DeleteAll: true,
+          DeleteAll: false,
           UserId: parsed.Data.Id,
         };
         this.delete(data, parsed.Token.access_token);

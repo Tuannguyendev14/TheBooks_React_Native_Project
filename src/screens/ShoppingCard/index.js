@@ -3,6 +3,7 @@ import {
   View,
   Image,
   Text,
+  LoadingPage,
   TouchableOpacity,
   StyleSheet,
   FlatList,
@@ -16,11 +17,8 @@ import {Navigation} from 'react-native-navigation';
 import {List} from 'react-native-paper';
 class ShoppingCard extends Component {
   componentDidMount() {
-    this.props.onGetCard(this.props.idbasket, this.props.token);
-    console.log('card:', this.props.card.data.Data.Items);
-    // const card = this.props.card;
-
-    // console.log('cc', card);
+    //this.props.onGetCard(this.props.idbasket, this.props.token);
+    // console.log('get data card:', this.props.card);
   }
   listEmptyComponent = () => {
     return (
@@ -29,43 +27,60 @@ class ShoppingCard extends Component {
       </View>
     );
   };
-  render() {
-    const card = this.props.card;
 
-    console.log('card ..:', card);
-    return (
-      <View style={styles.container}>
-        <View style={styles.top}>
-          <Icon1 style={styles.back} name="ic-back" size={25} color="#5f5f5f" />
-          <Text style={styles.text}>Giỏ hàng</Text>
-          <Icon1
-            style={styles.trash}
-            name="ic-trash"
-            size={25}
-            color="#5f5f5f"
-          />
+  back = () => {
+    Navigation.dismissAllModals();
+  };
+  render() {
+    const card = this.props.card.data.Data;
+    console.log('get data card:', this.props.card.data.Data);
+    if (card == null || card === 'undefined') {
+      return (
+        <View>
+          <Text>No thing to show</Text>
         </View>
-        <View style={styles.center}>
-          <Text>Card</Text>
-          <FlatList
-            style={styles.list}
-            data={card.data.Data.Items}
-            renderItem={({item}) => (
-              <Book
-                image={item.Book.Medias[0].ImageUrl}
-                name={item.Book.Publishers[0].Name}
-                author={item.Book.Authors[0].Name}
-                count={item.Book.Quantity}
-                id={item.Book.Id}
-              />
-            )}
-            ListEmptyComponent={this.listEmptyComponent}
-            keyExtractor={(item, index) => index.toString()}
-            showsHorizontalScrollIndicator={false}
-          />
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <Icon1
+              onPress={() => this.back()}
+              style={styles.back}
+              name="ic-back"
+              size={25}
+              color="#5f5f5f"
+            />
+            <Text style={styles.text}>Giỏ hàng</Text>
+            <Icon1
+              style={styles.trash}
+              name="ic-trash"
+              size={25}
+              color="#5f5f5f"
+            />
+          </View>
+          <View style={styles.center}>
+            <Text>Card</Text>
+            <FlatList
+              style={styles.list}
+              data={card.Items}
+              renderItem={({item}) => (
+                <Book
+                  image={item.Book.Medias[0].ImageUrl}
+                  name={item.Book.Publishers[0].Name}
+                  author={item.Book.Authors[0].Name}
+                  count={item.Book.Quantity}
+                  id={item.Book.Id}
+                />
+              )}
+              ListEmptyComponent={this.listEmptyComponent}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   }
 }
 const styles = StyleSheet.create({
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  //console.log('card:', state.CardReducer);
+  console.log('map', state.CardReducer);
   return {
     book: state.bookReducer,
     card: state.CardReducer,
@@ -115,7 +130,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onGetBooks: () => dispatch(getBook()),
-    onGetCard: (idbasket, token) => dispatch(getCard(idbasket, token)),
+    onGetCard: (data, token) => dispatch(getCard(data, token)),
   };
 };
 

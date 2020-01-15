@@ -95,7 +95,6 @@ class Detail extends Component {
       UserId: userId,
     };
     this.props.onAddCard(data, token);
-    this.props.onGetCard(idbasket, token);
     Navigation.showModal({
       stack: {
         children: [
@@ -120,6 +119,7 @@ class Detail extends Component {
         ],
       },
     });
+    this.props.onGetCard(idbasket, token);
   };
 
   getCard = (id, token) => {
@@ -421,7 +421,7 @@ const mapDispatchToProps = dispatch => {
     onGetComment: idBook => dispatch(getComment(idBook)),
     onGetRelatedBooks: idBook => dispatch(getRelatedBooks(idBook)),
     onAddCard: (data, token) => dispatch(addCard(data, token)),
-    onGetCard: (idbasket, token) => dispatch(getCard(idbasket, token)),
+    onGetCard: (data, token) => dispatch(getCard(data, token)),
   };
 };
 

@@ -15,18 +15,20 @@ export function* addCardSaga(data) {
   try {
     const response = yield call(addToCard, data.data, data.token);
     AsyncStorage.setItem('idbasket', response.data.Data.Id);
-    console.log('add card:', response);
+    console.log('add card:', response.data);
     const data1 = response.data;
     yield put(addCardSuccess(data1));
   } catch (error) {
     console.log('saga error:', error);
+    alert(error);
     yield put(addCardFailure(error));
   }
 }
 export function* getCardSaga({data, token}) {
   try {
     const response = yield call(getCard, data, token);
-    const listCard = response.data.Data.Items;
+    console.log('get card:', response.data);
+    const listCard = response.data;
     yield put(getCardSuccess(listCard));
   } catch (error) {
     yield put(getCardFailure(error));
@@ -37,6 +39,7 @@ export function* deleteCardSaga({data, token}) {
     console.log('thong tin:', data);
     const response = yield call(deleteCard, data, token);
     console.log('delete: ', response);
+    alert('Delete successfully');
     yield put(deleteCardSuccess(response));
   } catch (error) {
     yield put(deleteCardFailure(error));
