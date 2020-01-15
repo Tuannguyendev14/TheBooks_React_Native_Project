@@ -131,29 +131,11 @@ class Profile extends Component {
               </View>
             </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                marginVertical: 27,
-                borderWidth: 1,
-                height: 50,
-                borderColor: '#c5c1c5',
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+            <View style={style.viewIcon}>
+              <View style={style.iconButton}>
                 <Icon name="ic-filter-change-2" size={30} color="black" />
               </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+              <View style={style.iconButton}>
                 <Icon name="ic-filter-change" size={30} color="black" />
               </View>
             </View>
@@ -237,6 +219,19 @@ const style = StyleSheet.create({
   textPlatinum: {
     margin: 18,
     fontSize: 22,
+  },
+  viewIcon: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 27,
+    borderWidth: 1,
+    height: 50,
+    borderColor: '#c5c1c5',
+  },
+  iconButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
