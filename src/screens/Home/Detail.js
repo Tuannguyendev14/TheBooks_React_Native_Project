@@ -94,7 +94,7 @@ class Detail extends Component {
       Quantity: 1,
       UserId: userId,
     };
-    this.props.onAddCard(data, token);
+    //this.props.onAddCard(data, token);
     Navigation.showModal({
       stack: {
         children: [

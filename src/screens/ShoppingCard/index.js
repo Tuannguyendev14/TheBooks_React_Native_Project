@@ -36,8 +36,26 @@ class ShoppingCard extends Component {
     console.log('get data card:', this.props.card.data.Data);
     if (card == null || card === 'undefined') {
       return (
-        <View>
-          <Text>No thing to show</Text>
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <Icon1
+              onPress={() => this.back()}
+              style={styles.back}
+              name="ic-back"
+              size={25}
+              color="#5f5f5f"
+            />
+            <Text style={styles.text}>Giỏ hàng</Text>
+            <Icon1
+              style={styles.trash}
+              name="ic-trash"
+              size={25}
+              color="#5f5f5f"
+            />
+          </View>
+          <View style={styles.center}>
+            <Text>Giỏ hàng trống</Text>
+          </View>
         </View>
       );
     } else {
