@@ -16,9 +16,18 @@ import Book from '../ShoppingCard/components/bookOrder';
 import {Navigation} from 'react-native-navigation';
 import {List} from 'react-native-paper';
 class ShoppingCard extends Component {
-  componentDidMount() {
-    //this.props.onGetCard(this.props.idbasket, this.props.token);
-    // console.log('get data card:', this.props.card);
+  // componentDidMount() {
+  //   this.props.onGetCard(this.props.idbasket, this.props.token);
+  //   console.log('got data card:', this.props.card);
+  // }
+  // componentDidUpdate() {
+  //   this.props.onGetCard(this.props.idbasket, this.props.token);
+  // }
+  // componentWillUnmount() {
+  //   this.props.onGetCard(this.props.idbasket, this.props.token);
+  // }
+  componentWillMount() {
+    this.props.onGetCard(this.props.idbasket, this.props.token);
   }
   listEmptyComponent = () => {
     return (
@@ -84,7 +93,11 @@ class ShoppingCard extends Component {
               data={card.Items}
               renderItem={({item}) => (
                 <Book
-                  image={item.Book.Medias[0].ImageUrl}
+                  image={
+                    item.Book.Medias[0]
+                      ? item.Book.Medias[0].ImageUrl
+                      : 'https://the-books-dev-files.s3.amazonaws.com/Image/1533113457208_1533113324978_web.jpg'
+                  }
                   name={item.Book.Publishers[0].Name}
                   author={item.Book.Authors[0].Name}
                   count={item.Book.Quantity}

@@ -12,7 +12,7 @@ import {onSignIn} from '../../../navigation';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {connect} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
-import {deleteCard} from '../../../redux/cardRedux/action';
+import {deleteCard, getCard} from '../../../redux/cardRedux/action';
 class Book extends Component {
   onPress = (image, name, title, author, count, id) => {
     Navigation.showModal({
@@ -47,6 +47,7 @@ class Book extends Component {
   onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
       console.log('user:', parsed.Data.Id);
       if (parsed === null) {
@@ -58,14 +59,12 @@ class Book extends Component {
           DeleteAll: false,
           UserId: parsed.Data.Id,
         };
-        this.delete(data, parsed.Token.access_token);
+        this.props.onGetCard(idbasket, parsed.Token.access_token);
+        await this.props.onDeleteCard(data, parsed.Token.access_token);
       }
     } catch (error) {
       alert(error);
     }
-  };
-  delete = (data, token) => {
-    this.props.onDeleteCard(data, token);
   };
   render() {
     //const {image, name, author, count, title} = this.props;
@@ -189,6 +188,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onDeleteCard: (data, token) => dispatch(deleteCard(data, token)),
+    onGetCard: (data, token) => dispatch(getCard(data, token)),
   };
 };
 

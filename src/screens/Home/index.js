@@ -2,11 +2,19 @@ import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
-import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  AsyncStorage,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {offlineData} from '../../utils/offlineData';
 import Book from '../../component/Book';
-
+import {onSignIn} from '../../navigation';
 //const data = this.props.user.data.Data;
 class index extends Component {
   constructor(props) {
@@ -28,7 +36,48 @@ class index extends Component {
       },
     });
   };
-
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
+      let parsed = JSON.parse(user);
+      console.log('parsed:', parsed);
+      if (parsed === null) {
+        onSignIn();
+      } else {
+        //this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
+        this.changShopping(idbasket, parsed.Token.access_token);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+  changShopping = (idbasket, token) => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'ShoppingCard',
+              passProps: {
+                token: token,
+                idbasket: idbasket,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
   changScreenSearch = () => {
     Navigation.showModal({
       component: {
@@ -160,11 +209,38 @@ class index extends Component {
             />
           </View>
         </ScrollView>
+        <View style={styles.footer}>
+          <Icon1
+            name="ic-cart"
+            size={60}
+            color="red"
+            onPress={() => this.onCheck()}
+          />
+        </View>
+
+        {/* <Image
+          source={{
+            uri:
+              'https://images.all-free-download.com/images/graphiclarge/shopping_cart_icon_vector_red_background_280670.jpg',
+          }}
+          style={styles.footer}
+        /> */}
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
+  footer: {
+    backgroundColor: 'transparent',
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 65,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: 'red',
+    right: 20,
+    overflow: 'hidden',
+  },
   showall: {
     alignItems: 'flex-end',
     //paddingLeft: 80,

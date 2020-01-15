@@ -21,7 +21,7 @@ import {connect} from 'react-redux';
 import {getComment} from '../../redux/commentRedux/actions';
 import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
 import {addCard, getCard} from '../../redux/cardRedux/action';
-
+import store from '../../redux/store';
 class Detail extends Component {
   constructor(props) {
     super(props);
@@ -88,37 +88,37 @@ class Detail extends Component {
     }
   };
 
-  onPress = (userId, token, idbasket) => {
+  onPress = async (userId, token, idbasket) => {
     let data = {
       BookId: this.props.IdBook,
       Quantity: 1,
       UserId: userId,
     };
-    //this.props.onAddCard(data, token);
-    Navigation.showModal({
-      stack: {
-        children: [
-          {
-            component: {
-              name: 'ShoppingCard',
-              passProps: {
-                token: token,
-                idbasket: idbasket,
-              },
-              options: {
-                topBar: {
-                  title: {
-                    text: '',
-                    alignment: 'center',
-                  },
-                  visible: false,
-                },
-              },
-            },
-          },
-        ],
-      },
-    });
+    await this.props.onAddCard(data, token);
+    // Navigation.showModal({
+    //   stack: {
+    //     children: [
+    //       {
+    //         component: {
+    //           name: 'ShoppingCard',
+    //           passProps: {
+    //             token: token,
+    //             idbasket: idbasket,
+    //           },
+    //           options: {
+    //             topBar: {
+    //               title: {
+    //                 text: '',
+    //                 alignment: 'center',
+    //               },
+    //               visible: false,
+    //             },
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   },
+    // });
     this.props.onGetCard(idbasket, token);
   };
 
@@ -127,6 +127,8 @@ class Detail extends Component {
   };
   componentDidMount() {
     let idBook = this.props.IdBook;
+    let store1 = store.getState().CardReducer;
+    console.log('cart', store1);
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
   }

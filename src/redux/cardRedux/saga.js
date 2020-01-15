@@ -15,11 +15,12 @@ export function* addCardSaga(data) {
   try {
     const response = yield call(addToCard, data.data, data.token);
     AsyncStorage.setItem('idbasket', response.data.Data.Id);
-    console.log('add card:', response.data);
+    console.log('add card:', response);
     const data1 = response.data;
+    alert('Add successfully');
     yield put(addCardSuccess(data1));
   } catch (error) {
-    console.log('saga error:', error);
+    console.log('add saga error:', error);
     alert(error);
     yield put(addCardFailure(error));
   }

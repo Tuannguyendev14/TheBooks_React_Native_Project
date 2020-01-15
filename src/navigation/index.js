@@ -27,7 +27,7 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
-
+console.disableYellowBox = true;
 function ReduxProvider(Component) {
   return props => (
     <Provider store={store}>
