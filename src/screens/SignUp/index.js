@@ -18,12 +18,11 @@ class SignUp extends Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
-      firstName: 'Nguyen Huu',
-      lastName: 'Tuan',
-      phoneNumber: '0779763016',
-      email: 'tuan.nguyen.106902@gmail.com',
-      password: 'tuannui123',
-      confirmPass: 'tuannui123',
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+      email: '',
+      confirmPass: '',
       errorFirstName: '',
       errorLastName: '',
       errorEmail: '',

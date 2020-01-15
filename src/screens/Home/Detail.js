@@ -32,7 +32,6 @@ import UpdateModal from './UpdateModal';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-
 class Detail extends Component {
   constructor(props) {
     super(props);
@@ -80,10 +79,9 @@ class Detail extends Component {
         this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
       }
     } catch (error) {
-       alert(error);
+      alert(error);
     }
   };
-
 
   onPress = async (userId, token, idbasket) => {
     let data = {
@@ -93,8 +91,8 @@ class Detail extends Component {
     };
     await this.props.onAddCard(data, token);
     this.props.onGetCard(idbasket, token);
-  }
-  
+  };
+
   showAlert = () => {
     this.setState({
       showAlert: true,

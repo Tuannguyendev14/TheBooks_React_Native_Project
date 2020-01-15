@@ -42,7 +42,7 @@ export default class ShowAllBook extends Component {
             data={data}
             renderItem={({item}) => (
               <Book
-                //style={styles.book}
+                style={styles.book}
                 image={get(item, 'Medias.0.ImageUrl')}
                 name={get(item, 'Shelf.Name')}
                 author={get(item, 'Authors.0.Name')}
@@ -73,5 +73,8 @@ const styles = StyleSheet.create({
   viewIcon: {
     justifyContent: 'center',
     flex: 1,
+  },
+  book: {
+    flex: 0.5,
   },
 });

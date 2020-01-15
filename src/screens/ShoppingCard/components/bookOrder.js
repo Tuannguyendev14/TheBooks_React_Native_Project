@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   AsyncStorage,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {onSignIn} from '../../../navigation';
@@ -70,58 +71,80 @@ class Book extends Component {
     //const {image, name, author, count, title} = this.props;
 
     return (
-      <View style={styles.showflast}>
-        <TouchableOpacity
-          style={styles.image}
-          onPress={() =>
-            this.onPress(
-              this.props.image,
-              this.props.name,
-              this.props.title,
-              this.props.author,
-              this.props.count,
-              this.props.id,
-            )
-          }>
-          <Image
-            source={{uri: this.props.image}}
-            style={{
-              width: 150,
-              height: 200,
-              backgroundColor: 'red',
-              marginHorizontal: 2,
-            }}
+      <View>
+        <View style={styles.showflast}>
+          <TouchableOpacity
+            style={styles.image}
+            onPress={() =>
+              this.onPress(
+                this.props.image,
+                this.props.name,
+                this.props.title,
+                this.props.author,
+                this.props.count,
+                this.props.id,
+              )
+            }>
+            <Image
+              source={{uri: this.props.image}}
+              style={{
+                width: 150,
+                height: 200,
+                backgroundColor: 'red',
+                marginHorizontal: 2,
+              }}
+            />
+          </TouchableOpacity>
+          <View style={styles.right}>
+            <TouchableOpacity>
+              <Text style={styles.name}>{this.props.name}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={styles.author}>{this.props.author}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.rate}>
+              <Icon1 name="star" size={15} color="#fc9619" />
+              <Icon1 name="star" size={15} color="#fc9619" />
+              <Icon1 name="star" size={15} color="#fc9619" />
+              <Icon1 name="star" size={15} color="#fc9619" />
+              <Icon1 name="star" size={15} color="#cecece" />
+              <Text style={styles.bookCount}>{this.props.count}</Text>
+            </TouchableOpacity>
+            <View style={styles.bot}>
+              <Icon1 name="ic-book-1" size={15} color="#fc9619" />
+              <Text style={styles.bot_text}>{this.props.quantity} Quyển</Text>
+              <Icon1
+                style={{paddingLeft: 20}}
+                name="ic-price"
+                size={15}
+                color="#fc9619"
+              />
+              <Text style={styles.bot_text}>{this.props.price}</Text>
+            </View>
+          </View>
+          <Icon1
+            onPress={this.onCheck}
+            style={styles.delete_Card}
+            name="ic-delete"
+            size={15}
+            color="#5f5f5f"
           />
-        </TouchableOpacity>
-        <View style={styles.right}>
-          <TouchableOpacity>
-            <Text style={styles.name}>{this.props.name}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.author}>{this.props.author}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.rate}>
-            <Icon1 name="star" size={11} color="#fc9619" />
-            <Icon1 name="star" size={11} color="#fc9619" />
-            <Icon1 name="star" size={11} color="#fc9619" />
-            <Icon1 name="star" size={11} color="#fc9619" />
-            <Icon1 name="star" size={11} color="#979797" />
-            <Text style={styles.bookCount}>{this.props.count}</Text>
-          </TouchableOpacity>
         </View>
-        <Icon1
-          onPress={this.onCheck}
-          style={styles.delete_Card}
-          name="ic-delete"
-          size={15}
-          color="#5f5f5f"
-        />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  bot_text: {
+    paddingLeft: 5,
+    color: '#ababab',
+  },
+  bot: {
+    flexDirection: 'row',
+    paddingTop: 15,
+    alignItems: 'center',
+  },
   delete_Card: {
     alignItems: 'flex-end',
   },
@@ -177,6 +200,8 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    borderRadius: 25,
+    overflow: 'hidden',
   },
 });
 const mapStateToProps = state => {

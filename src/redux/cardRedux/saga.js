@@ -17,7 +17,7 @@ export function* addCardSaga(data) {
     AsyncStorage.setItem('idbasket', response.data.Data.Id);
     console.log('add card:', response);
     const data1 = response.data;
-    alert('Add successfully');
+    alert('Thêm thành công');
     yield put(addCardSuccess(data1));
   } catch (error) {
     console.log('add saga error:', error);
@@ -40,7 +40,7 @@ export function* deleteCardSaga({data, token}) {
     console.log('thong tin:', data);
     const response = yield call(deleteCard, data, token);
     console.log('delete: ', response);
-    alert('Delete successfully');
+    alert('Xóa thành công');
     yield put(deleteCardSuccess(response));
   } catch (error) {
     yield put(deleteCardFailure(error));

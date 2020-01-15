@@ -6,11 +6,13 @@ import {
   LoadingPage,
   TouchableOpacity,
   StyleSheet,
+  TouchableWithoutFeedback,
   FlatList,
+  AsyncStorage,
 } from 'react-native';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
-import {getCard} from '../../redux/cardRedux/action';
+import {getCard, deleteCard} from '../../redux/cardRedux/action';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import Book from '../ShoppingCard/components/bookOrder';
 import {Navigation} from 'react-native-navigation';
@@ -32,11 +34,39 @@ class ShoppingCard extends Component {
   listEmptyComponent = () => {
     return (
       <View>
-        <Text>No thing to show</Text>
+        <Text style={styles.empty}>Giỏ hàng trống</Text>
       </View>
     );
   };
-
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
+      let parsed = JSON.parse(user);
+      console.log('user:', parsed.Data.Id);
+      if (parsed === null) {
+        // this.onPress();
+        //onSignIn();
+      } else {
+        let data = {
+          BookId: this.props.id,
+          DeleteAll: true,
+          UserId: parsed.Data.Id,
+        };
+        await this.props.onDeleteAllCard(data, parsed.Token.access_token);
+        Navigation.setRoot({
+          root: {
+            component: {
+              name: 'Home',
+            },
+          },
+        });
+        //alert('Đã xóa tất cả sách trong giỏ hàng !');
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
   back = () => {
     Navigation.dismissAllModals();
   };
@@ -80,6 +110,7 @@ class ShoppingCard extends Component {
             />
             <Text style={styles.text}>Giỏ hàng</Text>
             <Icon1
+              onPress={() => this.onCheck()}
               style={styles.trash}
               name="ic-trash"
               size={25}
@@ -87,7 +118,6 @@ class ShoppingCard extends Component {
             />
           </View>
           <View style={styles.center}>
-            <Text>Card</Text>
             <FlatList
               style={styles.list}
               data={card.Items}
@@ -102,6 +132,8 @@ class ShoppingCard extends Component {
                   author={item.Book.Authors[0].Name}
                   count={item.Book.Quantity}
                   id={item.Book.Id}
+                  quantity={item.Book.Quantity}
+                  price={item.Book.Price}
                 />
               )}
               ListEmptyComponent={this.listEmptyComponent}
@@ -109,12 +141,32 @@ class ShoppingCard extends Component {
               showsHorizontalScrollIndicator={false}
             />
           </View>
+          <View style={styles.bot}>
+            <TouchableWithoutFeedback onPress={this.onAddToCard}>
+              <Text style={styles.buttonAddToCard}>Đặt sách</Text>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
       );
     }
   }
 }
 const styles = StyleSheet.create({
+  buttonAddToCard: {
+    //position: 'absolute',
+    //alignSelf: 'flex-end',
+    top: 10,
+    fontSize: 25,
+    fontWeight: 'bold',
+    padding: 15,
+    textAlign: 'center',
+    backgroundColor: '#fc9619',
+    color: 'white',
+  },
+  empty: {
+    fontSize: 22,
+    textAlign: 'center',
+  },
   center: {
     borderBottomWidth: 1,
     borderBottomColor: '#e9e9e9',
@@ -162,6 +214,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetBooks: () => dispatch(getBook()),
     onGetCard: (data, token) => dispatch(getCard(data, token)),
+    onDeleteAllCard: (data, token) => dispatch(deleteCard(data, token)),
   };
 };
 
