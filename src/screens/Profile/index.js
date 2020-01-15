@@ -7,11 +7,15 @@ import {
   TouchableWithoutFeedback,
   Image,
   AsyncStorage,
+  FlatList,
 } from 'react-native';
-import iconProfile from '../../../assets/images/Home/app.png';
 import {onSignIn} from '../../navigation';
 import {connect} from 'react-redux';
 import {logOut} from '../../redux/userRedux/actions';
+import iconProfile from '../../../assets/images/Home/anh.jpg';
+import Icon from 'react-native-vector-icons/thebook-appicon';
+import {StyleProvider} from 'native-base';
+import Book from '../../component/Book';
 
 class Profile extends Component {
   constructor(props) {
@@ -68,73 +72,173 @@ class Profile extends Component {
 
   render() {
     const {fullName, email, gender, phoneNumber} = this.state;
+    const newBooks = this.props.book.data.NewBooks;
     return (
-      <ScrollView orientation="vertical">
-        <View>
-          <Image style={style.styleImage} source={iconProfile} />
-
-          <View style={style.styleViewProfile}>
-            <Image style={style.styleImageProfile} source={iconProfile} />
+      <View>
+        <View style={style.topbar}>
+          <View style={{flex: 1}}>
+            <Icon
+              name="ic-photo"
+              size={30}
+              color="#5f5f5f"
+              onPress={() => this.changScreenFilter()}
+            />
           </View>
-          <View style={{marginTop: 30, marginHorizontal: 5}}>
-            <Text style={style.styleText}>Họ và tên: {fullName}</Text>
-            <Text style={style.styleText}>Email: {email}</Text>
-            <Text style={style.styleText}>Giới tính: {gender}</Text>
-            <Text style={style.styleText}>Tuổi: 21</Text>
-            <Text style={style.styleText}>Số điện thoại: {phoneNumber}</Text>
-          </View>
-
-          <View style={style.styleViewButtonLogOut}>
-            <TouchableWithoutFeedback onPress={this.onLogOut}>
-              <Text style={style.button}>Log Out</Text>
-            </TouchableWithoutFeedback>
+          <View style={style.search}>
+            <Icon
+              name="ic-setting"
+              size={30}
+              color="#5f5f5f"
+              onPress={() => this.changScreenSearch()}
+            />
           </View>
         </View>
-      </ScrollView>
+        <ScrollView orientation="vertical">
+          <View>
+            <View style={style.styleViewProfile}>
+              <Image style={style.styleImageProfile} source={iconProfile} />
+            </View>
+            <View style={{margin: 20, marginTop: -110}}>
+              <Text style={{color: 'white', fontSize: 30}}>{fullName}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 20,
+                }}>
+                <View style={style.platinum}>
+                  <Icon name="ic-titan" size={35} color="#ea06f9" />
+                  <Text style={style.textPlatinum}>Platinum</Text>
+                </View>
+                <View style={{flex: 1}} />
+                <View style={style.viewCode}>
+                  <Icon name="code" size={50} color="black" />
+                </View>
+              </View>
+            </View>
+
+            <View style={style.viewInfor}>
+              <View style={style.viewItemText}>
+                <Text style={style.text}>Đang mượn</Text>
+                <Text style={style.text}>12</Text>
+              </View>
+              <View style={style.viewItemText}>
+                <Text style={style.text}>Yêu thích</Text>
+                <Text style={style.text}>86</Text>
+              </View>
+              <View style={style.viewItemText}>
+                <Text style={style.text}>Tích điểm</Text>
+                <Text style={style.text}>215</Text>
+              </View>
+            </View>
+
+            <View style={style.viewIcon}>
+              <View style={style.iconButton}>
+                <Icon name="ic-filter-change-2" size={30} color="black" />
+              </View>
+              <View style={style.iconButton}>
+                <Icon name="ic-filter-change" size={30} color="black" />
+              </View>
+            </View>
+            <FlatList
+              style={style.list}
+              data={newBooks}
+              renderItem={({item}) => (
+                <Book
+                  image={item.Medias[0].ImageUrl}
+                  name={item.Shelf.Name}
+                  author={item.Authors[0].Name}
+                  count={item.Shelf.BookCount}
+                  title={item.Title}
+                  OverallStarRating={item.OverallStarRating}
+                  idBook={item.Id}
+                />
+              )}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
 
 const style = StyleSheet.create({
-  styleImage: {
-    width: '100%',
-    height: 220,
+  topbar: {
+    paddingLeft: 15,
+    paddingTop: 20.5,
+    fontSize: 10.5,
+    flexDirection: 'row',
+    marginHorizontal: 10,
   },
 
-  styleText: {
-    fontSize: 20,
-    padding: 5,
-  },
-  button: {
-    borderWidth: 1.5,
-    borderRadius: 12,
-    fontSize: 24,
-    fontWeight: 'bold',
-    width: 140,
-    padding: 12,
-    textAlign: 'center',
-    backgroundColor: 'white',
-    borderColor: 'blue',
-    color: '#a09292',
-  },
   styleViewProfile: {
     alignContent: 'center',
     alignItems: 'center',
     marginTop: -80,
   },
   styleImageProfile: {
-    borderRadius: 150,
+    width: '100%',
+    height: 500,
   },
-  styleViewButtonLogOut: {
-    alignItems: 'center',
+  list: {
+    paddingTop: 5,
+  },
+  platinum: {
+    flexDirection: 'row',
+    flex: 3,
+    backgroundColor: '#f7f3f7',
+    borderRadius: 50,
+    height: 80,
     justifyContent: 'center',
-    marginTop: 25,
+    alignItems: 'center',
+  },
+  viewInfor: {
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  viewItemText: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
+  },
+  viewCode: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    height: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textPlatinum: {
+    margin: 18,
+    fontSize: 22,
+  },
+  viewIcon: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 27,
+    borderWidth: 1,
+    height: 50,
+    borderColor: '#c5c1c5',
+  },
+  iconButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
 const mapStateToProps = state => {
   return {
     userData: state.user,
+    book: state.bookReducer,
   };
 };
 

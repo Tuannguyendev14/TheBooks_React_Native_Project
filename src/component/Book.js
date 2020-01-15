@@ -7,7 +7,7 @@ import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import {Navigation} from 'react-native-navigation';
 
 class Book extends Component {
-  onPress = (image, name, title, author, count, idBook, OverallStarRating) => {
+  onPress = idBook => {
     Navigation.showModal({
       stack: {
         children: [
@@ -15,13 +15,7 @@ class Book extends Component {
             component: {
               name: 'Detail',
               passProps: {
-                data: image,
-                name: name,
-                namebook: title,
-                authorName: author,
-                rank: count,
                 IdBook: idBook,
-                OverallStarRating: OverallStarRating,
               },
               options: {
                 topBar: {
@@ -56,22 +50,11 @@ class Book extends Component {
       star.push(<Icon1 name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - OverallStarRating; i++) {
-      starOutline.push(<Icon1 name="ic-star-pre" size={20} color="#fc9619" />);
+      starOutline.push(<Icon1 name="star" size={20} color="#979797" />);
     }
     return (
       <View style={styles.showflast}>
-        <TouchableOpacity
-          onPress={() =>
-            this.onPress(
-              image,
-              name,
-              title,
-              author,
-              count,
-              idBook,
-              OverallStarRating,
-            )
-          }>
+        <TouchableOpacity onPress={() => this.onPress(idBook)}>
           <Image
             source={{uri: image}}
             style={{
@@ -87,8 +70,6 @@ class Book extends Component {
         </TouchableOpacity>
         <TouchableOpacity>
           <Text style={styles.author}>{author}</Text>
-          <Text style={styles.author}>{idBook}</Text>
-          <Text style={styles.author}>{OverallStarRating}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rate}>
           {star}
@@ -133,6 +114,8 @@ const styles = StyleSheet.create({
   showflast: {
     width: 170,
     marginVertical: 20,
+    marginLeft: 10,
+    height: 300,
   },
   name: {
     color: '#4a4a4a',

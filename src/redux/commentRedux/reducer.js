@@ -1,41 +1,47 @@
-import {
-  GET_COMMENT,
-  GET_COMMENT_SUCCESS,
-  GET_COMMENT_FAILURE,
-} from '../constants/actionTypes';
+import * as types from '../constants/actionTypes';
 
 const initialState = {
   data: {},
+  detailComment: {},
   error: {},
   loading: false,
 };
 
 const commentReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_COMMENT:
+    case types.GET_COMMENT:
       return {...state, loading: true};
 
-    case GET_COMMENT_SUCCESS:
+    case types.GET_COMMENT_SUCCESS:
       return {...state, data: action.payload, loading: false};
 
-    case GET_COMMENT_FAILURE:
+    case types.GET_COMMENT_FAILURE:
       return {
         ...state,
         error: action.payload,
         loading: false,
       };
 
-    // case LOG_IN:
-    //   return {...state, loading: true};
+    case types.ADD_COMMENT:
+      return {...state, loading: true};
 
-    // case LOGIN_SUCCESS:
-    //   return {...state, data: action.payload, loading: false};
+    case types.ADD_COMMENT_SUCCESS:
+      return {...state, data: action.payload, loading: false};
 
-    // case LOGIN_FAILURE:
-    //   return {...state, error: action.payload, loading: false};
+    case types.ADD_COMMENT_FAILURE:
+      return {...state, error: action.payload, loading: false};
 
-    // case LOGOUT_SUCCESS:
-    //   return {...initialState};
+    case types.GET_COMMENT:
+      return {...state, loading: true};
+
+    case types.GET_BOOK_DETAIL_SUCCESS:
+      return {...state, detailComment: action.payload, loading: false};
+
+    case types.UPDATE_COMMENT:
+      return {...state, loading: true};
+
+    case types.UPDATE_COMMENT_SUCCESS:
+      return {...state, data: action.payload};
 
     default:
       return state;

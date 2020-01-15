@@ -1,34 +1,31 @@
 import {call, put, takeLatest} from 'redux-saga//effects';
-import {getComment, getCommentSuccess, getCommentFailure} from './actions';
-import {GET_COMMENT} from '../constants/actionTypes';
-import {getComments} from '../../api/reviews';
-// import {onChangeIntoMainScreen, onSignIn} from '../../navigation';
-import {AsyncStorage} from 'react-native';
+import {
+  getCommentSuccess,
+  getCommentFailure,
+  addCommentSuccess,
+  addCommentFailure,
+} from './actions';
+import {
+  GET_COMMENT,
+  ADD_COMMENT,
+  GET_COMMENT_DETAIL,
+} from '../constants/actionTypes';
+import {getComments, addComment, getCommentDetail} from '../../api/reviews';
 
-// export function* registerSaga(action) {
-//   try {
-//     const response = yield call(register, action.data);
-//     const data = response.data;
-//     yield put(addUserSuccess(data));
-//     AsyncStorage.setItem('user', JSON.stringify(data));
-//     onChangeIntoMainScreen();
-//     console.log('response', response);
-//   } catch (error) {
-//     console.log('error', error.toJSON());
-//     yield put(addUserFailure({error}));
-//   }
-// }
-
-// export function* updateTaskSaga({id, task}) {
-//     try {
-//       const response = yield call(updateTask, id, task);
-//       const data = response.data;
-//       console.log(id, task);
-//       yield put(updateTaskSuccess(id, task));
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
+export function* addCommentSaga(commentData) {
+  try {
+    const response = yield call(
+      addComment,
+      commentData.commentData,
+      commentData.userToken,
+    );
+    const data = response.data.Data;
+    yield put(addCommentSuccess(data));
+  } catch (error) {
+    let response = error.response.data.Message;
+    yield put(addCommentFailure(response));
+  }
+}
 
 export function* getCommentSaga({idBook}) {
   try {
@@ -40,6 +37,19 @@ export function* getCommentSaga({idBook}) {
   }
 }
 
-const commentSagas = () => [takeLatest(GET_COMMENT, getCommentSaga)];
+export function* getCommentDetailSaga({Id}) {
+  try {
+    const response = yield call(getCommentDetail, Id);
+    // const bookDetailData = response.data;
+    console.log('CommentDetailData', response);
+    // yield put(getBookDetailSuccess(bookDetailData));
+  } catch (error) {}
+}
+
+const commentSagas = () => [
+  takeLatest(GET_COMMENT, getCommentSaga),
+  takeLatest(ADD_COMMENT, addCommentSaga),
+  takeLatest(GET_COMMENT_DETAIL, getCommentDetailSaga),
+];
 
 export default commentSagas();

@@ -10,6 +10,7 @@ import ShowAllBook from '../screens/Home/ShowAllBook';
 import Order from '../screens/Order';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
+import SideMenuLeft from '../../src/screens/Profile/sideMenuLeft';
 import Intro from '../screens/Intro';
 import Library from '../screens/Library';
 import SignIn from '../screens/SignIn';
@@ -19,6 +20,7 @@ import ShoppingCard from '../screens/ShoppingCard';
 import Filter from '../screens/Filter/Filter';
 import Categories from '../screens/Filter/Categories';
 import Sort from '../screens/Filter/Sort';
+import UpdateModal from '../../src/navigation';
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
@@ -27,6 +29,7 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
+import CommentModal from '../screens/Home/CommentModal';
 
 function ReduxProvider(Component) {
   return props => (
@@ -127,13 +130,10 @@ Navigation.registerComponent(
 );
 
 Navigation.registerComponent(
-  'ShoppingCard',
-  () => ReduxProvider(ShoppingCard),
-  () => ShoppingCard,
+  'Filter',
+  () => ReduxProvider(Filter),
+  () => Filter,
 );
-
-Navigation.registerComponent('Filter', () => Filter);
-Navigation.registerComponent('Categories', () => Categories);
 
 Navigation.registerComponent(
   'ShoppingCard',
@@ -141,10 +141,35 @@ Navigation.registerComponent(
   () => ShoppingCard,
 );
 
-Navigation.registerComponent('Filter', () => Filter);
-Navigation.registerComponent('Categories', () => Categories);
-Navigation.registerComponent('Sort', () => Sort);
+Navigation.registerComponent(
+  'CommentModal',
+  () => ReduxProvider(CommentModal),
+  () => CommentModal,
+);
 
+Navigation.registerComponent(
+  'Categories',
+  () => ReduxProvider(Categories),
+  () => Categories,
+);
+
+Navigation.registerComponent(
+  'Sort',
+  () => ReduxProvider(Sort),
+  () => Sort,
+);
+
+Navigation.registerComponent(
+  'SideMenuLeft',
+  () => ReduxProvider(SideMenuLeft),
+  () => SideMenuLeft,
+);
+
+Navigation.registerComponent(
+  'UpdateModal',
+  () => ReduxProvider(UpdateModal),
+  () => UpdateModal,
+);
 
 export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
@@ -257,6 +282,7 @@ export const onChangeIntoMainScreen = () => {
                     },
                   ],
                   options: {
+                    topBar: {visible: false},
                     bottomTab: {
                       text: 'Profile',
                       icon: iconLibrary,
@@ -270,7 +296,7 @@ export const onChangeIntoMainScreen = () => {
         },
         right: {
           component: {
-            name: 'Categories',
+            name: 'SideMenuLeft',
           },
         },
       },

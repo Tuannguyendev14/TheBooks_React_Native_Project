@@ -6,48 +6,109 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   StyleSheet,
+  AsyncStorage,
 } from 'react-native';
-import ImageProfile from '../../../../assets/images/Home/anh.jpg';
 import Icon from 'react-native-vector-icons/thebook-appicon';
+import {Navigation} from 'react-native-navigation';
 
 export default class comment extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowButton: false,
+    };
+  }
+
+  componentWillMount() {
+    this.onCheckUserId();
+  }
+
+  onCheckUserId = () => {
+    let userId = this.props.userId;
+    let userIdMember = this.props.userIdMember;
+
+    if (userId === userIdMember) {
+      this.setState({
+        isShowButton: true,
+      });
+    } else {
+      this.setState({
+        isShowButton: false,
+      });
+    }
+  };
+
+  onDeleteComment = () => {
+    alert('xoa');
+  };
+
+  onEditComment = (Id, userId, comment, starRating) => {
+    this.props.parentFlatList.refs.updateModal.showEditModal(
+      Id,
+      userId,
+      comment,
+      starRating,
+    );
+  };
+
   render() {
+    const isShowButton = this.state.isShowButton;
+    const {
+      starRating,
+      userImage,
+      name,
+      comment,
+      userIdMember,
+      userId,
+      Id,
+    } = this.props;
+
+    const showButton = isShowButton ? (
+      <View style={styles.viewbutton}>
+        <View style={{margin: 10}}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              this.onEditComment(Id, userId, comment, starRating);
+            }}>
+            <Icon name="ic-edit-comment" size={25} color="" />
+          </TouchableWithoutFeedback>
+        </View>
+        <View>
+          <TouchableWithoutFeedback onPress={this.onDeleteComment}>
+            <Icon name="ic-trash" size={25} color="" />
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+    ) : (
+      <Text />
+    );
+
     let star = [];
     let starOutline = [];
-    for (let i = 0; i < this.props.star; i++) {
+    for (let i = 0; i < starRating; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
-    for (let i = 0; i < 5 - this.props.star; i++) {
+    for (let i = 0; i < 5 - starRating; i++) {
       starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
 
     return (
       <View style={styles.container}>
         <View style={styles.ViewControl}>
-          <Image source={{uri: this.props.userImage}} style={styles.image} />
+          <Image source={{uri: userImage}} style={styles.image} />
           <View style={styles.viewname}>
-            <Text>{this.props.name}</Text>
+            <Text>{name}</Text>
             <TouchableOpacity style={styles.star}>
               {star}
               {starOutline}
             </TouchableOpacity>
           </View>
-          <View style={styles.viewbutton}>
-            <View>
-              <TouchableWithoutFeedback>
-                <Icon name="ic-edit-comment" size={25} color="" />
-              </TouchableWithoutFeedback>
-            </View>
-            <View>
-              <TouchableWithoutFeedback>
-                <Icon name="ic-trash" size={25} color="" />
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
+
+          {showButton}
         </View>
         <View style={styles.viewcomment}>
           <Text style={styles.textcomment} numberOfLines={2}>
-            {this.props.comment}
+            {comment}
           </Text>
         </View>
       </View>
@@ -76,10 +137,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   viewbutton: {
-    alignItems: 'flex-end',
+    alignItems: 'center',
     flex: 2,
     flexDirection: 'row',
-    marginHorizontal: 10,
   },
   viewcomment: {
     marginVertical: 15,
