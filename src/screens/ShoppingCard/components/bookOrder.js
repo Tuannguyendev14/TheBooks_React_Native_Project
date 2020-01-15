@@ -1,11 +1,18 @@
 import React, {Component} from 'react';
-import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  AsyncStorage,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import {onSignIn} from '../../../navigation';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
-
+import {connect} from 'react-redux';
 import {Navigation} from 'react-native-navigation';
-
+import {deleteCard} from '../../../redux/cardRedux/action';
 class Book extends Component {
   onPress = (image, name, title, author, count, id) => {
     Navigation.showModal({
@@ -37,7 +44,29 @@ class Book extends Component {
       },
     });
   };
-
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      console.log('user:', parsed.Data.Id);
+      if (parsed === null) {
+        // this.onPress();
+        //onSignIn();
+      } else {
+        let data = {
+          BookId: this.props.id,
+          DeleteAll: true,
+          UserId: parsed.Data.Id,
+        };
+        this.delete(data, parsed.Token.access_token);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+  delete = (data, token) => {
+    this.props.onDeleteCard(data, token);
+  };
   render() {
     //const {image, name, author, count, title} = this.props;
 
@@ -82,6 +111,7 @@ class Book extends Component {
           </TouchableOpacity>
         </View>
         <Icon1
+          onPress={this.onCheck}
           style={styles.delete_Card}
           name="ic-delete"
           size={15}
@@ -150,4 +180,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default Book;
+const mapStateToProps = state => {
+  return {
+    card: state.CardReducer,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onDeleteCard: (data, token) => dispatch(deleteCard(data, token)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Book);

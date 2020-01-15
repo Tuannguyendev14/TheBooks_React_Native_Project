@@ -70,7 +70,7 @@ class Detail extends Component {
       let user = await AsyncStorage.getItem('user');
       let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
-      console.log('idbasket:', idbasket);
+      console.log('parsed:', parsed);
       if (parsed === null) {
         // this.onPress();
         onSignIn();
@@ -94,7 +94,8 @@ class Detail extends Component {
       Quantity: 1,
       UserId: userId,
     };
-    //this.props.onAddCard(data, token);
+    this.props.onAddCard(data, token);
+    this.props.onGetCard(idbasket, token);
     Navigation.showModal({
       stack: {
         children: [

@@ -17,11 +17,22 @@ import {List} from 'react-native-paper';
 class ShoppingCard extends Component {
   componentDidMount() {
     this.props.onGetCard(this.props.idbasket, this.props.token);
-    //console.log('card:', this.props.card.data.Data.Items);
+    console.log('card:', this.props.card.data.Data.Items);
+    // const card = this.props.card;
+
+    // console.log('cc', card);
   }
+  listEmptyComponent = () => {
+    return (
+      <View>
+        <Text>No thing to show</Text>
+      </View>
+    );
+  };
   render() {
-    const card = this.props.card.data.Data.Items;
-    console.log('cc', card);
+    const card = this.props.card;
+
+    console.log('card ..:', card);
     return (
       <View style={styles.container}>
         <View style={styles.top}>
@@ -38,16 +49,17 @@ class ShoppingCard extends Component {
           <Text>Card</Text>
           <FlatList
             style={styles.list}
-            data={card}
+            data={card.data.Data.Items}
             renderItem={({item}) => (
               <Book
                 image={item.Book.Medias[0].ImageUrl}
                 name={item.Book.Publishers[0].Name}
                 author={item.Book.Authors[0].Name}
                 count={item.Book.Quantity}
-                //id={item.Book.}
+                id={item.Book.Id}
               />
             )}
+            ListEmptyComponent={this.listEmptyComponent}
             keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
