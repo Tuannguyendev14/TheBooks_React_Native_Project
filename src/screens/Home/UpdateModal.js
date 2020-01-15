@@ -144,7 +144,7 @@ class UpdateModal extends Component {
 
   render() {
     const {star1, star2, star3, star4, star5} = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <Modal
         ref={'myModal'}

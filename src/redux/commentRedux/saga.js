@@ -4,13 +4,21 @@ import {
   getCommentFailure,
   addCommentSuccess,
   addCommentFailure,
+  getOutstandingReviewsSuccess,
+  getOutstandingReviewsFailure,
 } from './actions';
 import {
   GET_COMMENT,
   ADD_COMMENT,
   GET_COMMENT_DETAIL,
+  GET_OUSTANDING_REVIEWS,
 } from '../constants/actionTypes';
-import {getComments, addComment, getCommentDetail} from '../../api/reviews';
+import {
+  getComments,
+  addComment,
+  getCommentDetail,
+  getOutstandingReviews,
+} from '../../api/reviews';
 
 export function* addCommentSaga(commentData) {
   try {
@@ -46,10 +54,21 @@ export function* getCommentDetailSaga({Id}) {
   } catch (error) {}
 }
 
+export function* getOustandingReviewsSaga() {
+  try {
+    const response = yield call(getOutstandingReviews);
+    const outstandingReviewsData = response.data.Data.OutstandingReviews;
+    yield put(getOutstandingReviewsSuccess(outstandingReviewsData));
+  } catch (error) {
+    yield put(getOutstandingReviewsFailure(error));
+  }
+}
+
 const commentSagas = () => [
   takeLatest(GET_COMMENT, getCommentSaga),
   takeLatest(ADD_COMMENT, addCommentSaga),
   takeLatest(GET_COMMENT_DETAIL, getCommentDetailSaga),
+  takeLatest(GET_OUSTANDING_REVIEWS, getOustandingReviewsSaga),
 ];
 
 export default commentSagas();

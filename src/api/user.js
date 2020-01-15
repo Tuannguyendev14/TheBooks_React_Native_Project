@@ -11,3 +11,7 @@ export const login = data => {
 export const logout = () => {
   return callApi('/api/Token', 'DELETE');
 };
+
+export const getBestUsers = () => {
+  return callApi('/api/cms/bestusers', 'GET');
+};

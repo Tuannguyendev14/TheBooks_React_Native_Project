@@ -2,10 +2,13 @@ import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
+import {getBestUsers} from '../../redux/userRedux/actions';
+import {getOutstandingReviews} from '../../redux/commentRedux/actions';
 import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
-import {get} from 'lodash';
+import UserReview from './components/userReview';
+import {get, filter} from 'lodash';
 
 class index extends Component {
   constructor(props) {
@@ -42,11 +45,25 @@ class index extends Component {
 
   componentDidMount() {
     this.props.onGetBooks();
+    this.props.onGetBestUsersData();
+    this.props.onGetOutstandingData();
   }
 
   render() {
     const newBooks = this.props.book.data.NewBooks;
     const mostBorrowBooks = this.props.book.data.MostBorrowBooks;
+    const bestUsers = this.props.bestUsers;
+    const oustandingReviews = this.props.oustandingReviews;
+
+    const listNewBooksActive = filter(
+      newBooks,
+      item => item.IsDeleted === false,
+    );
+
+    const listMostBorrowBooksActive = filter(
+      mostBorrowBooks,
+      item => item.IsDeleted === false,
+    );
 
     return (
       <View>
@@ -72,26 +89,27 @@ class index extends Component {
           <View style={styles.main}>
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mới ({get(newBooks, 'length')})
+                Sách mới ({get(listNewBooksActive, 'length')})
               </Text>
               <Text
                 style={styles.showall}
-                onPress={() => this.changScreenShowAll(newBooks, 'Sách mới')}>
+                onPress={() =>
+                  this.changScreenShowAll(listNewBooksActive, 'Sách mới')
+                }>
                 Xem hết
               </Text>
             </View>
             <FlatList
               style={styles.list}
-              data={newBooks}
+              data={listNewBooksActive}
               renderItem={({item}) => (
                 <Book
-                  image={item.Medias[0].ImageUrl}
-                  name={item.Shelf.Name}
-                  author={item.Authors[0].Name}
-                  count={item.Shelf.BookCount}
-                  title={item.Title}
-                  OverallStarRating={item.OverallStarRating}
-                  idBook={item.Id}
+                  image={get(item, 'Medias.0.ImageUrl')}
+                  author={get(item, 'Authors.0.Name')}
+                  count={get(item, 'Shelf.BookCount')}
+                  OverallStarRating={get(item, 'OverallStarRating')}
+                  title={get(item, 'Title')}
+                  idBook={get(item, 'Id')}
                 />
               )}
               horizontal={true}
@@ -100,30 +118,66 @@ class index extends Component {
             />
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mượn nhiều ({get(mostBorrowBooks, 'length')})
+                Sách mượn nhiều ({get(listMostBorrowBooksActive, 'length')})
               </Text>
 
               <Text
                 style={styles.showall}
                 onPress={() =>
-                  this.changScreenShowAll(mostBorrowBooks, 'Sách mượn nhiều')
+                  this.changScreenShowAll(
+                    listMostBorrowBooksActive,
+                    'Sách mượn nhiều',
+                  )
                 }>
                 Xem hết
               </Text>
             </View>
             <FlatList
               style={styles.list}
-              data={mostBorrowBooks}
+              data={listMostBorrowBooksActive}
               renderItem={({item}) => (
                 <Book
-                  image={item.Medias[0].ImageUrl}
-                  name={item.Shelf.Name}
-                  author={item.Authors[0].Name}
-                  count={item.Shelf.BookCount}
-                  OverallStarRating={item.OverallStarRating}
-                  title={item.Title}
-                  idBook={item.Id}
+                  image={get(item, 'Medias.0.ImageUrl')}
+                  name={get(item, 'Shelf.Name')}
+                  author={get(item, 'Authors.0.Name')}
+                  count={get(item, 'Shelf.BookCount')}
+                  OverallStarRating={get(item, 'OverallStarRating')}
+                  title={get(item, 'Title')}
+                  idBook={get(item, 'Id')}
                 />
+              )}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+
+            <View style={styles.category}>
+              <Text style={styles.text}>Top 10 bạn đọc mượn sách</Text>
+            </View>
+            <FlatList
+              style={styles.list}
+              data={bestUsers}
+              renderItem={({item}) => (
+                <UserReview
+                  image={item.ImageUrl}
+                  name={item.Name}
+                  booksCount={item.BooksCount}
+                  extraInfor={'lượt mượn'}
+                />
+              )}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+
+            <View style={styles.category}>
+              <Text style={styles.text}>Top 5 người nhận xét nổi bật</Text>
+            </View>
+            <FlatList
+              style={styles.list}
+              data={oustandingReviews}
+              renderItem={({item}) => (
+                <UserReview image={item.UrlImageUser} name={item.UserName} />
               )}
               horizontal={true}
               keyExtractor={(item, index) => index.toString()}
@@ -165,9 +219,6 @@ const styles = StyleSheet.create({
   search: {
     alignItems: 'flex-end',
   },
-  list: {
-    paddingTop: 5,
-  },
   text: {
     fontSize: 22,
     paddingTop: 5,
@@ -188,12 +239,18 @@ const styles = StyleSheet.create({
   },
 });
 const mapStateToProps = state => {
-  return {book: state.bookReducer};
+  return {
+    book: state.bookReducer,
+    bestUsers: state.user.bestUsers,
+    oustandingReviews: state.comment.ounstandingReviews,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onGetBooks: () => dispatch(getBook()),
+    onGetBestUsersData: () => dispatch(getBestUsers()),
+    onGetOutstandingData: () => dispatch(getOutstandingReviews()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(index);

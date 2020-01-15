@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
-
 import {Navigation} from 'react-native-navigation';
 
 class Book extends Component {
@@ -47,30 +44,34 @@ class Book extends Component {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < OverallStarRating; i++) {
-      star.push(<Icon1 name="star" size={20} color="#fc9619" />);
+      star.push(<Icon1 name="star" size={15} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - OverallStarRating; i++) {
-      starOutline.push(<Icon1 name="star" size={20} color="#979797" />);
+      starOutline.push(<Icon1 name="star" size={15} color="#c3c1c1" />);
     }
+
+    const showAuthor =
+      author === null ? (
+        <Text style={styles.author} numberOfLines={1}>
+          Chưa xác định
+        </Text>
+      ) : (
+        <Text style={styles.author} numberOfLines={1}>
+          {author}
+        </Text>
+      );
     return (
       <View style={styles.showflast}>
         <TouchableOpacity onPress={() => this.onPress(idBook)}>
-          <Image
-            source={{uri: image}}
-            style={{
-              width: 150,
-              height: 200,
-              backgroundColor: 'red',
-              marginHorizontal: 2,
-            }}
-          />
+          <Image source={{uri: image}} style={styles.image} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name} numberOfLines={1}>
+            {title}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={styles.author}>{author}</Text>
-        </TouchableOpacity>
+
+        <View>{showAuthor}</View>
         <TouchableOpacity style={styles.rate}>
           {star}
           {starOutline}
@@ -115,15 +116,22 @@ const styles = StyleSheet.create({
     width: 170,
     marginVertical: 20,
     marginLeft: 10,
-    height: 300,
+    height: 280,
   },
   name: {
     color: '#4a4a4a',
     fontSize: 18,
+    marginTop: 10,
   },
   author: {
     color: '#ababab',
     fontSize: 16,
+  },
+  image: {
+    width: 150,
+    height: 200,
+    backgroundColor: 'red',
+    marginHorizontal: 2,
   },
 });
 export default Book;

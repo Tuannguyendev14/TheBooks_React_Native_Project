@@ -71,15 +71,7 @@ export default class SideMenuLeft extends Component {
       <View style={{backgroundColor: 'white', flex: 1}}>
         <SafeAreaView>
           <View style={styles.header}>
-            <View style={styles.back}>
-              <TouchableOpacity
-                onPress={Navigation.dismissModal(this.props.componentId)}>
-                <Icon name="ic-back" size={20} color="#5f5f5f" />
-              </TouchableOpacity>
-            </View>
-            <View style={{justifyContent: 'center', flex: 3}}>
-              <Text style={styles.title}>Cài đặt thông tin</Text>
-            </View>
+            <Text style={styles.title}>Cài đặt thông tin</Text>
           </View>
 
           <ScrollView>
@@ -189,12 +181,14 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
     height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   container: {
     marginHorizontal: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
   },
   titleOption: {
     fontSize: 20,

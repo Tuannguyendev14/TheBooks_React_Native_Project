@@ -82,3 +82,23 @@ export function updateCommentSuccess(Id, updateCommentData) {
     payload: [...commentLists],
   };
 }
+
+export const getOutstandingReviews = () => {
+  return {
+    type: types.GET_OUSTANDING_REVIEWS,
+  };
+};
+
+export const getOutstandingReviewsSuccess = response => {
+  return {
+    type: types.GET_OUSTANDING_REVIEWS_SUCCESS,
+    payload: response,
+  };
+};
+
+export const getOutstandingReviewsFailure = error => {
+  return {
+    type: types.GET_OUSTANDING_REVIEWS_FAILURE,
+    payload: error,
+  };
+};

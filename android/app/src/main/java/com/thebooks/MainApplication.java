@@ -1,4 +1,5 @@
 package com.thebooks;
+
 import com.oblador.vectoricons.VectorIconsPackage;
 import android.app.Application;
 import android.content.Context;
@@ -15,9 +16,10 @@ import com.reactnativenavigation.react.ReactGateway;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainApplication extends NavigationApplication {
 
@@ -40,11 +42,10 @@ public class MainApplication extends NavigationApplication {
   protected List<ReactPackage> getPackages() {
     // Add additional packages you require here
     // No need to add RnnPackage and MainReactPackage
-    return Arrays.<ReactPackage>asList(
-      new VectorIconsPackage(),
-      new MainReactPackage(),
-      new RNCViewPagerPackage()
-  );
+    List<ReactPackage> packages = new PackageList(this).getPackages();
+    packages.add(new RNCViewPagerPackage());
+
+    return packages;
   }
 
   @Override
