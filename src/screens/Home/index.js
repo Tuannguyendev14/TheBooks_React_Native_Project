@@ -38,15 +38,18 @@ class index extends Component {
   };
 
   changScreenFilter = () => {
-    Navigation.showModal({
-      component: {
-        name: 'SideMenu',
+    Navigation.mergeOptions('sideMenu', {
+      sideMenu: {
+        left: {
+          visible: true,
+        },
       },
     });
   };
 
   render() {
     const {Data} = offlineData.Data.NewBooks;
+
     return (
       <View>
         <View style={styles.topbar}>
@@ -63,6 +66,7 @@ class index extends Component {
               name="ic-search"
               size={30}
               color="#5f5f5f"
+              id="name"
               onPress={() => this.changScreenSearch()}
             />
           </View>

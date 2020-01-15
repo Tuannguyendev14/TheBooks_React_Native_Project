@@ -22,7 +22,7 @@ export default class Categories extends Component {
     super(props);
     this.state = {
       ticker: false,
-      name: '',
+      value: '',
     };
   }
 
@@ -41,9 +41,9 @@ export default class Categories extends Component {
                       ticker: !this.state.ticker,
                     });
                     this.state.ticker === false ? (
-                      <Text>{this.setState({name: listItem.Name})}</Text>
+                      <Text>{this.setState({value: listItem.Name})}</Text>
                     ) : (
-                      <Text>{this.setState({name: ''})}</Text>
+                      <Text>{this.setState({value: ''})}</Text>
                     );
                   }}>
                   <List.Item
@@ -77,15 +77,15 @@ export default class Categories extends Component {
       component: {
         name: 'Filter',
         passProps: {
-          name: this.state.name,
+          value: this.state.name,
         },
       },
     });
   };
   onPress = () => {
-    console.log('name: ', this.state.name);
+    console.log('value: ', this.state.name);
     {
-      this.state.name === '' ? null : this.changScreenSearch();
+      this.state.value === '' ? null : this.changScreenSearch();
     }
   };
 

@@ -45,7 +45,7 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'TestSearch',
+          name: 'App',
         },
       },
     });
@@ -276,7 +276,7 @@ export const onChangeIntoMainScreen = () => {
         },
         right: {
           component: {
-            name: 'Categories',
+            name: 'Filter',
           },
         },
       },

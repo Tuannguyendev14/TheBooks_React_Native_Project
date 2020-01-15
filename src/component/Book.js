@@ -49,13 +49,13 @@ class Book extends Component {
       idBook,
       OverallStarRating,
     } = this.props;
-
+    let round = Math.round(OverallStarRating);
     let star = [];
     let starOutline = [];
-    for (let i = 0; i < OverallStarRating; i++) {
+    for (let i = 0; i < round; i++) {
       star.push(<Icon1 name="star" size={20} color="#fc9619" />);
     }
-    for (let i = 0; i < 5 - OverallStarRating; i++) {
+    for (let i = 0; i < 5 - round; i++) {
       starOutline.push(<Icon1 name="ic-star-pre" size={20} color="#fc9619" />);
     }
     return (

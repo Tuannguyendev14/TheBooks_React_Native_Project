@@ -23,7 +23,7 @@ export default class SideMenu extends Component {
     super(props);
     this.state = {
       ticker: false,
-      name: '',
+      value: '',
     };
   }
 
@@ -40,9 +40,9 @@ export default class SideMenu extends Component {
                       ticker: !this.state.ticker,
                     });
                     this.state.ticker === false ? (
-                      <Text>{this.setState({name: listItem.Name})}</Text>
+                      <Text>{this.setState({value: listItem.Name})}</Text>
                     ) : (
-                      <Text>{this.setState({name: ''})}</Text>
+                      <Text>{this.setState({value: ''})}</Text>
                     );
                   }}>
                   <List.Item
@@ -53,7 +53,7 @@ export default class SideMenu extends Component {
                 </TouchableOpacity>
               </View>
               <View>
-                {this.state.name === listItem.Name &&
+                {this.state.value === listItem.Name &&
                 this.state.ticker === true ? (
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
                 ) : (
@@ -72,14 +72,14 @@ export default class SideMenu extends Component {
       component: {
         name: 'Filter',
         passProps: {
-          name: this.state.name,
+          value: this.state.value,
         },
       },
     });
   };
   onPress = () => {
     {
-      this.state.name === '' ? null : this.changScreenSearch();
+      this.state.value === '' ? null : this.changScreenSearch();
     }
   };
   render() {

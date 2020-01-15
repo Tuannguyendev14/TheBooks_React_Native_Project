@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {map, find, some, filter} from 'lodash';
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
@@ -27,12 +28,13 @@ export default class Filter extends Component {
   };
 
   countStar = item => {
+    let round = Math.round(item.OverallStarRating);
     let star = [];
     let starOutline = [];
-    for (let i = 0; i < item.OverallStarRating; i++) {
+    for (let i = 0; i < round; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
-    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
+    for (let i = 0; i < 5 - round; i++) {
       star.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
     }
     return star;
@@ -67,139 +69,136 @@ export default class Filter extends Component {
 
   displayScreenHorizontal() {
     const DATA = offlineData.Data.MostBorrowBooks;
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+
     return (
-      <View>
-        <FlatList
-          data={DATA}
-          renderItem={this.renderItemHorizontal}
-          keyExtractor={(item, index) => index}
-          key={2}
-          numColumns={2}
-        />
-      </View>
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemHorizontal}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        key={2}
+      />
     );
   }
 
   displayScreenVertical() {
     const DATA = offlineData.Data.MostBorrowBooks;
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
     return (
-      <View>
-        <FlatList
-          data={DATA}
-          renderItem={this.renderItemVertical}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemVertical}
+        keyExtractor={(item, index) => index}
+      />
     );
   }
 
   renderItemHorizontal = ({item}) => {
-    return item.Categories.map(listItem => (
+    return (
       <View>
-        {this.props.name === listItem.Name ? (
-          <View>
-            <View style={styles.containerMain}>
-              <TouchableOpacity style={styles.item}>
-                <Image
-                  style={styles.imageThumbnail}
-                  source={{uri: item.Medias[0].ImageUrl}}
-                />
+        <View style={styles.containerMain}>
+          <TouchableOpacity style={styles.item}>
+            <Image
+              style={styles.imageThumbnail}
+              source={{uri: item.Medias[0].ImageUrl}}
+            />
+          </TouchableOpacity>
+          <View style={styles.containerBody}>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={styles.title}>{item.Title}</Text>
               </TouchableOpacity>
-              <View style={styles.containerBody}>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={() => this.onPressItem(item)}>
-                  <Text style={styles.title}>{item.Shelf.Name}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={() => this.onPressItem(item)}>
-                  <Text style={[styles.titleAuthor, styles.titleSize]}>
-                    {item.Authors[0].Name === null
-                      ? 'No name'
-                      : item.Authors[0].Name}
-                  </Text>
-                </TouchableOpacity>
-                <View style={{flexDirection: 'row'}}>
-                  {this.countStar(item)}
-                  <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => this.onPressItem(item)}>
-                    <Text style={[styles.titleNumber, styles.titleSize]}>
-                      {item.Shelf.BookCount}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.titleAuthor, styles.titleSize]}>
+                {item.Authors[0].Name === null
+                  ? 'No name'
+                  : item.Authors[0].Name}
+              </Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              {this.countStar(item)}
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber, styles.titleSize]}>
+                  {item.Shelf.BookCount}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        ) : null}
+        </View>
       </View>
-    ));
+    );
   };
 
   renderItemVertical = ({item}) => {
-    return item.Categories.map(listItem => (
+    return (
       <View>
-        {this.props.name === listItem.Name ? (
-          <View>
-            <View style={styles.containerMain1}>
-              <TouchableOpacity style={styles.item}>
-                <Image
-                  style={styles.imageThumbnail1}
-                  source={{uri: item.Medias[0].ImageUrl}}
-                />
-              </TouchableOpacity>
+        <View style={styles.containerMain1}>
+          <TouchableOpacity style={styles.item}>
+            <Image
+              style={styles.imageThumbnail1}
+              source={{uri: item.Medias[0].ImageUrl}}
+            />
+          </TouchableOpacity>
 
-              <View style={styles.containerBody}>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={() => this.onPressItem(item)}>
-                  <Text style={[styles.title, styles.title1]}>
-                    {item.Title}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={() => this.onPressItem(item)}>
-                  <Text style={[styles.titleAuthor, styles.titleSize1]}>
-                    {item.Authors[0].Name === null
-                      ? 'No name'
-                      : item.Authors[0].Name}
-                  </Text>
-                </TouchableOpacity>
-                <View style={{flexDirection: 'row'}}>
-                  {this.countStar(item)}
-                  <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => this.onPressItem(item)}>
-                    <Text style={[styles.titleNumber, styles.titleSize1]}>
-                      {item.Shelf.BookCount}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.containerNumber1}>
-                  <Icon name="ic-book-1" size={20} color="#fc9619" />
-                  <TouchableOpacity style={styles.item}>
-                    <Text style={[styles.titleNumber, styles.titleSize1]}>
-                      {item.Quantity} quyển
-                    </Text>
-                  </TouchableOpacity>
-                  <Icon name="ic-price" size={18} color="#fc9619" />
-                  <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => this.onPressItem(item)}>
-                    <Text style={[styles.titleNumber, styles.titleSize1]}>
-                      {item.Price}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+          <View style={styles.containerBody}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.title, styles.title1]}>{item.Title}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.titleAuthor, styles.titleSize1]}>
+                {item.Authors[0].Name === null
+                  ? 'No name'
+                  : item.Authors[0].Name}
+              </Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              {this.countStar(item)}
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
+                  {item.Shelf.BookCount}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.containerNumber1}>
+              <Icon name="ic-book-1" size={20} color="#fc9619" />
+              <TouchableOpacity style={styles.item}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
+                  {item.Quantity} quyển
+                </Text>
+              </TouchableOpacity>
+              <Icon name="ic-price" size={18} color="#fc9619" />
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
+                  {item.Price}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
-        ) : null}
+        </View>
       </View>
-    ));
+    );
   };
 
   main() {
@@ -217,7 +216,7 @@ export default class Filter extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.title}>{this.props.name}</Text>
+            <Text style={styles.title}>{this.props.value}</Text>
           </View>
           <View style={styles.search}>
             <TouchableOpacity style={styles.item}>
@@ -238,7 +237,7 @@ export default class Filter extends Component {
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => this.changScreenCategories()}>
-                  <Text style={styles.styleText}>{this.props.name}</Text>
+                  <Text style={styles.styleText}>{this.props.value}</Text>
                 </TouchableOpacity>
               </View>
               <View style={{marginTop: 8}}>
@@ -324,10 +323,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   containerMain: {
-    flex: 2,
+    flex: 1,
   },
   containerBody: {
-    flex: 2,
+    flex: 1,
     marginHorizontal: 16,
   },
   containerNumber: {
@@ -374,8 +373,8 @@ const styles = StyleSheet.create({
   containerMain1: {
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginVertical: 35,
-    marginTop: -7,
+    marginVertical: 1,
+    // marginTop: -7,
     flex: 1,
   },
   containerNumber1: {

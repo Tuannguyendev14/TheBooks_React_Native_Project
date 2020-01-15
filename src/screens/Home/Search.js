@@ -19,17 +19,71 @@ export default class Search extends Component {
     super(props);
     this.state = {
       textInput: '',
+      data: [],
+      value: '',
     };
+    this.arrayHolder = [];
   }
+
+  componentDidMount() {
+    this.makeRemoteRequest();
+  }
+
+  makeRemoteRequest = () => {
+    this.setState({
+      data: searchData,
+    });
+    this.arrayHolder = searchData;
+  };
+
   itemOnclick = data => {
     this.setState({
-      textInput: data,
+      value: data,
+    });
+  };
+
+  onChangeText = (key, value) => {
+    this.setState({
+      [key]: value,
     });
   };
 
   backMainScreen = () => {
     Navigation.dismissModal(this.props.componentId);
   };
+
+  searchFilterFunction = text => {
+    this.setState({
+      value: text,
+    });
+
+    const newData = this.arrayHolder.filter(item => {
+      const itemData = `${item.toUpperCase()} ${item.toUpperCase()} ${item.toUpperCase()}`;
+      const textData = text.toUpperCase();
+
+      return itemData.indexOf(textData) > -1;
+    });
+    this.setState({
+      data: newData,
+    });
+  };
+
+  changScreenSearch = data => {
+    Navigation.showModal({
+      component: {
+        name: 'Filter',
+        passProps: {
+          value: this.state.value,
+        },
+      },
+    });
+  };
+  onPress = () => {
+    {
+      this.state.value === '' ? null : this.changScreenSearch();
+    }
+  };
+
   render() {
     return (
       <View style={styles.main}>
@@ -43,20 +97,25 @@ export default class Search extends Component {
           <TextInput
             style={styles.textInput}
             placeholder="Hãy nhập tên sách mà bạn muốn tìm!"
-            value={this.state.textInput}
+            // value={this.state.textInput}
+            // onChangeText={(textInput) => this.setState({textInput})}
+            onChangeText={text => this.searchFilterFunction(text)}
+            autoCorrect={false}
+            value={this.state.value}
           />
-          <Image
-            source={{
-              uri:
-                'https://cdn4.iconfinder.com/data/icons/ios7-essence/22/common_search_lookup__-512.png',
-            }}
-            style={styles.ImageStyle}
+
+          <Icon1
+            name="ic-search"
+            size={26}
+            color="#5f5f5f"
+            onPress={() => this.onPress()}
           />
         </View>
         <Text style={styles.common}>Các từ khóa thông dụng</Text>
         <FlatList
           style={styles.list}
-          data={searchData}
+          // data={searchData}
+          data={this.state.data}
           renderItem={({item}) => (
             <Text
               style={styles.listsearch}
