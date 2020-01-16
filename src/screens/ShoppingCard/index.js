@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {
   View,
   Image,
+  ScrollView,
   Text,
   LoadingPage,
   TouchableOpacity,
@@ -43,7 +44,7 @@ class ShoppingCard extends Component {
       let user = await AsyncStorage.getItem('user');
       let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
-      console.log('user:', parsed.Data.Id);
+      //console.log('user:', parsed.Data.Id);
       if (parsed === null) {
         // this.onPress();
         //onSignIn();
@@ -72,7 +73,7 @@ class ShoppingCard extends Component {
   };
   render() {
     const card = this.props.card.data.Data;
-    console.log('get data card:', this.props.card.data.Data);
+    //console.log('get data card:', this.props.card.data.Data);
     if (card == null || card === 'undefined') {
       return (
         <View style={styles.container}>
@@ -117,7 +118,7 @@ class ShoppingCard extends Component {
               color="#5f5f5f"
             />
           </View>
-          <View style={styles.center}>
+          <ScrollView style={styles.center}>
             <FlatList
               style={styles.list}
               data={card.Items}
@@ -140,22 +141,28 @@ class ShoppingCard extends Component {
               keyExtractor={(item, index) => index.toString()}
               showsHorizontalScrollIndicator={false}
             />
-          </View>
-          <View style={styles.bot}>
+          </ScrollView>
+
+          {/* <View style={styles.bot}>
             <TouchableWithoutFeedback onPress={this.onAddToCard}>
               <Text style={styles.buttonAddToCard}>Đặt sách</Text>
             </TouchableWithoutFeedback>
-          </View>
+          </View> */}
         </View>
       );
     }
   }
 }
 const styles = StyleSheet.create({
+  // bot: {
+  //   //bottom: 15,
+  //   position: 'absolute',
+  //   alignSelf: 'flex-end',
+  // },
   buttonAddToCard: {
     //position: 'absolute',
     //alignSelf: 'flex-end',
-    top: 10,
+    //top: 10,
     fontSize: 25,
     fontWeight: 'bold',
     padding: 15,
@@ -183,6 +190,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     paddingTop: 30,
+    flexDirection: 'column',
   },
   trash: {
     alignItems: 'flex-end',

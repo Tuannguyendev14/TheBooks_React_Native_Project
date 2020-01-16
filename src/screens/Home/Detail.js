@@ -63,9 +63,9 @@ class Detail extends Component {
     });
   };
 
-  onAddToCard = () => {
-    this.onCheckAddToCard();
-  };
+  // onAddToCard = () => {
+  //   this.onCheckAddToCard();
+  // };
 
   onAddToCard = async () => {
     try {

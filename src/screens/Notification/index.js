@@ -4,11 +4,19 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  AsyncStorage,
   TouchableWithoutFeedback,
   Alert,
 } from 'react-native';
+import {onSignIn} from '../../navigation';
 import AwesomeAlert from 'react-native-awesome-alerts';
-export default class index extends Component {
+import {connect} from 'react-redux';
+import {getNotification} from '../../redux/notificationRedux/action';
+
+class index extends Component {
+  componentDidMount() {
+    this.onCheck();
+  }
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -20,14 +28,41 @@ export default class index extends Component {
       showAlert: false,
     });
   };
-
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      console.log('parsed:', parsed);
+      if (parsed === null) {
+        onSignIn();
+      } else {
+        let data = {
+          isDelete: true,
+          pageNumber: 1,
+          pageSize: 1,
+          sortBy: 'title',
+          sortDesc: true,
+          isSeen: true,
+          userId: parsed.Data.Id,
+        };
+        this.getNoti(data, parsed.Token.access_token);
+        //this.changShopping(idbasket, parsed.Token.access_token);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+  getNoti = (data, token) => {
+    this.props.onGetNotification(data, token);
+  };
   constructor(props) {
     super(props);
     this.state = {showAlert: false};
   }
   render() {
     const {showAlert} = this.state;
-
+    const noti = this.props.notification;
+    console.log('noti', noti);
     return (
       <View style={styles.container}>
         <TouchableOpacity
@@ -38,25 +73,6 @@ export default class index extends Component {
             <Text style={styles.text}>Try me!</Text>
           </View>
         </TouchableOpacity>
-
-        <AwesomeAlert
-          show={showAlert}
-          showProgress={false}
-          title="Bạn cần đăng nhập để thực hiện chức năng này"
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          showCancelButton={true}
-          showConfirmButton={true}
-          cancelText="Lúc khác"
-          confirmText="Đăng nhập"
-          confirmButtonColor="#DD6B55"
-          onCancelPressed={() => {
-            this.hideAlert();
-          }}
-          onConfirmPressed={() => {
-            this.hideAlert();
-          }}
-        />
       </View>
     );
   }
@@ -81,3 +97,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+const mapStateToProps = state => {
+  //console.log('noti', state.notificationReducer);
+  return {
+    notification: state.notificationReducer,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onGetNotification: (data, token) => dispatch(getNotification(data, token)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(index);

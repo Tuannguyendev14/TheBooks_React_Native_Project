@@ -19,7 +19,6 @@ import Book from '../../component/Book';
 import UserReview from './components/userReview';
 import {get, filter} from 'lodash';
 
-
 class index extends Component {
   constructor(props) {
     super(props);
@@ -245,7 +244,7 @@ class index extends Component {
             color="red"
             onPress={() => this.onCheck()}
           />
-        </View>      
+        </View>
       </View>
     );
   }
