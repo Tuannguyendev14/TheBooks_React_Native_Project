@@ -11,9 +11,9 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-
 import {offlineData} from '../../utils/offlineData';
 import {searchData} from '../../utils/searchData';
+import {filter, some} from 'lodash';
 export default class Search extends Component {
   constructor(props) {
     super(props);
@@ -80,7 +80,23 @@ export default class Search extends Component {
   };
   onPress = () => {
     {
-      this.state.value === '' ? null : this.changScreenSearch();
+      // this.state.value === '' ? null : this.changScreenSearch();
+      this.state.value === ''
+        ? null
+        : filter(this.arrayHolder, item => {
+            some(item, {Name: this.state.value});
+            return this.changScreenSearch();
+          });
+      console.log(
+        'aaaaaaaaaaa',
+        this.arrayHolder.filter(item => {
+          return (
+            <View>
+              <Text>{item}</Text>
+            </View>
+          );
+        }),
+      );
     }
   };
 
