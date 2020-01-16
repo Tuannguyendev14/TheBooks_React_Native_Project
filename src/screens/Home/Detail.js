@@ -21,12 +21,17 @@ import {onSignIn} from '../../navigation';
 import {connect} from 'react-redux';
 import {getComment, addComment} from '../../redux/commentRedux/actions';
 import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
+
+import {addCard, getCard} from '../../redux/cardRedux/action';
+import store from '../../redux/store';
+
 import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
 import ImageProfile from '../../../assets/images/Home/anh.jpg';
 import UpdateModal from './UpdateModal';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
+
 
 class Detail extends Component {
   constructor(props) {
@@ -66,18 +71,30 @@ class Detail extends Component {
   onAddToCard = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
       if (parsed === null) {
         // onSignIn();
         this.showAlert();
       } else {
-        this.onPress();
+        this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
       }
     } catch (error) {
-      // alert(error);
+       alert(error);
     }
   };
 
+
+  onPress = async (userId, token, idbasket) => {
+    let data = {
+      BookId: this.props.IdBook,
+      Quantity: 1,
+      UserId: userId,
+    };
+    await this.props.onAddCard(data, token);
+    this.props.onGetCard(idbasket, token);
+  }
+  
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -90,32 +107,14 @@ class Detail extends Component {
     });
   };
 
-  onPress = () => {
-    Navigation.showModal({
-      stack: {
-        children: [
-          {
-            component: {
-              name: 'ShoppingCard',
-              passProps: {},
-              options: {
-                topBar: {
-                  title: {
-                    text: '',
-                    alignment: 'center',
-                  },
-                  visible: false,
-                },
-              },
-            },
-          },
-        ],
-      },
-    });
+  getCard = (id, token) => {
+    this.props.onGetCard(id, token);
   };
 
   componentDidMount() {
     let idBook = this.props.IdBook;
+    let store1 = store.getState().CardReducer;
+    console.log('cart', store1);
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
     this.props.onGetBookDetail(idBook);
@@ -546,6 +545,7 @@ const mapStateToProps = state => {
     books: state.bookReducer.detailBook,
     comment: state.comment,
     relatedBooks: state.relatedBook,
+    card: state.CardReducer,
   };
 };
 
@@ -553,6 +553,8 @@ const mapDispatchToProps = dispatch => {
   return {
     onGetComment: idBook => dispatch(getComment(idBook)),
     onGetRelatedBooks: idBook => dispatch(getRelatedBooks(idBook)),
+    onAddCard: (data, token) => dispatch(addCard(data, token)),
+    onGetCard: (data, token) => dispatch(getCard(data, token)),
     onGetBookDetail: idBook => dispatch(getBookDetail(idBook)),
     onAddComment: (commentData, userToken) =>
       dispatch(addComment(commentData, userToken)),

@@ -2,13 +2,23 @@ import React, {Component} from 'react';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  AsyncStorage,
+  FlatList,
+  ScrollView,
+} from 'react-native';
+import {onSignIn} from '../../navigation';
 import {getBestUsers} from '../../redux/userRedux/actions';
 import {getOutstandingReviews} from '../../redux/commentRedux/actions';
-import {Text, View, StyleSheet, FlatList, ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import UserReview from './components/userReview';
 import {get, filter} from 'lodash';
+
 
 class index extends Component {
   constructor(props) {
@@ -23,6 +33,49 @@ class index extends Component {
           data: data,
           title: title,
         },
+      },
+    });
+  };
+
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
+      let parsed = JSON.parse(user);
+      console.log('parsed:', parsed);
+      if (parsed === null) {
+        onSignIn();
+      } else {
+        this.changShopping(idbasket, parsed.Token.access_token);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  changShopping = (idbasket, token) => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'ShoppingCard',
+              passProps: {
+                token: token,
+                idbasket: idbasket,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
       },
     });
   };
@@ -185,11 +238,30 @@ class index extends Component {
             />
           </View>
         </ScrollView>
+        <View style={styles.footer}>
+          <Icon
+            name="ic-cart"
+            size={60}
+            color="red"
+            onPress={() => this.onCheck()}
+          />
+        </View>      
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
+  footer: {
+    backgroundColor: 'transparent',
+    alignSelf: 'flex-end',
+    position: 'absolute',
+    bottom: 65,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: 'red',
+    right: 20,
+    overflow: 'hidden',
+  },
   showall: {
     alignItems: 'flex-end',
     color: '#1d9dd8',
