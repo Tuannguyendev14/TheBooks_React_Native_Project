@@ -129,12 +129,14 @@ class UpdateModal extends Component {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-      let UserId = parsed.Data.Id;
-      await this.setState({
-        userId: UserId,
-      });
+      if (parsed) {
+        let UserId = parsed.Data.Id;
+        await this.setState({
+          userId: UserId,
+        });
+      }
     } catch (error) {
-      alert(error);
+      alert('User: ', error);
     }
   };
 
@@ -144,7 +146,7 @@ class UpdateModal extends Component {
 
   render() {
     const {star1, star2, star3, star4, star5} = this.state;
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <Modal
         ref={'myModal'}

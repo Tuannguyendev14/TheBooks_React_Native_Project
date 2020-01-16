@@ -14,8 +14,8 @@ import {connect} from 'react-redux';
 import {logOut} from '../../redux/userRedux/actions';
 import iconProfile from '../../../assets/images/Home/anh.jpg';
 import Icon from 'react-native-vector-icons/thebook-appicon';
-import {StyleProvider} from 'native-base';
 import Book from '../../component/Book';
+import {Navigation} from 'react-native-navigation';
 
 class Profile extends Component {
   constructor(props) {
@@ -46,6 +46,7 @@ class Profile extends Component {
   componentDidMount() {
     this.onCheck();
   }
+
   onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
@@ -70,6 +71,16 @@ class Profile extends Component {
     }
   };
 
+  onPress = () => {
+    Navigation.mergeOptions('sideMenu', {
+      sideMenu: {
+        right: {
+          visible: true,
+        },
+      },
+    });
+  };
+
   render() {
     const {fullName, email, gender, phoneNumber} = this.state;
     const newBooks = this.props.book.data.NewBooks;
@@ -81,7 +92,7 @@ class Profile extends Component {
               name="ic-photo"
               size={30}
               color="#5f5f5f"
-              onPress={() => this.changScreenFilter()}
+              onPress={this.onBack}
             />
           </View>
           <View style={style.search}>
@@ -89,7 +100,7 @@ class Profile extends Component {
               name="ic-setting"
               size={30}
               color="#5f5f5f"
-              onPress={() => this.changScreenSearch()}
+              onPress={this.onPress}
             />
           </View>
         </View>

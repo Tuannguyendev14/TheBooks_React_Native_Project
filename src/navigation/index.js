@@ -175,6 +175,7 @@ export const onChangeIntoMainScreen = () => {
   Navigation.setRoot({
     root: {
       sideMenu: {
+        id: 'sideMenu',
         left: {
           component: {
             name: 'Categories',
@@ -241,6 +242,25 @@ export const onChangeIntoMainScreen = () => {
                   children: [
                     {
                       component: {
+                        name: 'Profile',
+                      },
+                    },
+                  ],
+                  options: {
+                    topBar: {visible: false},
+                    bottomTab: {
+                      text: 'Profile',
+                      icon: profile_icon,
+                      testID: 'THIRST_TAB_BAR_BUTTON',
+                    },
+                  },
+                },
+              },
+              {
+                stack: {
+                  children: [
+                    {
+                      component: {
                         name: 'Notification',
                       },
                     },
@@ -248,8 +268,8 @@ export const onChangeIntoMainScreen = () => {
                   options: {
                     bottomTab: {
                       text: 'Notification',
-                      icon: profile_icon,
-                      testID: 'THIRST_TAB_BAR_BUTTON',
+                      icon: iconNotification,
+                      testID: 'FOUR_TAB_BAR_BUTTON',
                     },
                   },
                 },
@@ -264,27 +284,9 @@ export const onChangeIntoMainScreen = () => {
                     },
                   ],
                   options: {
-                    bottomTab: {
-                      text: 'Library',
-                      icon: iconNotification,
-                      testID: 'FOUR_TAB_BAR_BUTTON',
-                    },
-                  },
-                },
-              },
-              {
-                stack: {
-                  children: [
-                    {
-                      component: {
-                        name: 'Profile',
-                      },
-                    },
-                  ],
-                  options: {
                     topBar: {visible: false},
                     bottomTab: {
-                      text: 'Profile',
+                      text: 'Library',
                       icon: iconLibrary,
                       testID: 'FOUR_TAB_BAR_BUTTON',
                     },

@@ -48,3 +48,25 @@ export const logOut = () => {
     type: types.LOGOUT_SUCCESS,
   };
 };
+
+export const getBestUsers = () => {
+  return {
+    type: types.GET_BEST_USERS,
+    //payload: data,
+  };
+};
+
+export const getBestUsersSuccess = response => {
+  // console.log('response', response);
+  return {
+    type: types.GET_BEST_USERS_SUCCESS,
+    payload: response,
+  };
+};
+
+export const getBestUsersFailure = error => {
+  return {
+    type: types.GET_BEST_USERS_FAILURE,
+    payload: error,
+  };
+};

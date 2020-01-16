@@ -15,3 +15,7 @@ export const getCommentDetail = (Id, Token) => {
 export const updateComment = (Id, data, Token) => {
   return callApi(`/api/reviews/${Id}`, 'PUT', data, Token);
 };
+
+export const getOutstandingReviews = () => {
+  return callApi('/api/cms/reviews', 'GET');
+};

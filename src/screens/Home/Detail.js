@@ -25,6 +25,8 @@ import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
 import ImageProfile from '../../../assets/images/Home/anh.jpg';
 import UpdateModal from './UpdateModal';
+import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 class Detail extends Component {
   constructor(props) {
@@ -37,6 +39,8 @@ class Detail extends Component {
       userToken: '',
       userId: '',
       isShowAllComment: false,
+      isShowAllContent: false,
+      showAlert: false,
     };
   }
   backMainScreen = () => {
@@ -59,18 +63,31 @@ class Detail extends Component {
     this.onCheckAddToCard();
   };
 
-  onCheckAddToCard = async () => {
+  onAddToCard = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
       if (parsed === null) {
-        onSignIn();
+        // onSignIn();
+        this.showAlert();
       } else {
         this.onPress();
       }
     } catch (error) {
       // alert(error);
     }
+  };
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true,
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false,
+    });
   };
 
   onPress = () => {
@@ -105,8 +122,8 @@ class Detail extends Component {
     this.onCheckToken();
   }
 
-  onShowForm = async () => {
-    await this.onCheck();
+  onCheck = async () => {
+    //await this.onCheck();
     let userId = this.state.userId;
     const commentData = this.props.comment.data;
 
@@ -118,12 +135,14 @@ class Detail extends Component {
     }
   };
 
-  onCheck = async () => {
+  onShowForm = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
       if (parsed === null) {
-        onSignIn();
+        this.showAlert();
+      } else {
+        this.onCheck();
       }
     } catch (error) {
       // alert(error);
@@ -168,6 +187,12 @@ class Detail extends Component {
     });
   };
 
+  onShowAllContent = () => {
+    this.setState({
+      isShowAllContent: !this.state.isShowAllContent,
+    });
+  };
+
   render() {
     const relatedBooks = this.props.relatedBooks.data.RelatedBooks;
     const commentData = this.props.comment.data;
@@ -179,8 +204,20 @@ class Detail extends Component {
       star.push(<IconStar name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
-      starOutline.push(<IconStar name="star" size={20} color="#979797" />);
+      starOutline.push(<IconStar name="star" size={20} color="#c3c1c1" />);
     }
+
+    const ShowAllComment = this.state.isShowAllComment ? (
+      <Text style={style.textComment}>Thu gọn</Text>
+    ) : (
+      <Text style={style.textComment}>Xem tất cả nhận xét</Text>
+    );
+
+    const ShowAllContent = this.state.isShowAllContent ? (
+      <Text style={style.text1}>Thu gọn</Text>
+    ) : (
+      <Text style={style.text1}>Xem thêm</Text>
+    );
 
     return (
       <View style={style.container}>
@@ -231,6 +268,22 @@ class Detail extends Component {
           </View>
 
           <View style={style.viewRank}>
+            <View style={style.viewIcon}>
+              <Icon1 name="ic-book-1" size={17} color="#fc9619" />
+              <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
+                {get(bookDetail, 'Quantity')} quyển
+              </Text>
+            </View>
+
+            <View style={style.viewIcon}>
+              <Icon1 name="ic-bookshelf" size={17} color="#fc9619" />
+              <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
+                {get(bookDetail, 'Shelf.Name')}
+              </Text>
+            </View>
+          </View>
+
+          <View style={style.viewRank}>
             <View>
               <TouchableOpacity style={style.rank}>
                 {star}
@@ -238,22 +291,25 @@ class Detail extends Component {
               </TouchableOpacity>
             </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                margin: 20,
-              }}>
-              <Icon name="ios-pricetags" size={22} color="#fc9619" />
+            <View style={style.viewIcon}>
+              <Icon1 name="ic-price-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
-                {bookDetail.TotalReview}
+                {bookDetail.Price}
               </Text>
             </View>
           </View>
 
           <View style={style.viewdescription}>
-            <Text numberOfLines={3} style={style.description}>
+            <Text
+              numberOfLines={
+                this.state.isShowAllContent ? bookDetail.Content.length : 3
+              }
+              style={style.description}>
               {bookDetail.Content}
             </Text>
+            <TouchableWithoutFeedback onPress={this.onShowAllContent}>
+              {ShowAllContent}
+            </TouchableWithoutFeedback>
           </View>
 
           <View style={style.viewSameBook}>
@@ -318,14 +374,15 @@ class Detail extends Component {
             showsHorizontalScrollIndicator={false}
           />
           <TouchableWithoutFeedback onPress={this.onShowAllComment}>
-            <Text style={style.textComment}>Xem tất cả nhận xét</Text>
+            {/* <Text style={style.textComment}>Xem tất cả nhận xét</Text> */}
+            {ShowAllComment}
           </TouchableWithoutFeedback>
-          <View>
-            <TouchableWithoutFeedback onPress={this.onAddToCard}>
-              <Text style={style.buttonAddToCard}>Thêm vào giỏ</Text>
-            </TouchableWithoutFeedback>
-          </View>
         </ScrollView>
+        <View>
+          <TouchableWithoutFeedback onPress={this.onAddToCard}>
+            <Text style={style.buttonAddToCard}>Thêm vào giỏ</Text>
+          </TouchableWithoutFeedback>
+        </View>
         <CommentModal
           ref={'addModal'}
           parentFlatList={this}
@@ -337,6 +394,25 @@ class Detail extends Component {
           parentFlatList={this}
           IdBook={bookDetail.Id}
           onUpdateComment={this.onUpdateComment}
+        />
+
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          title="Bạn cần đăng nhập để thực hiện chức năng này"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="Lúc khác"
+          confirmText="Đăng nhập"
+          confirmButtonColor="#DD6B55"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            onSignIn();
+          }}
         />
       </View>
     );
@@ -358,10 +434,10 @@ const style = StyleSheet.create({
     paddingTop: 5,
   },
   showall: {
-    alignItems: 'flex-end',
-    //paddingLeft: 80,
-    color: '#1d9dd8',
+    color: '#2bb6f9',
     flex: 1,
+    paddingTop: 5,
+    marginVertical: 10,
   },
 
   container: {
@@ -375,7 +451,6 @@ const style = StyleSheet.create({
 
   topbar: {
     paddingLeft: 15,
-    paddingTop: 20.5,
     fontSize: 10.5,
     flexDirection: 'row',
     marginHorizontal: 10,
@@ -417,8 +492,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 15,
-    marginVertical: -20,
+    marginVertical: -17,
   },
   rank: {
     flexDirection: 'row',
@@ -435,7 +509,7 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     padding: 15,
     textAlign: 'center',
-    backgroundColor: 'orange',
+    backgroundColor: '#2bb6f9',
     color: 'white',
   },
   viewSameBook: {
@@ -456,6 +530,14 @@ const style = StyleSheet.create({
     color: '#2bb6f9',
     fontSize: 18,
     marginVertical: 20,
+  },
+  viewIcon: {
+    flexDirection: 'row',
+    margin: 20,
+    alignItems: 'center',
+  },
+  text1: {
+    color: '#2bb6f9',
   },
 });
 

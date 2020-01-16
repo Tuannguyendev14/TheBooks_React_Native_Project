@@ -2,6 +2,7 @@ import * as types from '../constants/actionTypes';
 
 const initialState = {
   data: {},
+  bestUsers: {},
   error: {},
   loading: false,
 };
@@ -12,7 +13,6 @@ const userReducer = (state = initialState, action) => {
       return {...state, loading: true};
 
     case types.ADD_USER_SUCCESS:
-      console.log('ok');
       return {...state, data: action.payload, loading: false};
 
     case types.ADD_USER_FAILURE:
@@ -33,6 +33,24 @@ const userReducer = (state = initialState, action) => {
 
     case types.LOGOUT_SUCCESS:
       return {...initialState};
+
+    case types.GET_BEST_USERS:
+      return {
+        ...state,
+        loading: true,
+      };
+    case types.GET_BEST_USERS_SUCCESS:
+      return {
+        ...state,
+        bestUsers: action.payload,
+        loading: false,
+      };
+    case types.GET_BEST_USERS_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false,
+      };
 
     default:
       return state;

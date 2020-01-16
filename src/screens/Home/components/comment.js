@@ -9,7 +9,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/thebook-appicon';
-import {Navigation} from 'react-native-navigation';
+import iconProfile from '../../../../assets/images/profile-icon.png';
 
 export default class comment extends Component {
   constructor(props) {
@@ -63,6 +63,14 @@ export default class comment extends Component {
       Id,
     } = this.props;
 
+    const showImage =
+      userImage === '' ? (
+        <Image source={iconProfile} style={styles.image} />
+      ) : (
+        // <Text>ok</Text>
+        <Image source={{uri: userImage}} style={styles.image} />
+      );
+
     const showButton = isShowButton ? (
       <View style={styles.viewbutton}>
         <View style={{margin: 10}}>
@@ -89,25 +97,26 @@ export default class comment extends Component {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - starRating; i++) {
-      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
+      starOutline.push(<Icon name="star" size={20} color="#c3c1c1" />);
     }
 
     return (
       <View style={styles.container}>
         <View style={styles.ViewControl}>
-          <Image source={{uri: userImage}} style={styles.image} />
+          {/* <Image source={{uri: userImage}} style={styles.image} /> */}
+          {showImage}
           <View style={styles.viewname}>
             <Text>{name}</Text>
-            <TouchableOpacity style={styles.star}>
+            <View style={styles.star}>
               {star}
               {starOutline}
-            </TouchableOpacity>
+            </View>
           </View>
 
           {showButton}
         </View>
         <View style={styles.viewcomment}>
-          <Text style={styles.textcomment} numberOfLines={2}>
+          <Text style={styles.textcomment} numberOfLines={8}>
             {comment}
           </Text>
         </View>
