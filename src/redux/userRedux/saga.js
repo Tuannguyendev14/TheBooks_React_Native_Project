@@ -4,9 +4,11 @@ import {
   addUserFailure,
   logInSuccess,
   logInFailure,
+  getBestUsersSuccess,
+  getBestUsersFailure,
 } from './actions';
-import {ADD_USER, LOG_IN} from '../constants/actionTypes';
-import {register, login, logout} from '../../api/user';
+import {ADD_USER, LOG_IN, GET_BEST_USERS} from '../constants/actionTypes';
+import {register, login, getBestUsers} from '../../api/user';
 import {onChangeIntoMainScreen, onSignIn} from '../../navigation';
 import {AsyncStorage} from 'react-native';
 
@@ -17,9 +19,7 @@ export function* registerSaga(action) {
     yield put(addUserSuccess(data));
     AsyncStorage.setItem('user', JSON.stringify(data));
     onChangeIntoMainScreen();
-    console.log('response', response);
   } catch (error) {
-    console.log('error', error.toJSON());
     yield put(addUserFailure({error}));
   }
 }
@@ -29,7 +29,6 @@ export function* loginSaga({data}) {
     const response = yield call(login, data);
 
     const userData = response.data;
-    // console.log('userData', userData);
     AsyncStorage.setItem('user', JSON.stringify(userData));
     yield put(logInSuccess(userData));
     onChangeIntoMainScreen();
@@ -39,9 +38,20 @@ export function* loginSaga({data}) {
   }
 }
 
+export function* getBestUsersSaga() {
+  try {
+    const response = yield call(getBestUsers);
+    const bestUsersData = response.data.Data;
+    yield put(getBestUsersSuccess(bestUsersData));
+  } catch (error) {
+    yield put(getBestUsersFailure(error));
+  }
+}
+
 const userSagas = () => [
   takeLatest(ADD_USER, registerSaga),
   takeLatest(LOG_IN, loginSaga),
+  takeLatest(GET_BEST_USERS, getBestUsersSaga),
 ];
 
 export default userSagas();

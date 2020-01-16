@@ -1,22 +1,29 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  AsyncStorage,
-  ActivityIndicator,
-} from 'react-native';
-import {onIntro} from './src/navigation';
+import {StyleSheet, View, ActivityIndicator, AsyncStorage} from 'react-native';
+import {onIntro, onChangeIntoMainScreen} from './src/navigation';
 
-export default class App extends Component {
+class App extends Component {
   constructor() {
     super();
   }
 
   componentDidMount() {
-    // onChangeIntoMainScreen();
-    onIntro();
+    this.onCheck();
   }
+
+  onCheck = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let parsed = JSON.parse(user);
+      if (parsed) {
+        onChangeIntoMainScreen();
+      } else {
+        onIntro();
+      }
+    } catch (error) {
+      // alert(error);
+    }
+  };
 
   componentWillMount() {
     setTimeout(() => {}, 3000);
@@ -39,3 +46,5 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;

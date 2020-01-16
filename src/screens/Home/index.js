@@ -11,18 +11,18 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
-import {offlineData} from '../../utils/offlineData';
-import Book from '../../component/Book';
 import {onSignIn} from '../../navigation';
-//const data = this.props.user.data.Data;
+import {getBestUsers} from '../../redux/userRedux/actions';
+import {getOutstandingReviews} from '../../redux/commentRedux/actions';
+import Icon from 'react-native-vector-icons/thebook-appicon';
+import Book from '../../component/Book';
+import UserReview from './components/userReview';
+import {get, filter} from 'lodash';
+
+
 class index extends Component {
   constructor(props) {
     super(props);
-  }
-  componentDidMount() {
-    //this.props.onGetBooks();
-    console.log('full data: ', this.props.book.data.Data);
   }
 
   changScreenShowAll = (data, title) => {
@@ -36,6 +36,7 @@ class index extends Component {
       },
     });
   };
+
   onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
@@ -45,13 +46,13 @@ class index extends Component {
       if (parsed === null) {
         onSignIn();
       } else {
-        //this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
         this.changShopping(idbasket, parsed.Token.access_token);
       }
     } catch (error) {
       alert(error);
     }
   };
+
   changShopping = (idbasket, token) => {
     Navigation.showModal({
       stack: {
@@ -78,6 +79,7 @@ class index extends Component {
       },
     });
   };
+
   changScreenSearch = () => {
     Navigation.showModal({
       component: {
@@ -94,13 +96,33 @@ class index extends Component {
     });
   };
 
+  componentDidMount() {
+    this.props.onGetBooks();
+    this.props.onGetBestUsersData();
+    this.props.onGetOutstandingData();
+  }
+
   render() {
-    const {Data} = offlineData.Data.NewBooks;
+    const newBooks = this.props.book.data.NewBooks;
+    const mostBorrowBooks = this.props.book.data.MostBorrowBooks;
+    const bestUsers = this.props.bestUsers;
+    const oustandingReviews = this.props.oustandingReviews;
+
+    const listNewBooksActive = filter(
+      newBooks,
+      item => item.IsDeleted === false,
+    );
+
+    const listMostBorrowBooksActive = filter(
+      mostBorrowBooks,
+      item => item.IsDeleted === false,
+    );
+
     return (
       <View>
         <View style={styles.topbar}>
           <View style={{flex: 1}}>
-            <Icon1
+            <Icon
               name="ic-menu"
               size={30}
               color="#5f5f5f"
@@ -108,7 +130,7 @@ class index extends Component {
             />
           </View>
           <View style={styles.search}>
-            <Icon1
+            <Icon
               name="ic-search"
               size={30}
               color="#5f5f5f"
@@ -120,40 +142,27 @@ class index extends Component {
           <View style={styles.main}>
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mới{'('} {this.props.book.data.Data.NewBooks.length} {')'}
+                Sách mới ({get(listNewBooksActive, 'length')})
               </Text>
               <Text
                 style={styles.showall}
                 onPress={() =>
-                  this.changScreenShowAll(
-                    this.props.book.data.Data.NewBooks,
-                    'Sách mới',
-                  )
+                  this.changScreenShowAll(listNewBooksActive, 'Sách mới')
                 }>
                 Xem hết
               </Text>
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(this.props.book.data.Data.NewBooks)}
+              data={listNewBooksActive}
               renderItem={({item}) => (
                 <Book
-                  image={
-                    this.props.book.data.Data.NewBooks[item].Medias[0].ImageUrl
-                  }
-                  name={this.props.book.data.Data.NewBooks[item].Shelf.Name}
-                  author={
-                    this.props.book.data.Data.NewBooks[item].Authors[0].Name
-                  }
-                  count={
-                    this.props.book.data.Data.NewBooks[item].Shelf.BookCount
-                  }
-                  title={this.props.book.data.Data.NewBooks[item].Title}
-                  OverallStarRating={
-                    this.props.book.data.Data.NewBooks[item].OverallStarRating
-                  }
-                  Price={this.props.book.data.Data.NewBooks[item].Price}
-                  idBook={this.props.book.data.Data.NewBooks[item].Id}
+                  image={get(item, 'Medias.0.ImageUrl')}
+                  author={get(item, 'Authors.0.Name')}
+                  count={get(item, 'Shelf.BookCount')}
+                  OverallStarRating={get(item, 'OverallStarRating')}
+                  title={get(item, 'Title')}
+                  idBook={get(item, 'Id')}
                 />
               )}
               horizontal={true}
@@ -162,14 +171,14 @@ class index extends Component {
             />
             <View style={styles.category}>
               <Text style={styles.text}>
-                Sách mượn nhiều{'('}{' '}
-                {this.props.book.data.Data.MostBorrowBooks.length} {')'}
+                Sách mượn nhiều ({get(listMostBorrowBooksActive, 'length')})
               </Text>
+
               <Text
                 style={styles.showall}
                 onPress={() =>
                   this.changScreenShowAll(
-                    this.props.book.data.Data.MostBorrowBooks,
+                    listMostBorrowBooksActive,
                     'Sách mượn nhiều',
                   )
                 }>
@@ -178,30 +187,50 @@ class index extends Component {
             </View>
             <FlatList
               style={styles.list}
-              data={Object.keys(this.props.book.data.Data.MostBorrowBooks)}
+              data={listMostBorrowBooksActive}
               renderItem={({item}) => (
                 <Book
-                  image={
-                    this.props.book.data.Data.MostBorrowBooks[item].Medias[0]
-                      .ImageUrl
-                  }
-                  name={
-                    this.props.book.data.Data.MostBorrowBooks[item].Shelf.Name
-                  }
-                  author={
-                    this.props.book.data.Data.MostBorrowBooks[item].Authors[0]
-                      .Name
-                  }
-                  count={
-                    this.props.book.data.Data.MostBorrowBooks[item].Shelf
-                      .BookCount
-                  }
-                  OverallStarRating={
-                    this.props.book.data.Data.NewBooks[item].OverallStarRating
-                  }
-                  title={this.props.book.data.Data.MostBorrowBooks[item].Title}
-                  idBook={this.props.book.data.Data.MostBorrowBooks[item].Id}
+                  image={get(item, 'Medias.0.ImageUrl')}
+                  name={get(item, 'Shelf.Name')}
+                  author={get(item, 'Authors.0.Name')}
+                  count={get(item, 'Shelf.BookCount')}
+                  OverallStarRating={get(item, 'OverallStarRating')}
+                  title={get(item, 'Title')}
+                  idBook={get(item, 'Id')}
                 />
+              )}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+
+            <View style={styles.category}>
+              <Text style={styles.text}>Top 10 bạn đọc mượn sách</Text>
+            </View>
+            <FlatList
+              style={styles.list}
+              data={bestUsers}
+              renderItem={({item}) => (
+                <UserReview
+                  image={item.ImageUrl}
+                  name={item.Name}
+                  booksCount={item.BooksCount}
+                  extraInfor={'lượt mượn'}
+                />
+              )}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
+              showsHorizontalScrollIndicator={false}
+            />
+
+            <View style={styles.category}>
+              <Text style={styles.text}>Top 5 người nhận xét nổi bật</Text>
+            </View>
+            <FlatList
+              style={styles.list}
+              data={oustandingReviews}
+              renderItem={({item}) => (
+                <UserReview image={item.UrlImageUser} name={item.UserName} />
               )}
               horizontal={true}
               keyExtractor={(item, index) => index.toString()}
@@ -210,21 +239,13 @@ class index extends Component {
           </View>
         </ScrollView>
         <View style={styles.footer}>
-          <Icon1
+          <Icon
             name="ic-cart"
             size={60}
             color="red"
             onPress={() => this.onCheck()}
           />
-        </View>
-
-        {/* <Image
-          source={{
-            uri:
-              'https://images.all-free-download.com/images/graphiclarge/shopping_cart_icon_vector_red_background_280670.jpg',
-          }}
-          style={styles.footer}
-        /> */}
+        </View>      
       </View>
     );
   }
@@ -243,10 +264,9 @@ const styles = StyleSheet.create({
   },
   showall: {
     alignItems: 'flex-end',
-    //paddingLeft: 80,
     color: '#1d9dd8',
     flex: 1,
-    marginBottom: 10,
+    fontSize: 15,
   },
   category: {
     alignItems: 'center',
@@ -266,20 +286,13 @@ const styles = StyleSheet.create({
     paddingTop: 20.5,
     fontSize: 10.5,
     flexDirection: 'row',
-    //color: 'red',
-    //flex: 1,
     marginHorizontal: 10,
   },
   search: {
-    // marginLeft: 230,
-
     alignItems: 'flex-end',
   },
-  list: {
-    paddingTop: 5,
-  },
   text: {
-    fontSize: 25.5,
+    fontSize: 22,
     paddingTop: 5,
     flex: 3.5,
   },
@@ -294,19 +307,22 @@ const styles = StyleSheet.create({
   author: {
     color: '#ababab',
     fontSize: 16,
-    //maxWidth: 150,
     width: 150,
   },
 });
 const mapStateToProps = state => {
-  console.log('render:', state.bookReducer);
-  return {book: state.bookReducer};
+  return {
+    book: state.bookReducer,
+    bestUsers: state.user.bestUsers,
+    oustandingReviews: state.comment.ounstandingReviews,
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onGetBooks: () => dispatch(getBook()),
+    onGetBestUsersData: () => dispatch(getBestUsers()),
+    onGetOutstandingData: () => dispatch(getOutstandingReviews()),
   };
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(index);
