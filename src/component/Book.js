@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 200,
-    backgroundColor: 'red',
+    backgroundColor: '#ababab',
     marginHorizontal: 2,
   },
 });

@@ -119,12 +119,14 @@ class CommentModal extends Component {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-      let UserId = parsed.Data.Id;
-      await this.setState({
-        userId: UserId,
-      });
+      if (parsed) {
+        let UserId = parsed.Data.Id;
+        await this.setState({
+          userId: UserId,
+        });
+      }
     } catch (error) {
-      alert(error);
+      // alert(error);
     }
   };
 

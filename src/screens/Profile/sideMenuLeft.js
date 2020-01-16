@@ -37,10 +37,12 @@ export default class SideMenuLeft extends Component {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
 
-      let userName = parsed.Data.FullName;
-      this.setState({
-        UserName: userName,
-      });
+      if (parsed) {
+        let userName = parsed.Data.FullName;
+        this.setState({
+          UserName: userName,
+        });
+      }
     } catch (error) {
       alert(error);
     }

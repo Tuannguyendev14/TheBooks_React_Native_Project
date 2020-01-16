@@ -16,6 +16,7 @@ import com.reactnativenavigation.react.ReactGateway;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.viewpager.RNCViewPagerPackage;
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
@@ -40,12 +41,13 @@ public class MainApplication extends NavigationApplication {
   }
 
   protected List<ReactPackage> getPackages() {
-    // Add additional packages you require here
-    // No need to add RnnPackage and MainReactPackage
+
     List<ReactPackage> packages = new PackageList(this).getPackages();
     packages.add(new RNCViewPagerPackage());
-
     return packages;
+
+    // return Arrays.<ReactPackage>asList(new VectorIconsPackage(), new
+    // MainReactPackage(), new RNCViewPagerPackage());
   }
 
   @Override
