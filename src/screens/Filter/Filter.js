@@ -20,6 +20,7 @@ export default class Filter extends Component {
 
     this.state = {
       check: false,
+      sort: false,
     };
   }
 
@@ -67,8 +68,27 @@ export default class Filter extends Component {
     });
   };
 
+  displayScreenHorizontalSort() {
+    const DATA = sortBy(offlineData.Data.MostBorrowBooks, 'Title');
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+
+    return (
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemHorizontal}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        key={2}
+      />
+    );
+  }
+
   displayScreenHorizontal() {
     const DATA = offlineData.Data.MostBorrowBooks;
+
     const categories = filter(DATA, value => {
       return some(value.Categories, {Name: this.props.value});
       return [];
@@ -203,6 +223,12 @@ export default class Filter extends Component {
 
   main() {
     const DATA = offlineData.Data.MostBorrowBooks;
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+    console.log(categories.length);
+
     return (
       <View>
         <View style={styles.header}>
@@ -255,7 +281,7 @@ export default class Filter extends Component {
               <View style={{flex: 2}}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => sortBy(item, 'Title')}>
+                  onPress={() => this.setState({sort: !this.state.sort})}>
                   <Text style={styles.styleText}>Sắp xếp</Text>
                 </TouchableOpacity>
               </View>
@@ -285,9 +311,22 @@ export default class Filter extends Component {
             </View>
           </View>
         </View>
-        {this.state.check === false
-          ? this.displayScreenHorizontal()
-          : this.displayScreenVertical()}
+        {categories.length === 0 ? (
+          <View>
+            <Text
+              style={{fontSize: 30, marginHorizontal: 22, textAlign: 'center'}}>
+              Không có sách liên quan đến thể loại này!!!
+            </Text>
+          </View>
+        ) : this.state.check === false ? (
+          this.state.sort === false ? (
+            this.displayScreenHorizontal()
+          ) : (
+            this.displayScreenHorizontalSort()
+          )
+        ) : (
+          this.displayScreenVertical()
+        )}
       </View>
     );
   }

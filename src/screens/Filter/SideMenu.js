@@ -84,8 +84,6 @@ export default class SideMenu extends Component {
   };
   render() {
     const DATA = offlineData.Data.References.Categories;
-    console.log('data', DATA);
-
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <SafeAreaView>

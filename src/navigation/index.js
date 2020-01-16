@@ -29,9 +29,6 @@ import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
 import SideMenu from './../screens/Filter/SideMenu';
 
-import TestSearch from '../screens/Filter/Search';
-// import TodoListComponent from './../screens/SortDemo/TodoListComponent';
-
 function ReduxProvider(Component) {
   return props => (
     <Provider store={store}>
@@ -45,16 +42,12 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'Sort',
+          name: 'App',
         },
       },
     });
   });
 };
-
-// Navigation.registerComponent('TodoListComponent', () => TodoListComponent);
-
-Navigation.registerComponent('TestSearch', () => TestSearch);
 
 Navigation.registerComponent(
   'App',

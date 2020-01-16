@@ -27,8 +27,6 @@ export default class Categories extends Component {
   }
 
   renderItem = DATA => {
-    console.log('state: ', this.state);
-
     return DATA.map(item => (
       <View>
         <List.Accordion title={item.Name}>
@@ -54,7 +52,7 @@ export default class Categories extends Component {
                 </TouchableOpacity>
               </View>
               <View>
-                {this.state.name === listItem.Name &&
+                {this.state.value === listItem.Name &&
                 this.state.ticker === true ? (
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
                 ) : (
@@ -77,13 +75,12 @@ export default class Categories extends Component {
       component: {
         name: 'Filter',
         passProps: {
-          value: this.state.name,
+          value: this.state.value,
         },
       },
     });
   };
   onPress = () => {
-    console.log('value: ', this.state.name);
     {
       this.state.value === '' ? null : this.changScreenSearch();
     }
@@ -91,8 +88,6 @@ export default class Categories extends Component {
 
   render() {
     const DATA = offlineData.Data.References.Categories;
-    console.log('data', DATA);
-
     return (
       <View>
         <SafeAreaView>
