@@ -1,191 +1,419 @@
 import React, {Component} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 
-class Sort extends Component {
-  state = {
-    sorters: this.props.sorters,
-  };
+import {map, find, some, filter, sortBy} from 'lodash';
+import {offlineData} from '../../utils/offlineData';
+import {Navigation} from 'react-native-navigation';
+import {connect} from 'react-redux';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 
-  data = [
-    {
-      id: 0,
-      name: 'Vernon Dunham',
-      company: 'Qualcore',
-      email: 'vernon.dunham@qualcore.com',
-    },
-    {
-      id: 1,
-      name: 'Dori Neal',
-      company: 'Sunopia',
-      email: 'dori.neal@sunopia.com',
-    },
-    {
-      id: 2,
-      name: 'Rico Muldoon',
-      company: 'Airconix',
-      email: 'rico.muldoon@airconix.com',
-    },
-    {
-      id: 3,
-      name: 'Jason Neal',
-      company: 'Qualcore',
-      email: 'jason.neal@qualcore.com',
-    },
-    {
-      id: 4,
-      name: 'Rico Pettey',
-      company: 'Thermolock',
-      email: 'rico.pettey@thermolock.com',
-    },
-    {
-      id: 5,
-      name: 'Raymond Seabury',
-      company: 'Airconix',
-      email: 'raymond.seabury@airconix.com',
-    },
-    {
-      id: 6,
-      name: 'Dori Pettey',
-      company: 'Hivemind',
-      email: 'dori.pettey@hivemind.com',
-    },
-    {
-      id: 7,
-      name: 'Vernon Neal',
-      company: 'Qualcore',
-      email: 'vernon.neal@qualcore.com',
-    },
-    {
-      id: 8,
-      name: 'Jason Neal',
-      company: 'Qualcore',
-      email: 'jason.neal@qualcore.com',
-    },
-    {
-      id: 9,
-      name: 'Vernon Muldoon',
-      company: 'Airconix',
-      email: 'vernon.muldoon@airconix.com',
-    },
-    {
-      id: 10,
-      name: 'Vernon Seabury',
-      company: 'Hivemind',
-      email: 'vernon.seabury@hivemind.com',
-    },
-    {
-      id: 11,
-      name: 'Dori Neal',
-      company: 'Airconix',
-      email: 'dori.neal@airconix.com',
-    },
-    {
-      id: 12,
-      name: 'Raymond Pettey',
-      company: 'Airconix',
-      email: 'raymond.pettey@airconix.com',
-    },
-    {
-      id: 13,
-      name: 'Rico Muldoon',
-      company: 'Qualcore',
-      email: 'rico.muldoon@qualcore.com',
-    },
-    {
-      id: 14,
-      name: 'Vernon Seabury',
-      company: 'Sunopia',
-      email: 'vernon.seabury@sunopia.com',
-    },
-    {
-      id: 15,
-      name: 'Rico Pettey',
-      company: 'Airconix',
-      email: 'rico.pettey@airconix.com',
-    },
-    {
-      id: 16,
-      name: 'Jason Dunham',
-      company: 'Sunopia',
-      email: 'jason.dunham@sunopia.com',
-    },
-    {
-      id: 17,
-      name: 'Vernon Neal',
-      company: 'Qualcore',
-      email: 'vernon.neal@qualcore.com',
-    },
-    {
-      id: 18,
-      name: 'Jason Pettey',
-      company: 'Thermolock',
-      email: 'jason.pettey@thermolock.com',
-    },
-    {
-      id: 19,
-      name: 'Vernon Dunham',
-      company: 'Thermolock',
-      email: 'vernon.dunham@thermolock.com',
-    },
-  ];
+export default class Filter extends Component {
+  constructor(props) {
+    super(props);
 
-  static defaultProps = {
-    sorters: [
-      {
-        property: 'name',
-      },
-      {
-        property: 'company',
-      },
-    ],
-  };
-
-  componentDidMount() {}
-
-  parseData(data) {
-    const {sorters} = data;
-
-    if (data && data.length) {
-      if (Array.isArray(sorters) && sorters.length) {
-        data.sort(createSorter(...sorters));
-      }
-    }
-
-    return data;
+    this.state = {
+      check: false,
+      sort: false,
+    };
   }
 
-  onLoad = data => {
-    this.setState({
-      data: this.parseData(data),
+  backMainScreen = () => {
+    Navigation.dismissModal(this.props.componentId);
+  };
+
+  countStar = item => {
+    let round = Math.round(item.OverallStarRating);
+    let star = [];
+    let starOutline = [];
+    for (let i = 0; i < round; i++) {
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
+    }
+    for (let i = 0; i < 5 - round; i++) {
+      star.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
+    }
+    return star;
+  };
+
+  changScreenCategories = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Categories',
+      },
     });
   };
 
+  changScreenSort = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Sort',
+        passProps: {
+          data: data,
+        },
+      },
+    });
+  };
+
+  changScreenSearch = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Search',
+      },
+    });
+  };
+
+  displayScreenHorizontalSort() {
+    const DATA = sortBy(offlineData.Data.MostBorrowBooks, 'Title');
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+
+    return (
+      <FlatList
+        data={DATA}
+        renderItem={this.renderItemHorizontal}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        key={2}
+      />
+    );
+  }
+
+  displayScreenHorizontal() {
+    const DATA = offlineData.Data.MostBorrowBooks;
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+
+    return (
+      <FlatList
+        data={DATA}
+        renderItem={this.renderItemHorizontal}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        key={2}
+      />
+    );
+  }
+
+  displayScreenVertical() {
+    const DATA = offlineData.Data.MostBorrowBooks;
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+    return (
+      <FlatList
+        data={DATA}
+        renderItem={this.renderItemVertical}
+        keyExtractor={(item, index) => index}
+      />
+    );
+  }
+
+  renderItemHorizontal = ({item}) => {
+    return (
+      <View>
+        <View style={styles.containerMain}>
+          <TouchableOpacity style={styles.item}>
+            <Image
+              style={styles.imageThumbnail}
+              source={{uri: item.Medias[0].ImageUrl}}
+            />
+          </TouchableOpacity>
+          <View style={styles.containerBody}>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={styles.title}>{item.Title}</Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.titleAuthor, styles.titleSize]}>
+                {item.Authors[0].Name === null
+                  ? 'No name'
+                  : item.Authors[0].Name}
+              </Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              {this.countStar(item)}
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber, styles.titleSize]}>
+                  {item.Shelf.BookCount}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  renderItemVertical = ({item}) => {
+    return (
+      <View>
+        <View style={styles.containerMain1}>
+          <TouchableOpacity style={styles.item}>
+            <Image
+              style={styles.imageThumbnail1}
+              source={{uri: item.Medias[0].ImageUrl}}
+            />
+          </TouchableOpacity>
+
+          <View style={styles.containerBody}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.title, styles.title1]}>{item.Title}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => this.onPressItem(item)}>
+              <Text style={[styles.titleAuthor, styles.titleSize1]}>
+                {item.Authors[0].Name === null
+                  ? 'No name'
+                  : item.Authors[0].Name}
+              </Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+              {this.countStar(item)}
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
+                  {item.Shelf.BookCount}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.containerNumber1}>
+              <Icon name="ic-book-1" size={20} color="#fc9619" />
+              <TouchableOpacity style={styles.item}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
+                  {item.Quantity} quyển
+                </Text>
+              </TouchableOpacity>
+              <Icon name="ic-price" size={18} color="#fc9619" />
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() => this.onPressItem(item)}>
+                <Text style={[styles.titleNumber, styles.titleSize1]}>
+                  {item.Price}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  main() {
+    const DATA = offlineData.Data.MostBorrowBooks;
+    console.log(sortBy(DATA, 'Title'));
+
+    return (
+      <View>
+        <View style={styles.header}>
+          <View style={styles.back}>
+            <TouchableOpacity style={styles.item}>
+              <Icon
+                name="ic-back"
+                size={30}
+                color="#5f5f5f"
+                onPress={() => this.backMainScreen()}
+              />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Text style={styles.title}>{this.props.value}</Text>
+          </View>
+          <View style={styles.search}>
+            <TouchableOpacity style={styles.item}>
+              <Icon
+                name="ic-search"
+                size={30}
+                color="#5f5f5f"
+                onPress={() => this.changScreenSearch()}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.header}>
+          <View style={[styles.type, styles.sort]}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 2}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenCategories()}>
+                  <Text style={styles.styleText}>{this.props.value}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{marginTop: 8}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenCategories()}>
+                  <Icon name="filter" size={30} color="#5f5f5f" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.sort}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 2}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.setState({sort: !this.state.sort})}>
+                  <Text style={styles.styleText}>Sắp xếp</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection: 'row', marginTop: 8}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenSort()}>
+                  <Icon name="select" size={30} color="#5f5f5f" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+          <View style={styles.choose}>
+            <View style={{marginTop: 8}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({check: !this.state.check});
+                }}>
+                <Text>
+                  {this.state.check === false ? (
+                    <Icon name="ic-filter-change-2" size={30} color="#5f5f5f" />
+                  ) : (
+                    <Icon name="ic-filter-change" size={30} color="#5f5f5f" />
+                  )}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        {this.state.check === false
+          ? this.state.sort === false
+            ? this.displayScreenHorizontal()
+            : this.displayScreenHorizontalSort()
+          : this.displayScreenVertical()}
+      </View>
+    );
+  }
+
   render() {
-    const {data} = this.state;
-
-    return data ? this.renderData(data) : this.renderLoading();
-  }
-
-  renderData(data) {
-    if (data && data.length > 0) {
-      console.log(data);
-
-      return (
-        <div>
-          {data.map(item => (
-            <div key={item.id}>
-              <a href={`mailto:${item.email}`}>{item.name}</a> {item.company}
-            </div>
-          ))}
-        </div>
-      );
-    } else {
-      return <div>No items found</div>;
-    }
-  }
-
-  renderLoading() {
-    return <div>Loading...</div>;
+    return <View>{this.main()}</View>;
   }
 }
 
-export default Sort;
+const styles = StyleSheet.create({
+  type: {
+    marginLeft: -16,
+    borderColor: '#d6d7da',
+  },
+  sort: {
+    flex: 3,
+    borderWidth: 1.5,
+    borderRightColor: 'white',
+    borderLeftColor: 'white',
+    borderTopColor: '#d6d7da',
+    borderBottomColor: '#d6d7da',
+  },
+  choose: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderColor: '#d6d7da',
+    marginRight: -16,
+    alignItems: 'center',
+  },
+  header: {
+    borderColor: 'red',
+    height: 50,
+    flexDirection: 'row',
+    marginHorizontal: 16,
+  },
+  containerMain: {
+    flex: 1,
+  },
+  containerBody: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  containerNumber: {
+    // flexDirection: 'row',
+    flex: 2,
+  },
+  item: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 20,
+    marginTop: 4,
+    color: '#4a4a4a',
+  },
+  titleSize: {
+    fontSize: 15,
+  },
+  titleNumber: {
+    opacity: 0.3,
+  },
+  titleAuthor: {
+    opacity: 0.3,
+  },
+  imageThumbnail: {
+    flex: 1,
+    width: 190,
+    height: 230,
+    marginHorizontal: 10,
+  },
+  search: {
+    flex: 1,
+    alignItems: 'flex-end',
+    marginTop: 8,
+  },
+  back: {
+    flex: 1,
+    marginTop: 8,
+  },
+  styleText: {
+    textAlign: 'center',
+    marginTop: 15,
+  },
+
+  containerMain1: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
+    marginVertical: 1,
+    // marginTop: -7,
+    flex: 1,
+  },
+  containerNumber1: {
+    flexDirection: 'row',
+    flex: 2,
+  },
+  title1: {
+    fontSize: 25,
+  },
+  titleSize1: {
+    fontSize: 20,
+  },
+  imageThumbnail1: {
+    flex: 1,
+    height: 200,
+    borderRadius: 15,
+  },
+});

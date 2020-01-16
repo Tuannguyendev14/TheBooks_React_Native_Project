@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {map, find, some, filter} from 'lodash';
+import {map, find, some, filter, sortBy} from 'lodash';
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
@@ -202,6 +202,7 @@ export default class Filter extends Component {
   };
 
   main() {
+    const DATA = offlineData.Data.MostBorrowBooks;
     return (
       <View>
         <View style={styles.header}>
@@ -254,7 +255,7 @@ export default class Filter extends Component {
               <View style={{flex: 2}}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => this.changScreenSort()}>
+                  onPress={() => sortBy(item, 'Title')}>
                   <Text style={styles.styleText}>Sắp xếp</Text>
                 </TouchableOpacity>
               </View>

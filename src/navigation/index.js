@@ -45,7 +45,7 @@ export default () => {
     Navigation.setRoot({
       root: {
         component: {
-          name: 'Search',
+          name: 'Sort',
         },
       },
     });

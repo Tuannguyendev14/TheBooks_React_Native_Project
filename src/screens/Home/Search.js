@@ -81,22 +81,9 @@ export default class Search extends Component {
   onPress = () => {
     {
       // this.state.value === '' ? null : this.changScreenSearch();
-      this.state.value === ''
-        ? null
-        : filter(this.arrayHolder, item => {
-            some(item, {Name: this.state.value});
-            return this.changScreenSearch();
-          });
-      console.log(
-        'aaaaaaaaaaa',
-        this.arrayHolder.filter(item => {
-          return (
-            <View>
-              <Text>{item}</Text>
-            </View>
-          );
-        }),
-      );
+      this.arrayHolder.filter(item => {
+        item === this.state.value ? this.changScreenSearch() : null;
+      });
     }
   };
 
@@ -113,8 +100,6 @@ export default class Search extends Component {
           <TextInput
             style={styles.textInput}
             placeholder="Hãy nhập tên sách mà bạn muốn tìm!"
-            // value={this.state.textInput}
-            // onChangeText={(textInput) => this.setState({textInput})}
             onChangeText={text => this.searchFilterFunction(text)}
             autoCorrect={false}
             value={this.state.value}
@@ -130,7 +115,6 @@ export default class Search extends Component {
         <Text style={styles.common}>Các từ khóa thông dụng</Text>
         <FlatList
           style={styles.list}
-          // data={searchData}
           data={this.state.data}
           renderItem={({item}) => (
             <Text
@@ -164,7 +148,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   input: {
-    //paddingTop: 10,
     height: 30,
   },
   search: {
