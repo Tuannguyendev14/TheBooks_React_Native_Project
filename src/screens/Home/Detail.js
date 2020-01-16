@@ -32,7 +32,6 @@ import UpdateModal from './UpdateModal';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-
 class Detail extends Component {
   constructor(props) {
     super(props);
@@ -80,10 +79,9 @@ class Detail extends Component {
         this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
       }
     } catch (error) {
-       alert(error);
+      alert(error);
     }
   };
-
 
   onPress = async (userId, token, idbasket) => {
     let data = {
@@ -93,8 +91,8 @@ class Detail extends Component {
     };
     await this.props.onAddCard(data, token);
     this.props.onGetCard(idbasket, token);
-  }
-  
+  };
+
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -152,6 +150,7 @@ class Detail extends Component {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
+      console.log(parsed);
       if (parsed != null) {
         await this.setState({
           userId: parsed.Data.Id,
@@ -175,9 +174,9 @@ class Detail extends Component {
   onUpdateComment = (commentData, Id) => {
     let userToken = this.state.userToken;
     this.props.onUpdateComment(commentData, Id, userToken);
-    console.log('commentData', commentData);
-    console.log('Id', Id);
-    console.log('userToken', userToken);
+    // console.log('commentData', commentData);
+    // console.log('Id', Id);
+    // console.log('userToken', userToken);
   };
 
   onShowAllComment = () => {
@@ -218,6 +217,7 @@ class Detail extends Component {
       <Text style={style.text1}>Xem thêm</Text>
     );
 
+    console.log(commentData);
     return (
       <View style={style.container}>
         <View style={style.topbar}>
@@ -405,7 +405,8 @@ class Detail extends Component {
           showConfirmButton={true}
           cancelText="Lúc khác"
           confirmText="Đăng nhập"
-          confirmButtonColor="#DD6B55"
+          confirmButtonColor="#1d9dd8"
+          cancelButtonColor="#70f1cc"
           onCancelPressed={() => {
             this.hideAlert();
           }}

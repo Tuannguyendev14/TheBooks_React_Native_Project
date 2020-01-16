@@ -18,11 +18,14 @@ import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import UserReview from './components/userReview';
 import {get, filter} from 'lodash';
-
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 class index extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showAlert: false,
+    };
   }
 
   changScreenShowAll = (data, title) => {
@@ -44,13 +47,25 @@ class index extends Component {
       let parsed = JSON.parse(user);
       console.log('parsed:', parsed);
       if (parsed === null) {
-        onSignIn();
+        this.showAlert();
       } else {
         this.changShopping(idbasket, parsed.Token.access_token);
       }
     } catch (error) {
       alert(error);
     }
+  };
+
+  showAlert = () => {
+    this.setState({
+      showAlert: true,
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false,
+    });
   };
 
   changShopping = (idbasket, token) => {
@@ -241,26 +256,47 @@ class index extends Component {
         <View style={styles.footer}>
           <Icon
             name="ic-cart"
-            size={60}
-            color="red"
+            size={40}
+            color="white"
             onPress={() => this.onCheck()}
           />
-        </View>      
+        </View>
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          title="Bạn có chắc đăng xuất không?"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          cancelButtonColor="#8be4cb"
+          showConfirmButton={true}
+          cancelText="Để sau"
+          confirmText="Đăng nhập"
+          confirmButtonColor="#1d9dd8"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            onSignIn();
+          }}
+        />
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
   footer: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#7adaf7',
     alignSelf: 'flex-end',
     position: 'absolute',
     bottom: 65,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: 'red',
+    borderRadius: 50,
     right: 20,
     overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 60,
+    height: 60,
   },
   showall: {
     alignItems: 'flex-end',
