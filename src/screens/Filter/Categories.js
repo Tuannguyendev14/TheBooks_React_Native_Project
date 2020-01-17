@@ -35,15 +35,19 @@ export default class Categories extends Component {
               <View style={{flex: 1}}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({
-                      ticker: !this.state.ticker,
-                    });
-                    this.state.ticker === false ? (
-                      <Text>{this.setState({value: listItem.Name})}</Text>
-                    ) : (
-                      <Text>{this.setState({value: ''})}</Text>
-                    );
-                  }}>
+                    <Text>{this.setState({value: listItem.Name})}</Text>;
+                  }}
+                  // onPress={() => {
+                  //   this.setState({
+                  //     ticker: !this.state.ticker,
+                  //   });
+                  //   this.state.ticker === false ? (
+                  //     <Text>{this.setState({value: listItem.Name})}</Text>
+                  //   ) : (
+                  //     <Text>{this.setState({value: listItem.Name})}</Text>
+                  //   );
+                  // }}
+                >
                   <List.Item
                     id={item.Id}
                     style={{marginHorizontal: 10}}
@@ -52,8 +56,9 @@ export default class Categories extends Component {
                 </TouchableOpacity>
               </View>
               <View>
-                {this.state.value === listItem.Name &&
-                this.state.ticker === true ? (
+                {this.state.value === listItem.Name ? (
+                  // &&
+                  // this.state.ticker === true
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
                 ) : (
                   <Text></Text>
@@ -117,7 +122,7 @@ export default class Categories extends Component {
             </View>
           </View>
 
-          <ScrollView style={{marginVertical: 70, marginTop: -10}}>
+          <ScrollView style={{marginVertical: 120, marginTop: -10}}>
             <View style={[styles.container, styles.item]}>
               {this.renderItem(DATA)}
             </View>
@@ -136,7 +141,7 @@ export default class Categories extends Component {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#fc9619',
     padding: 10,
   },
   header: {
