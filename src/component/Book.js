@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import {Navigation} from 'react-native-navigation';
 
 class Book extends Component {
@@ -42,12 +42,11 @@ class Book extends Component {
     } = this.props;
     let round = Math.round(OverallStarRating);
     let star = [];
-    let starOutline = [];
     for (let i = 0; i < round; i++) {
-      star.push(<Icon1 name="star" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - round; i++) {
-      starOutline.push(<Icon1 name="ic-star-pre" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#c3c1c1" />);
     }
 
     const showAuthor =
@@ -74,7 +73,6 @@ class Book extends Component {
         <View>{showAuthor}</View>
         <TouchableOpacity style={styles.rate}>
           {star}
-          {starOutline}
           <Text style={styles.bookCount}>{count}</Text>
         </TouchableOpacity>
       </View>

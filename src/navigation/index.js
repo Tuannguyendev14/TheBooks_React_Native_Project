@@ -35,7 +35,6 @@ console.disableYellowBox = true;
 
 import CommentModal from '../screens/Home/CommentModal';
 
-
 function ReduxProvider(Component) {
   return props => (
     <Provider store={store}>
@@ -61,6 +60,8 @@ Navigation.registerComponent(
   () => ReduxProvider(App),
   () => App,
 );
+
+Navigation.registerComponent('SideMenu', () => SideMenu);
 
 Navigation.registerComponent(
   'Search',
@@ -163,7 +164,6 @@ Navigation.registerComponent(
   () => ReduxProvider(Sort),
   () => Sort,
 );
-
 
 Navigation.registerComponent(
   'SideMenuLeft',

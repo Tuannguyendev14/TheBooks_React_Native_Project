@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {map, find, some, filter, sortBy} from 'lodash';
+import {map, find, some, filter, sortBy, get} from 'lodash';
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/thebook-appicon';
+import Book from '../../component/Book';
 
 export default class Filter extends Component {
   constructor(props) {
@@ -123,42 +124,14 @@ export default class Filter extends Component {
   renderItemHorizontal = ({item}) => {
     return (
       <View>
-        <View style={styles.containerMain}>
-          <TouchableOpacity style={styles.item}>
-            <Image
-              style={styles.imageThumbnail}
-              source={{uri: item.Medias[0].ImageUrl}}
-            />
-          </TouchableOpacity>
-          <View style={styles.containerBody}>
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
-                <Text style={styles.title}>{item.Title}</Text>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.titleAuthor, styles.titleSize]}>
-                {item.Authors[0].Name === null
-                  ? 'No name'
-                  : item.Authors[0].Name}
-              </Text>
-            </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
-              {this.countStar(item)}
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize]}>
-                  {item.Shelf.BookCount}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        <Book
+          image={get(item, 'Medias.0.ImageUrl')}
+          author={get(item, 'Authors.0.Name')}
+          count={get(item, 'Shelf.BookCount')}
+          OverallStarRating={get(item, 'OverallStarRating')}
+          title={get(item, 'Title')}
+          idBook={get(item, 'Id')}
+        />
       </View>
     );
   };

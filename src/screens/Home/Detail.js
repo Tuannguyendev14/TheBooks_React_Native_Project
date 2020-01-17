@@ -13,8 +13,6 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {get, find, take} from 'lodash';
-import Icon from 'react-native-vector-icons/Ionicons';
-import IconStar from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import Comment from './components/comment';
 import {onSignIn} from '../../navigation';
@@ -29,9 +27,8 @@ import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
 import ImageProfile from '../../../assets/images/Home/anh.jpg';
 import UpdateModal from './UpdateModal';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
-
 
 class Detail extends Component {
   constructor(props) {
@@ -49,7 +46,7 @@ class Detail extends Component {
     };
   }
   backMainScreen = () => {
-    Navigation.dismissAllModals();
+    Navigation.dismissModal(this.props.componentId);
   };
 
   changScreenShowAll = (data, title) => {
@@ -80,10 +77,9 @@ class Detail extends Component {
         this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
       }
     } catch (error) {
-       alert(error);
+      alert(error);
     }
   };
-
 
   onPress = async (userId, token, idbasket) => {
     let data = {
@@ -93,8 +89,8 @@ class Detail extends Component {
     };
     await this.props.onAddCard(data, token);
     this.props.onGetCard(idbasket, token);
-  }
-  
+  };
+
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -198,12 +194,11 @@ class Detail extends Component {
     const bookDetail = this.props.books;
 
     let star = [];
-    let starOutline = [];
     for (let i = 0; i < bookDetail.OverallStarRating; i++) {
-      star.push(<IconStar name="star" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
-      starOutline.push(<IconStar name="star" size={20} color="#c3c1c1" />);
+      star.push(<Icon name="star" size={20} color="#c3c1c1" />);
     }
 
     const ShowAllComment = this.state.isShowAllComment ? (
@@ -223,7 +218,7 @@ class Detail extends Component {
         <View style={style.topbar}>
           <View style={{flex: 1}}>
             <Icon
-              name="ios-arrow-back"
+              name="ic-back"
               size={30}
               color="#5f5f5f"
               onPress={() => this.backMainScreen()}
@@ -232,18 +227,16 @@ class Detail extends Component {
           <View style={style.search}>
             {this.state.heartEmpty === false ? (
               <Icon
-                name="ios-heart"
+                name="ic-like"
                 size={30}
-                color="red"
                 onPress={() => {
                   this.setState({heartEmpty: !this.state.heartEmpty});
                 }}
               />
             ) : (
               <Icon
-                name="ios-heart-empty"
+                name="ic-like-pre"
                 size={30}
-                color="#fc9619"
                 onPress={() => {
                   this.setState({heartEmpty: !this.state.heartEmpty});
                 }}
@@ -268,14 +261,14 @@ class Detail extends Component {
 
           <View style={style.viewRank}>
             <View style={style.viewIcon}>
-              <Icon1 name="ic-book-1" size={17} color="#fc9619" />
+              <Icon name="ic-book-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {get(bookDetail, 'Quantity')} quyển
               </Text>
             </View>
 
             <View style={style.viewIcon}>
-              <Icon1 name="ic-bookshelf" size={17} color="#fc9619" />
+              <Icon name="ic-bookshelf" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {get(bookDetail, 'Shelf.Name')}
               </Text>
@@ -284,14 +277,11 @@ class Detail extends Component {
 
           <View style={style.viewRank}>
             <View>
-              <TouchableOpacity style={style.rank}>
-                {star}
-                {starOutline}
-              </TouchableOpacity>
+              <TouchableOpacity style={style.rank}>{star}</TouchableOpacity>
             </View>
 
             <View style={style.viewIcon}>
-              <Icon1 name="ic-price-1" size={17} color="#fc9619" />
+              <Icon name="ic-price-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {bookDetail.Price}
               </Text>

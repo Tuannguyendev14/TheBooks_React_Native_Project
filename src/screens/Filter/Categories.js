@@ -21,7 +21,6 @@ export default class Categories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ticker: false,
       value: '',
     };
   }
@@ -36,18 +35,7 @@ export default class Categories extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     <Text>{this.setState({value: listItem.Name})}</Text>;
-                  }}
-                  // onPress={() => {
-                  //   this.setState({
-                  //     ticker: !this.state.ticker,
-                  //   });
-                  //   this.state.ticker === false ? (
-                  //     <Text>{this.setState({value: listItem.Name})}</Text>
-                  //   ) : (
-                  //     <Text>{this.setState({value: listItem.Name})}</Text>
-                  //   );
-                  // }}
-                >
+                  }}>
                   <List.Item
                     id={item.Id}
                     style={{marginHorizontal: 10}}
@@ -57,12 +45,8 @@ export default class Categories extends Component {
               </View>
               <View>
                 {this.state.value === listItem.Name ? (
-                  // &&
-                  // this.state.ticker === true
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
-                ) : (
-                  <Text></Text>
-                )}
+                ) : null}
               </View>
             </View>
           ))}
