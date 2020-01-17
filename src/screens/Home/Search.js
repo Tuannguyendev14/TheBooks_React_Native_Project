@@ -11,7 +11,6 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {offlineData} from '../../utils/offlineData';
 import {searchData} from '../../utils/searchData';
 import {filter, some} from 'lodash';
 export default class Search extends Component {
