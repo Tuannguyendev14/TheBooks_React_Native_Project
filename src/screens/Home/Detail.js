@@ -13,25 +13,20 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {get, find, take} from 'lodash';
-import Icon from 'react-native-vector-icons/Ionicons';
-import IconStar from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import Comment from './components/comment';
 import {onSignIn} from '../../navigation';
 import {connect} from 'react-redux';
 import {getComment, addComment} from '../../redux/commentRedux/actions';
 import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
-
 import {addCard, getCard} from '../../redux/cardRedux/action';
 import store from '../../redux/store';
-
 import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
 import ImageProfile from '../../../assets/images/Home/anh.jpg';
 import UpdateModal from './UpdateModal';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
-
 
 class Detail extends Component {
   constructor(props) {
@@ -80,10 +75,9 @@ class Detail extends Component {
         this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
       }
     } catch (error) {
-       alert(error);
+      alert(error);
     }
   };
-
 
   onPress = async (userId, token, idbasket) => {
     let data = {
@@ -93,8 +87,8 @@ class Detail extends Component {
     };
     await this.props.onAddCard(data, token);
     this.props.onGetCard(idbasket, token);
-  }
-  
+  };
+
   showAlert = () => {
     this.setState({
       showAlert: true,
@@ -114,7 +108,6 @@ class Detail extends Component {
   componentDidMount() {
     let idBook = this.props.IdBook;
     let store1 = store.getState().CardReducer;
-    console.log('cart', store1);
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
     this.props.onGetBookDetail(idBook);
@@ -175,9 +168,9 @@ class Detail extends Component {
   onUpdateComment = (commentData, Id) => {
     let userToken = this.state.userToken;
     this.props.onUpdateComment(commentData, Id, userToken);
-    console.log('commentData', commentData);
-    console.log('Id', Id);
-    console.log('userToken', userToken);
+    // console.log('commentData', commentData);
+    // console.log('Id', Id);
+    // console.log('userToken', userToken);
   };
 
   onShowAllComment = () => {
@@ -200,10 +193,10 @@ class Detail extends Component {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < bookDetail.OverallStarRating; i++) {
-      star.push(<IconStar name="star" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
-      starOutline.push(<IconStar name="star" size={20} color="#c3c1c1" />);
+      starOutline.push(<Icon name="star" size={20} color="#c3c1c1" />);
     }
 
     const ShowAllComment = this.state.isShowAllComment ? (
@@ -218,12 +211,13 @@ class Detail extends Component {
       <Text style={style.text1}>Xem thêm</Text>
     );
 
+    console.log(commentData);
     return (
       <View style={style.container}>
         <View style={style.topbar}>
           <View style={{flex: 1}}>
             <Icon
-              name="ios-arrow-back"
+              name="ic-back"
               size={30}
               color="#5f5f5f"
               onPress={() => this.backMainScreen()}
@@ -232,16 +226,17 @@ class Detail extends Component {
           <View style={style.search}>
             {this.state.heartEmpty === false ? (
               <Icon
-                name="ios-heart"
+                name="like"
                 size={30}
                 color="red"
+                backgroundColor="red"
                 onPress={() => {
                   this.setState({heartEmpty: !this.state.heartEmpty});
                 }}
               />
             ) : (
               <Icon
-                name="ios-heart-empty"
+                name="like"
                 size={30}
                 color="#fc9619"
                 onPress={() => {
@@ -268,14 +263,14 @@ class Detail extends Component {
 
           <View style={style.viewRank}>
             <View style={style.viewIcon}>
-              <Icon1 name="ic-book-1" size={17} color="#fc9619" />
+              <Icon name="ic-book-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {get(bookDetail, 'Quantity')} quyển
               </Text>
             </View>
 
             <View style={style.viewIcon}>
-              <Icon1 name="ic-bookshelf" size={17} color="#fc9619" />
+              <Icon name="ic-bookshelf" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {get(bookDetail, 'Shelf.Name')}
               </Text>
@@ -291,7 +286,7 @@ class Detail extends Component {
             </View>
 
             <View style={style.viewIcon}>
-              <Icon1 name="ic-price-1" size={17} color="#fc9619" />
+              <Icon name="ic-price-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {bookDetail.Price}
               </Text>
@@ -405,7 +400,8 @@ class Detail extends Component {
           showConfirmButton={true}
           cancelText="Lúc khác"
           confirmText="Đăng nhập"
-          confirmButtonColor="#DD6B55"
+          confirmButtonColor="#1d9dd8"
+          cancelButtonColor="#70f1cc"
           onCancelPressed={() => {
             this.hideAlert();
           }}

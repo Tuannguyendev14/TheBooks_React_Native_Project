@@ -19,12 +19,16 @@ import {List} from 'react-native-paper';
 import IconProfile from '../../../assets/images/Home/anh.jpg';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import {onSignIn} from '../../navigation';
+import ImageProfile from '../../../assets/images/profile-icon.png';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class SideMenuLeft extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      UserName: '',
+      userName: '',
+      isShowInfor: false,
+      showAlert: false,
     };
   }
 
@@ -32,15 +36,29 @@ export default class SideMenuLeft extends Component {
     this.onCheck();
   }
 
+  showAlert = () => {
+    this.setState({
+      showAlert: true,
+    });
+  };
+
+  hideAlert = () => {
+    this.setState({
+      showAlert: false,
+    });
+  };
+
   onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
 
       if (parsed) {
-        let userName = parsed.Data.FullName;
+        console.log(parsed);
+        let UserName = parsed.Data.FullName;
         this.setState({
-          UserName: userName,
+          userName: UserName,
+          isShowInfor: true,
         });
       }
     } catch (error) {
@@ -48,13 +66,36 @@ export default class SideMenuLeft extends Component {
     }
   };
 
-  onSetting = () => {
-    alert('ok');
+  onClickPerInfor = () => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'PersonalInfor',
+
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
   };
 
   onSignOut = () => {
+    this.showAlert();
+  };
+
+  onSignIn = () => {
     onSignIn();
-    this.removeEverything();
   };
 
   removeEverything = async () => {
@@ -67,7 +108,53 @@ export default class SideMenuLeft extends Component {
   };
 
   render() {
-    const UserName = this.state.UserName;
+    const {userName} = this.state;
+
+    const ShowButton = this.state.isShowInfor ? (
+      <TouchableWithoutFeedback onPress={this.onSignOut}>
+        <Text style={styles.titleOption}>Đăng Xuất</Text>
+      </TouchableWithoutFeedback>
+    ) : (
+      <TouchableWithoutFeedback onPress={this.onSignIn}>
+        <Text style={styles.titleOption}>Đăng Nhập</Text>
+      </TouchableWithoutFeedback>
+    );
+
+    const showImageProfile = this.state.isShowInfor ? (
+      <Image source={ImageProfile} style={styles.styleImageProfile} />
+    ) : (
+      <Text />
+    );
+
+    const showTabInforPerson = this.state.isShowInfor ? (
+      <View style={styles.viewRow}>
+        <View style={styles.viewIcon}>
+          <Icon name="ic-profile" size={25} color="#979797" />
+        </View>
+        <View style={{flex: 5}}>
+          <TouchableWithoutFeedback onPress={() => this.onClickPerInfor()}>
+            <Text style={styles.titleOption}>Thông tin cá nhân</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+    ) : (
+      <Text />
+    );
+
+    const showTabChangePass = this.state.isShowInfor ? (
+      <View style={styles.viewRow}>
+        <View style={styles.viewIcon}>
+          <Icon name="ic-password" size={25} color="#979797" />
+        </View>
+        <View style={{flex: 5}}>
+          <TouchableWithoutFeedback onPress={this.onSetting}>
+            <Text style={styles.titleOption}>Đổi mật khẩu</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+    ) : (
+      <Text />
+    );
 
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -79,32 +166,14 @@ export default class SideMenuLeft extends Component {
           <ScrollView>
             <View style={styles.container}>
               <View style={styles.styleViewProfile}>
-                <Image source={IconProfile} style={styles.styleImageProfile} />
-                <Text style={{fontSize: 25}}>{UserName}</Text>
+                {showImageProfile}
+                <Text style={{fontSize: 25}}>{userName}</Text>
               </View>
+              {showTabInforPerson}
+              {showTabChangePass}
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-profile" size={30} color="#979797" />
-                </View>
-                <View style={{flex: 5}}>
-                  <TouchableWithoutFeedback onPress={this.onSetting}>
-                    <Text style={styles.titleOption}>Thông tin cá nhân</Text>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-              <View style={styles.viewRow}>
-                <View style={styles.viewIcon}>
-                  <Icon name="ic-password" size={30} color="#979797" />
-                </View>
-                <View style={{flex: 5}}>
-                  <TouchableWithoutFeedback onPress={this.onSetting}>
-                    <Text style={styles.titleOption}>Đổi mật khẩu</Text>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-              <View style={styles.viewRow}>
-                <View style={styles.viewIcon}>
-                  <Icon name="ic-help" size={30} color="#979797" />
+                  <Icon name="ic-help" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -114,7 +183,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-feedback" size={30} color="#979797" />
+                  <Icon name="ic-feedback" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -124,7 +193,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-regulation" size={30} color="#979797" />
+                  <Icon name="ic-regulation" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -136,7 +205,7 @@ export default class SideMenuLeft extends Component {
                 <View style={styles.viewIcon}>
                   <Icon
                     name="ic-history-membership"
-                    size={30}
+                    size={25}
                     color="#979797"
                   />
                 </View>
@@ -150,7 +219,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-share" size={30} color="#979797" />
+                  <Icon name="ic-share" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -160,17 +229,33 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-sign-out" size={30} color="#979797" />
+                  <Icon name="ic-sign-out" size={25} color="#979797" />
                 </View>
-                <View style={{flex: 5}}>
-                  <TouchableWithoutFeedback onPress={this.onSignOut}>
-                    <Text style={styles.titleOption}>Đăng xuất</Text>
-                  </TouchableWithoutFeedback>
-                </View>
+                <View style={{flex: 5}}>{ShowButton}</View>
               </View>
             </View>
           </ScrollView>
         </SafeAreaView>
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          title="Bạn cần đăng nhập để thực hiện chức năng này"
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={true}
+          showConfirmButton={true}
+          cancelText="Quay lại"
+          confirmText="Đăng xuất"
+          confirmButtonColor="#1d9dd8"
+          cancelButtonColor="#70f1cc"
+          onCancelPressed={() => {
+            this.hideAlert();
+          }}
+          onConfirmPressed={() => {
+            onSignIn();
+            this.removeEverything();
+          }}
+        />
       </View>
     );
   }
