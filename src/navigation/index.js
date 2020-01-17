@@ -10,6 +10,7 @@ import ShowAllBook from '../screens/Home/ShowAllBook';
 import Order from '../screens/Order';
 import Notification from '../screens/Notification';
 import Profile from '../screens/Profile';
+import PersonalInfor from '../screens/Profile/personalInfor';
 import SideMenuLeft from '../../src/screens/Profile/sideMenuLeft';
 import Intro from '../screens/Intro';
 import Library from '../screens/Library';
@@ -33,7 +34,6 @@ import {prepareIcons} from '../utils/icon';
 console.disableYellowBox = true;
 
 import CommentModal from '../screens/Home/CommentModal';
-
 
 function ReduxProvider(Component) {
   return props => (
@@ -163,7 +163,6 @@ Navigation.registerComponent(
   () => Sort,
 );
 
-
 Navigation.registerComponent(
   'SideMenuLeft',
   () => ReduxProvider(SideMenuLeft),
@@ -174,6 +173,12 @@ Navigation.registerComponent(
   'UpdateModal',
   () => ReduxProvider(UpdateModal),
   () => UpdateModal,
+);
+
+Navigation.registerComponent(
+  'PersonalInfor',
+  () => ReduxProvider(PersonalInfor),
+  () => PersonalInfor,
 );
 
 export const onChangeIntoMainScreen = () => {

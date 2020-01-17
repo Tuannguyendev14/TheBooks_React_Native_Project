@@ -26,7 +26,7 @@ export default class SideMenuLeft extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      UserName: '',
+      userName: '',
       isShowInfor: false,
       showAlert: false,
     };
@@ -54,9 +54,10 @@ export default class SideMenuLeft extends Component {
       let parsed = JSON.parse(user);
 
       if (parsed) {
-        let userName = parsed.Data.FullName;
+        console.log(parsed);
+        let UserName = parsed.Data.FullName;
         this.setState({
-          UserName: userName,
+          userName: UserName,
           isShowInfor: true,
         });
       }
@@ -65,8 +66,28 @@ export default class SideMenuLeft extends Component {
     }
   };
 
-  onSetting = () => {
-    alert('ok');
+  onClickPerInfor = () => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'PersonalInfor',
+
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
   };
 
   onSignOut = () => {
@@ -87,7 +108,8 @@ export default class SideMenuLeft extends Component {
   };
 
   render() {
-    const UserName = this.state.UserName;
+    const {userName} = this.state;
+
     const ShowButton = this.state.isShowInfor ? (
       <TouchableWithoutFeedback onPress={this.onSignOut}>
         <Text style={styles.titleOption}>Đăng Xuất</Text>
@@ -107,10 +129,10 @@ export default class SideMenuLeft extends Component {
     const showTabInforPerson = this.state.isShowInfor ? (
       <View style={styles.viewRow}>
         <View style={styles.viewIcon}>
-          <Icon name="ic-profile" size={30} color="#979797" />
+          <Icon name="ic-profile" size={25} color="#979797" />
         </View>
         <View style={{flex: 5}}>
-          <TouchableWithoutFeedback onPress={this.onSetting}>
+          <TouchableWithoutFeedback onPress={() => this.onClickPerInfor()}>
             <Text style={styles.titleOption}>Thông tin cá nhân</Text>
           </TouchableWithoutFeedback>
         </View>
@@ -122,7 +144,7 @@ export default class SideMenuLeft extends Component {
     const showTabChangePass = this.state.isShowInfor ? (
       <View style={styles.viewRow}>
         <View style={styles.viewIcon}>
-          <Icon name="ic-password" size={30} color="#979797" />
+          <Icon name="ic-password" size={25} color="#979797" />
         </View>
         <View style={{flex: 5}}>
           <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -145,13 +167,13 @@ export default class SideMenuLeft extends Component {
             <View style={styles.container}>
               <View style={styles.styleViewProfile}>
                 {showImageProfile}
-                <Text style={{fontSize: 25}}>{UserName}</Text>
+                <Text style={{fontSize: 25}}>{userName}</Text>
               </View>
               {showTabInforPerson}
               {showTabChangePass}
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-help" size={30} color="#979797" />
+                  <Icon name="ic-help" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -161,7 +183,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-feedback" size={30} color="#979797" />
+                  <Icon name="ic-feedback" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -171,7 +193,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-regulation" size={30} color="#979797" />
+                  <Icon name="ic-regulation" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -183,7 +205,7 @@ export default class SideMenuLeft extends Component {
                 <View style={styles.viewIcon}>
                   <Icon
                     name="ic-history-membership"
-                    size={30}
+                    size={25}
                     color="#979797"
                   />
                 </View>
@@ -197,7 +219,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-share" size={30} color="#979797" />
+                  <Icon name="ic-share" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>
                   <TouchableWithoutFeedback onPress={this.onSetting}>
@@ -207,7 +229,7 @@ export default class SideMenuLeft extends Component {
               </View>
               <View style={styles.viewRow}>
                 <View style={styles.viewIcon}>
-                  <Icon name="ic-sign-out" size={30} color="#979797" />
+                  <Icon name="ic-sign-out" size={25} color="#979797" />
                 </View>
                 <View style={{flex: 5}}>{ShowButton}</View>
               </View>

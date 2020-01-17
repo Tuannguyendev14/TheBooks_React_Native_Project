@@ -13,23 +13,19 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {get, find, take} from 'lodash';
-import Icon from 'react-native-vector-icons/Ionicons';
-import IconStar from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import Comment from './components/comment';
 import {onSignIn} from '../../navigation';
 import {connect} from 'react-redux';
 import {getComment, addComment} from '../../redux/commentRedux/actions';
 import {getRelatedBooks} from '../../redux/relatedBooksRedux/actions';
-
 import {addCard, getCard} from '../../redux/cardRedux/action';
 import store from '../../redux/store';
-
 import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
 import ImageProfile from '../../../assets/images/Home/anh.jpg';
 import UpdateModal from './UpdateModal';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 class Detail extends Component {
@@ -112,7 +108,6 @@ class Detail extends Component {
   componentDidMount() {
     let idBook = this.props.IdBook;
     let store1 = store.getState().CardReducer;
-    console.log('cart', store1);
     this.props.onGetComment(idBook);
     this.props.onGetRelatedBooks(idBook);
     this.props.onGetBookDetail(idBook);
@@ -150,7 +145,6 @@ class Detail extends Component {
     try {
       let user = await AsyncStorage.getItem('user');
       let parsed = JSON.parse(user);
-      console.log(parsed);
       if (parsed != null) {
         await this.setState({
           userId: parsed.Data.Id,
@@ -199,10 +193,10 @@ class Detail extends Component {
     let star = [];
     let starOutline = [];
     for (let i = 0; i < bookDetail.OverallStarRating; i++) {
-      star.push(<IconStar name="star" size={20} color="#fc9619" />);
+      star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
-      starOutline.push(<IconStar name="star" size={20} color="#c3c1c1" />);
+      starOutline.push(<Icon name="star" size={20} color="#c3c1c1" />);
     }
 
     const ShowAllComment = this.state.isShowAllComment ? (
@@ -223,7 +217,7 @@ class Detail extends Component {
         <View style={style.topbar}>
           <View style={{flex: 1}}>
             <Icon
-              name="ios-arrow-back"
+              name="ic-back"
               size={30}
               color="#5f5f5f"
               onPress={() => this.backMainScreen()}
@@ -232,16 +226,17 @@ class Detail extends Component {
           <View style={style.search}>
             {this.state.heartEmpty === false ? (
               <Icon
-                name="ios-heart"
+                name="like"
                 size={30}
                 color="red"
+                backgroundColor="red"
                 onPress={() => {
                   this.setState({heartEmpty: !this.state.heartEmpty});
                 }}
               />
             ) : (
               <Icon
-                name="ios-heart-empty"
+                name="like"
                 size={30}
                 color="#fc9619"
                 onPress={() => {
@@ -268,14 +263,14 @@ class Detail extends Component {
 
           <View style={style.viewRank}>
             <View style={style.viewIcon}>
-              <Icon1 name="ic-book-1" size={17} color="#fc9619" />
+              <Icon name="ic-book-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {get(bookDetail, 'Quantity')} quyển
               </Text>
             </View>
 
             <View style={style.viewIcon}>
-              <Icon1 name="ic-bookshelf" size={17} color="#fc9619" />
+              <Icon name="ic-bookshelf" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {get(bookDetail, 'Shelf.Name')}
               </Text>
@@ -291,7 +286,7 @@ class Detail extends Component {
             </View>
 
             <View style={style.viewIcon}>
-              <Icon1 name="ic-price-1" size={17} color="#fc9619" />
+              <Icon name="ic-price-1" size={17} color="#fc9619" />
               <Text style={{fontSize: 17, marginLeft: 5, marginTop: -2}}>
                 {bookDetail.Price}
               </Text>
