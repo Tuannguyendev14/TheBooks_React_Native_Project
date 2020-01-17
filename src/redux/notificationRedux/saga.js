@@ -11,7 +11,7 @@ export function* getNotificationSaga(data) {
     // alert(' thành công');
     yield put(getNotificationSuccess(data1));
   } catch (error) {
-    alert(error);
+    //alert(error);
     yield put(getNotificationFailure(error));
   }
 }

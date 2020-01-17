@@ -3,16 +3,20 @@ import {
   Text,
   StyleSheet,
   View,
+  FlatList,
   TouchableOpacity,
   AsyncStorage,
   TouchableWithoutFeedback,
+  ScrollView,
   Alert,
 } from 'react-native';
+import Message from './component/message';
 import {onSignIn} from '../../navigation';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {connect} from 'react-redux';
 import {getNotification} from '../../redux/notificationRedux/action';
-
+import {notiData} from '../../utils/notificationData';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 class index extends Component {
   componentDidMount() {
     this.onCheck();
@@ -61,28 +65,54 @@ class index extends Component {
   }
   render() {
     const {showAlert} = this.state;
-    const noti = this.props.notification;
-    console.log('noti', noti);
+    //const noti = this.props.notification;
+    console.log('noti', notiData);
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            this.showAlert();
-          }}>
-          <View style={styles.button}>
-            <Text style={styles.text}>Try me!</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.top}>
+          <Text style={styles.noti}>Thông báo</Text>
+        </View>
+        <View style={styles.bot}>
+          <ScrollView>
+            <FlatList
+              style={styles.list}
+              data={notiData}
+              renderItem={({item}) => (
+                <Message
+                  date={item.date}
+                  detail={item.detail}
+                  title={item.title}
+                />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+            />
+          </ScrollView>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  noti: {
+    color: '#4a4a4a',
+    paddingTop: 15,
+    fontSize: 33,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  top: {
+    flex: 1,
+  },
+  bot: {
+    flex: 9,
+  },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     backgroundColor: '#fff',
   },
   button: {
