@@ -29,6 +29,7 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
+import SideMenu from './../screens/Filter/SideMenu';
 
 console.disableYellowBox = true;
 
@@ -183,7 +184,7 @@ export const onChangeIntoMainScreen = () => {
         id: 'sideMenu',
         left: {
           component: {
-            name: 'Categories',
+            name: 'SideMenu',
           },
         },
         center: {

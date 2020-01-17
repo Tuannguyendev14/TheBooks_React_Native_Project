@@ -89,9 +89,11 @@ class index extends Component {
   };
 
   changScreenFilter = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Filter',
+    Navigation.mergeOptions('sideMenu', {
+      sideMenu: {
+        left: {
+          visible: true,
+        },
       },
     });
   };
@@ -118,6 +120,7 @@ class index extends Component {
       item => item.IsDeleted === false,
     );
 
+
     return (
       <View>
         <View style={styles.topbar}>
@@ -134,6 +137,7 @@ class index extends Component {
               name="ic-search"
               size={30}
               color="#5f5f5f"
+              id="name"
               onPress={() => this.changScreenSearch()}
             />
           </View>
