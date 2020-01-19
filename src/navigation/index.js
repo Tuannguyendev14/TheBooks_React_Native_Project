@@ -1,5 +1,5 @@
 import React from 'react';
-import {Navigation} from 'react-native-navigation';
+import { Navigation } from 'react-native-navigation';
 import App from '../../App';
 import Home from '../screens/Home/index';
 import Icon1 from 'react-native-vector-icons/thebook-appicon';
@@ -26,9 +26,9 @@ import iconNotification from '../../assets/images/notification_icon.png';
 import iconLibrary from '../../assets/images/library_icon.jpg';
 import books_icon from '../../assets/images/books_icon.png';
 import profile_icon from '../../assets/images/profile_icon.png';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from '../redux/store';
-import {prepareIcons} from '../utils/icon';
+import { prepareIcons } from '../utils/icon';
 import SideMenu from './../screens/Filter/SideMenu';
 
 console.disableYellowBox = true;
@@ -61,7 +61,7 @@ Navigation.registerComponent(
   () => App,
 );
 
-Navigation.registerComponent('SideMenu', () => SideMenu);
+Navigation.registerComponent('SideMenu', () => ReduxProvider(SideMenu), () => SideMenu);
 
 Navigation.registerComponent(
   'Search',
@@ -253,7 +253,7 @@ export const onChangeIntoMainScreen = () => {
                     },
                   ],
                   options: {
-                    topBar: {visible: false},
+                    topBar: { visible: false },
                     bottomTab: {
                       text: 'Profile',
                       icon: profile_icon,
@@ -290,7 +290,7 @@ export const onChangeIntoMainScreen = () => {
                     },
                   ],
                   options: {
-                    topBar: {visible: false},
+                    topBar: { visible: false },
                     bottomTab: {
                       text: 'Library',
                       icon: iconLibrary,

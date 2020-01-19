@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -12,13 +12,13 @@ import {
   SafeAreaView,
   TextInput,
 } from 'react-native';
-import {offlineData} from '../../utils/offlineData';
-import {Navigation} from 'react-native-navigation';
-import {connect} from 'react-redux';
+import { offlineData } from '../../utils/offlineData';
+import { Navigation } from 'react-native-navigation';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/thebook-appicon';
-import {List} from 'react-native-paper';
+import { List } from 'react-native-paper';
 
-export default class SideMenu extends Component {
+class SideMenu extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,26 +32,26 @@ export default class SideMenu extends Component {
       <View>
         <List.Accordion title={item.Name}>
           {item.SubCategories.map(listItem => (
-            <View style={{flexDirection: 'row', flex: 1}}>
-              <View style={{flex: 1}}>
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <View style={{ flex: 1 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    <Text>{this.setState({value: listItem.Name})}</Text>;
+                    <Text>{this.setState({ value: listItem.Name })}</Text>;
                   }}
-                  // onPress={() => {
-                  //   this.setState({
-                  //     ticker: !this.state.ticker,
-                  //   });
-                  //   this.state.ticker === false ? (
-                  //     <Text>{this.setState({value: listItem.Name})}</Text>
-                  //   ) : (
-                  //     <Text>{this.setState({value: listItem.Name})}</Text>
-                  //   );
-                  // }}
+                // onPress={() => {
+                //   this.setState({
+                //     ticker: !this.state.ticker,
+                //   });
+                //   this.state.ticker === false ? (
+                //     <Text>{this.setState({value: listItem.Name})}</Text>
+                //   ) : (
+                //     <Text>{this.setState({value: listItem.Name})}</Text>
+                //   );
+                // }}
                 >
                   <List.Item
                     id={item.Id}
-                    style={{marginHorizontal: 10}}
+                    style={{ marginHorizontal: 10 }}
                     title={listItem.Name}
                   />
                 </TouchableOpacity>
@@ -62,8 +62,8 @@ export default class SideMenu extends Component {
                   // this.state.ticker === true
                   <Icon name="ic-tick" size={20} color="#5f5f5f" />
                 ) : (
-                  <Text></Text>
-                )}
+                    <Text></Text>
+                  )}
               </View>
             </View>
           ))}
@@ -88,25 +88,66 @@ export default class SideMenu extends Component {
     }
   };
   render() {
-    const DATA = offlineData.Data.References.Categories;
+    const DATA = this.props.book.data.References.Categories;
     return (
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View style={{ backgroundColor: 'white', flex: 1 }}>
         <SafeAreaView>
           <View style={styles.header}>
             <View
-              style={{flexDirection: 'row', flex: 2, borderTopColor: 'red'}}>
+              style={{ flexDirection: 'row', flex: 2, borderTopColor: 'red' }}>
               <TextInput placeholder="Tìm thể loại" />
             </View>
             <View>
-              <TouchableOpacity style={{marginTop: 12, alignItems: 'flex-end'}}>
+              <TouchableOpacity style={{ marginTop: 12, alignItems: 'flex-end' }}>
                 <Icon name="ic-search" size={20} color="#5f5f5f" />
               </TouchableOpacity>
             </View>
           </View>
 
-          <ScrollView style={{marginVertical: 70, marginTop: -10}}>
+          <ScrollView style={{ marginVertical: 70, marginTop: -10 }}>
             <View style={[styles.container, styles.item]}>
-              {this.renderItem(DATA)}
+              {DATA.map(item => (
+                <View>
+                  <List.Accordion title={item.Name}>
+                    {item.SubCategories.map(listItem => (
+                      <View style={{ flexDirection: 'row', flex: 1 }}>
+                        <View style={{ flex: 1 }}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              <Text>{this.setState({ value: listItem.Name })}</Text>;
+                            }}
+                          // onPress={() => {
+                          //   this.setState({
+                          //     ticker: !this.state.ticker,
+                          //   });
+                          //   this.state.ticker === false ? (
+                          //     <Text>{this.setState({value: listItem.Name})}</Text>
+                          //   ) : (
+                          //     <Text>{this.setState({value: listItem.Name})}</Text>
+                          //   );
+                          // }}
+                          >
+                            <List.Item
+                              id={item.Id}
+                              style={{ marginHorizontal: 10 }}
+                              title={listItem.Name}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        <View>
+                          {this.state.value === listItem.Name ? (
+                            // &&
+                            // this.state.ticker === true
+                            <Icon name="ic-tick" size={20} color="#5f5f5f" />
+                          ) : (
+                              <Text></Text>
+                            )}
+                        </View>
+                      </View>
+                    ))}
+                  </List.Accordion>
+                </View>
+              ))}
             </View>
             <View style={[styles.container, styles.item]}>
               <TouchableOpacity style={styles.button} onPress={this.onPress}>
@@ -152,3 +193,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    book: state.bookReducer,
+  };
+};
+
+export default connect(mapStateToProps, null)(SideMenu);

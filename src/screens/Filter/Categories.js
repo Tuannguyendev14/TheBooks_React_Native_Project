@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -11,13 +11,13 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {offlineData} from '../../utils/offlineData';
-import {Navigation} from 'react-native-navigation';
-import {connect} from 'react-redux';
+import { offlineData } from '../../utils/offlineData';
+import { Navigation } from 'react-native-navigation';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/thebook-appicon';
-import {List} from 'react-native-paper';
+import { List } from 'react-native-paper';
 
-export default class Categories extends Component {
+class Categories extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,15 +30,15 @@ export default class Categories extends Component {
       <View>
         <List.Accordion title={item.Name}>
           {item.SubCategories.map(listItem => (
-            <View style={{flexDirection: 'row', flex: 1}}>
-              <View style={{flex: 1}}>
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <View style={{ flex: 1 }}>
                 <TouchableOpacity
                   onPress={() => {
-                    <Text>{this.setState({value: listItem.Name})}</Text>;
+                    <Text>{this.setState({ value: listItem.Name })}</Text>;
                   }}>
                   <List.Item
                     id={item.Id}
-                    style={{marginHorizontal: 10}}
+                    style={{ marginHorizontal: 10 }}
                     title={listItem.Name}
                   />
                 </TouchableOpacity>
@@ -106,7 +106,7 @@ export default class Categories extends Component {
             </View>
           </View>
 
-          <ScrollView style={{marginVertical: 120, marginTop: -10}}>
+          <ScrollView style={{ marginVertical: 120, marginTop: -10 }}>
             <View style={[styles.container, styles.item]}>
               {this.renderItem(DATA)}
             </View>
@@ -157,3 +157,11 @@ const styles = StyleSheet.create({
     fontSize: 42,
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    book: state.bookReducer,
+  };
+};
+
+export default connect(mapStateToProps, null)(Categories);

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {map, find, some, filter, sortBy, get} from 'lodash';
-import {offlineData} from '../../utils/offlineData';
-import {Navigation} from 'react-native-navigation';
-import {connect} from 'react-redux';
+import { map, find, some, filter, sortBy, get } from 'lodash';
+import { offlineData } from '../../utils/offlineData';
+import { Navigation } from 'react-native-navigation';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 
-export default class Filter extends Component {
+class Filter extends Component {
   constructor(props) {
     super(props);
 
@@ -41,6 +41,10 @@ export default class Filter extends Component {
     }
     return star;
   };
+
+  componentDidMount() {
+    // console.log("daaaaaaaaa", this.props.book.data.MostBorrowBooks);
+  }
 
   changScreenCategories = () => {
     Navigation.showModal({
@@ -70,9 +74,9 @@ export default class Filter extends Component {
   };
 
   displayScreenHorizontalSort() {
-    const DATA = sortBy(offlineData.Data.MostBorrowBooks, 'Title');
+    const DATA = sortBy(this.props.book.data.MostBorrowBooks, 'Title');
     const categories = filter(DATA, value => {
-      return some(value.Categories, {Name: this.props.value});
+      return some(value.Categories, { Name: this.props.value });
       return [];
     });
 
@@ -88,10 +92,10 @@ export default class Filter extends Component {
   }
 
   displayScreenHorizontal() {
-    const DATA = offlineData.Data.MostBorrowBooks;
+    const DATA = this.props.book.data.MostBorrowBooks;
 
     const categories = filter(DATA, value => {
-      return some(value.Categories, {Name: this.props.value});
+      return some(value.Categories, { Name: this.props.value });
       return [];
     });
 
@@ -107,9 +111,9 @@ export default class Filter extends Component {
   }
 
   displayScreenVertical() {
-    const DATA = offlineData.Data.MostBorrowBooks;
+    const DATA = this.props.book.data.MostBorrowBooks;
     const categories = filter(DATA, value => {
-      return some(value.Categories, {Name: this.props.value});
+      return some(value.Categories, { Name: this.props.value });
       return [];
     });
     return (
@@ -121,7 +125,7 @@ export default class Filter extends Component {
     );
   }
 
-  renderItemHorizontal = ({item}) => {
+  renderItemHorizontal = ({ item }) => {
     return (
       <View>
         <Book
@@ -136,37 +140,65 @@ export default class Filter extends Component {
     );
   };
 
-  renderItemVertical = ({item}) => {
+  onPress = idBook => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'Detail',
+              passProps: {
+                IdBook: idBook,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
+
+  renderItemVertical = ({ item }) => {
     return (
       <View>
         <View style={styles.containerMain1}>
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => this.onPress(item.idBook)}>
             <Image
               style={styles.imageThumbnail1}
-              source={{uri: item.Medias[0].ImageUrl}}
+              source={{ uri: item.Medias[0].ImageUrl }}
             />
           </TouchableOpacity>
 
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
-              onPress={() => this.onPressItem(item)}>
+              onPress={() => this.onPress(item.idBook)}>
               <Text style={[styles.title, styles.title1]}>{item.Title}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.item}
-              onPress={() => this.onPressItem(item)}>
+              onPress={() => this.onPress(item)}>
               <Text style={[styles.titleAuthor, styles.titleSize1]}>
                 {item.Authors[0].Name === null
                   ? 'No name'
                   : item.Authors[0].Name}
               </Text>
             </TouchableOpacity>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               {this.countStar(item)}
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => this.onPressItem(item)}>
+                onPress={() => this.onPress(item)}>
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Shelf.BookCount}
                 </Text>
@@ -182,7 +214,7 @@ export default class Filter extends Component {
               <Icon name="ic-price" size={18} color="#fc9619" />
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => this.onPressItem(item)}>
+                onPress={() => this.onPress(item)}>
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Price}
                 </Text>
@@ -195,12 +227,13 @@ export default class Filter extends Component {
   };
 
   main() {
-    const DATA = offlineData.Data.MostBorrowBooks;
+    const DATA = this.props.book.data.MostBorrowBooks;
+    console.log("daaaaaaaaa", DATA);
     const categories = filter(DATA, value => {
-      return some(value.Categories, {Name: this.props.value});
+      return some(value.Categories, { Name: this.props.value });
       return [];
     });
-    console.log(categories.length);
+    console.log(this.props.value);
 
     return (
       <View>
@@ -232,15 +265,15 @@ export default class Filter extends Component {
 
         <View style={styles.header}>
           <View style={[styles.type, styles.sort]}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 2}}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 2 }}>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => this.changScreenCategories()}>
                   <Text style={styles.styleText}>{this.props.value}</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 8}}>
+              <View style={{ marginTop: 8 }}>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => this.changScreenCategories()}>
@@ -250,15 +283,15 @@ export default class Filter extends Component {
             </View>
           </View>
           <View style={styles.sort}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 2}}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 2 }}>
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => this.setState({sort: !this.state.sort})}>
+                  onPress={() => this.setState({ sort: !this.state.sort })}>
                   <Text style={styles.styleText}>Sắp xếp</Text>
                 </TouchableOpacity>
               </View>
-              <View style={{flexDirection: 'row', marginTop: 8}}>
+              <View style={{ flexDirection: 'row', marginTop: 8 }}>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => this.changScreenSort()}>
@@ -268,17 +301,17 @@ export default class Filter extends Component {
             </View>
           </View>
           <View style={styles.choose}>
-            <View style={{marginTop: 8}}>
+            <View style={{ marginTop: 8 }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({check: !this.state.check});
+                  this.setState({ check: !this.state.check });
                 }}>
                 <Text>
                   {this.state.check === false ? (
                     <Icon name="ic-filter-change-2" size={30} color="#5f5f5f" />
                   ) : (
-                    <Icon name="ic-filter-change" size={30} color="#5f5f5f" />
-                  )}
+                      <Icon name="ic-filter-change" size={30} color="#5f5f5f" />
+                    )}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -287,7 +320,7 @@ export default class Filter extends Component {
         {categories.length === 0 ? (
           <View>
             <Text
-              style={{fontSize: 30, marginHorizontal: 22, textAlign: 'center'}}>
+              style={{ fontSize: 30, marginHorizontal: 22, textAlign: 'center' }}>
               Không có sách liên quan đến thể loại này!!!
             </Text>
           </View>
@@ -295,11 +328,11 @@ export default class Filter extends Component {
           this.state.sort === false ? (
             this.displayScreenHorizontal()
           ) : (
-            this.displayScreenHorizontalSort()
-          )
+              this.displayScreenHorizontalSort()
+            )
         ) : (
-          this.displayScreenVertical()
-        )}
+              this.displayScreenVertical()
+            )}
       </View>
     );
   }
@@ -406,3 +439,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    book: state.bookReducer,
+  };
+};
+export default connect(mapStateToProps, null)(Filter);
