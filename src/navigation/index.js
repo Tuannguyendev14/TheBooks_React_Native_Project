@@ -29,8 +29,8 @@ import profile_icon from '../../assets/images/profile_icon.png';
 import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
+import Message from '../screens/Notification/component/message';
 import SideMenu from './../screens/Filter/SideMenu';
-
 console.disableYellowBox = true;
 
 import CommentModal from '../screens/Home/CommentModal';
@@ -60,7 +60,11 @@ Navigation.registerComponent(
   () => ReduxProvider(App),
   () => App,
 );
-
+Navigation.registerComponent(
+  'Message',
+  () => ReduxProvider(Message),
+  () => Message,
+);
 Navigation.registerComponent(
   'SideMenu',
   () => ReduxProvider(SideMenu),
@@ -277,6 +281,7 @@ export const onChangeIntoMainScreen = () => {
                     },
                   ],
                   options: {
+                    topBar: {visible: false},
                     bottomTab: {
                       text: 'Notification',
                       icon: iconNotification,
