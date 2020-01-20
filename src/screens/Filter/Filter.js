@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -8,116 +8,205 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {map, find, some, filter, sortBy, get} from 'lodash';
 import {offlineData} from '../../utils/offlineData';
 import {Navigation} from 'react-native-navigation';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/thebook-appicon';
+import Book from '../../component/Book';
 
-export default class Filter extends Component {
+class Filter extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       check: false,
+      sort: false,
     };
   }
 
-  renderItemHorizontal = ({item}) => {
+  backMainScreen = () => {
+    Navigation.dismissModal(this.props.componentId);
+  };
+
+  countStar = item => {
+    let round = Math.round(item.OverallStarRating);
     let star = [];
     let starOutline = [];
-    for (let i = 0; i < item.OverallStarRating; i++) {
+    for (let i = 0; i < round; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
-    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
-      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
+    for (let i = 0; i < 5 - round; i++) {
+      star.push(<Icon name="star" size={20} color="#c3c1c1" />);
     }
-    
-    
-    return (
-      <>
-        <View style={styles.containerMain}>
-          <TouchableOpacity style={styles.item}>
-            <Image
-              style={styles.imageThumbnail}
-              source={{uri: item.Medias[0].ImageUrl}}
-            />
-          </TouchableOpacity>
-      
-          <View style={styles.containerBody}>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={styles.title}>{item.Title}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => this.onPressItem(item)}>
-              <Text style={[styles.titleAuthor, styles.titleSize]}>
-                {item.Authors[0].Name === null
-                  ? 'No name'
-                  : item.Authors[0].Name}
-              </Text>
-            </TouchableOpacity>
+    return star;
+  };
 
-            <View style={{flexDirection: 'row'}}>
-              {star}
-              {starOutline}
-              <TouchableOpacity
-                style={styles.item}
-                onPress={() => this.onPressItem(item)}>
-                <Text style={[styles.titleNumber, styles.titleSize]}>
-                  {item.Shelf.BookCount}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </>
+  componentDidMount() {
+    // console.log("daaaaaaaaa", this.props.book.data.MostBorrowBooks);
+  }
+
+  changScreenCategories = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Categories',
+      },
+    });
+  };
+
+  changScreenSort = () => {
+    this.setState({sort: !this.state.sort});
+  };
+
+  changScreenSearch = () => {
+    Navigation.showModal({
+      component: {
+        name: 'Search',
+      },
+    });
+  };
+
+  displayScreenHorizontalSort() {
+    const DATA = sortBy(this.props.book.data.MostBorrowBooks, 'Title');
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+
+    return (
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemHorizontal}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        key={2}
+      />
+    );
+  }
+
+  displayScreenHorizontal() {
+    const DATA = this.props.book.data.MostBorrowBooks;
+
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+
+    return (
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemHorizontal}
+        keyExtractor={(item, index) => index}
+        numColumns={2}
+        key={2}
+      />
+    );
+  }
+
+  displayScreenVertical() {
+    const DATA = this.props.book.data.MostBorrowBooks;
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+    return (
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemVertical}
+        keyExtractor={(item, index) => index}
+      />
+    );
+  }
+
+  displayScreenVerticalSort() {
+    const DATA = sortBy(this.props.book.data.MostBorrowBooks, 'Title');
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+    return (
+      <FlatList
+        data={categories}
+        renderItem={this.renderItemVertical}
+        keyExtractor={(item, index) => index}
+      />
+    );
+  }
+
+  renderItemHorizontal = ({item}) => {
+    return (
+      <View>
+        <Book
+          image={get(item, 'Medias.0.ImageUrl')}
+          author={get(item, 'Authors.0.Name')}
+          count={get(item, 'Shelf.BookCount')}
+          OverallStarRating={get(item, 'OverallStarRating')}
+          title={get(item, 'Title')}
+          idBook={get(item, 'Id')}
+        />
+      </View>
     );
   };
 
+  onPress = idBook => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'Detail',
+              passProps: {
+                IdBook: idBook,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
+
   renderItemVertical = ({item}) => {
-    let star = [];
-    let starOutline = [];
-    for (let i = 0; i < item.OverallStarRating; i++) {
-      star.push(<Icon name="star" size={20} color="#fc9619" />);
-    }
-    for (let i = 0; i < 5 - item.OverallStarRating; i++) {
-      starOutline.push(<Icon name="ic-star-pre" size={20} color="#fc9619" />);
-    }
     return (
       <View>
         <View style={styles.containerMain1}>
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => this.onPress(item.idBook)}>
             <Image
               style={styles.imageThumbnail1}
               source={{uri: item.Medias[0].ImageUrl}}
             />
           </TouchableOpacity>
-      
+
           <View style={styles.containerBody}>
             <TouchableOpacity
               style={styles.item}
-              onPress={() => this.onPressItem(item)}>
+              onPress={() => this.onPress(item.idBook)}>
               <Text style={[styles.title, styles.title1]}>{item.Title}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.item}
-              onPress={() => this.onPressItem(item)}>
+              onPress={() => this.onPress(item)}>
               <Text style={[styles.titleAuthor, styles.titleSize1]}>
                 {item.Authors[0].Name === null
                   ? 'No name'
                   : item.Authors[0].Name}
               </Text>
-
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
-              {star}
-              {starOutline}
-
+              {this.countStar(item)}
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => this.onPressItem(item)}>
+                onPress={() => this.onPress(item)}>
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Shelf.BookCount}
                 </Text>
@@ -129,12 +218,11 @@ export default class Filter extends Component {
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Quantity} quyển
                 </Text>
-
               </TouchableOpacity>
               <Icon name="ic-price" size={18} color="#fc9619" />
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => this.onPressItem(item)}>
+                onPress={() => this.onPress(item)}>
                 <Text style={[styles.titleNumber, styles.titleSize1]}>
                   {item.Price}
                 </Text>
@@ -146,12 +234,15 @@ export default class Filter extends Component {
     );
   };
 
-
-  backMainScreen = () => {
-    Navigation.dismissModal(this.props.componentId);
-  };
-
   main() {
+    const DATA = this.props.book.data.MostBorrowBooks;
+    console.log('daaaaaaaaa', DATA);
+    const categories = filter(DATA, value => {
+      return some(value.Categories, {Name: this.props.value});
+      return [];
+    });
+    console.log(this.props.value);
+
     return (
       <View>
         <View style={styles.header}>
@@ -166,7 +257,7 @@ export default class Filter extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.title}>Tháng tư và tuổi trẻ</Text>
+            <Text style={styles.title}>{this.props.value}</Text>
           </View>
           <View style={styles.search}>
             <TouchableOpacity style={styles.item}>
@@ -176,33 +267,44 @@ export default class Filter extends Component {
                 color="#5f5f5f"
                 onPress={() => this.changScreenSearch()}
               />
-
             </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.header}>
           <View style={[styles.type, styles.sort]}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.changScreenCategories()}>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 2}}>
-                  <Text style={styles.styleText}>Thể loại</Text>
-                </View>
-                <View style={{marginTop: 8}}>
-                  <Icon name="filter" size={30} color="#5f5f5f" />
-                </View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 2}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenCategories()}>
+                  <Text style={styles.styleText}>{this.props.value}</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+              <View style={{marginTop: 8}}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenCategories()}>
+                  <Icon name="filter" size={30} color="#5f5f5f" />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
           <View style={styles.sort}>
             <View style={{flexDirection: 'row'}}>
               <View style={{flex: 2}}>
-                <Text style={styles.styleText}>Sắp xếp</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenSort()}>
+                  <Text style={styles.styleText}>Sắp xếp</Text>
+                </TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', marginTop: 8}}>
-                <Icon name="select" size={30} color="#5f5f5f" />
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => this.changScreenSort()}>
+                  <Icon name="select" size={30} color="#5f5f5f" />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -223,54 +325,24 @@ export default class Filter extends Component {
             </View>
           </View>
         </View>
-        {this.state.check === false
-          ? this.displayScreenHorizontal()
-          : this.displayScreenVertical()}
-      </View>
-    );
-  }
-
-  changScreenCategories = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Categories',
-      },
-    });
-  };
-
-  changScreenSearch = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Search',
-      },
-    });
-  };
-
-  displayScreenHorizontal() {
-    const DATA = offlineData.Data.NewBooks;
-    return (
-      <View>
-        <FlatList
-          // data={DATA.map(item => Object.assign({key: item.Id}, item))}
-          data={DATA}
-          renderItem={this.renderItemHorizontal}
-          keyExtractor={(item, index) => index}
-          key={2}
-          numColumns={2}
-        />
-      </View>
-    );
-  }
-
-  displayScreenVertical() {
-    const DATA = offlineData.Data.NewBooks;
-    return (
-      <View>
-        <FlatList
-          data={DATA}
-          renderItem={this.renderItemVertical}
-          keyExtractor={(item, index) => index}
-        />
+        {categories.length === 0 ? (
+          <View>
+            <Text
+              style={{fontSize: 30, marginHorizontal: 22, textAlign: 'center'}}>
+              Không có sách liên quan đến thể loại này!!!
+            </Text>
+          </View>
+        ) : this.state.check === false ? (
+          this.state.sort === false ? (
+            this.displayScreenHorizontal()
+          ) : (
+            this.displayScreenHorizontalSort()
+          )
+        ) : this.state.sort === false ? (
+          this.displayScreenVertical()
+        ) : (
+          this.displayScreenVerticalSort()
+        )}
       </View>
     );
   }
@@ -307,15 +379,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   containerMain: {
-    flex: 2,
-    marginVertical: 16,
+    flex: 1,
   },
   containerBody: {
-    flex: 2,
+    flex: 1,
     marginHorizontal: 16,
   },
   containerNumber: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     flex: 2,
   },
   item: {
@@ -337,8 +408,9 @@ const styles = StyleSheet.create({
   },
   imageThumbnail: {
     flex: 1,
-    height: 200,
-    marginHorizontal: 16,
+    width: 190,
+    height: 230,
+    marginHorizontal: 10,
   },
   search: {
     flex: 1,
@@ -357,8 +429,9 @@ const styles = StyleSheet.create({
   containerMain1: {
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginVertical: 25,
-    flex: 2,
+    marginVertical: 1,
+    // marginTop: -7,
+    flex: 1,
   },
   containerNumber1: {
     flexDirection: 'row',
@@ -376,3 +449,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
 });
+
+const mapStateToProps = state => {
+  return {
+    book: state.bookReducer,
+  };
+};
+export default connect(mapStateToProps, null)(Filter);

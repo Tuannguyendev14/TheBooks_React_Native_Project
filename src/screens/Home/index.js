@@ -103,9 +103,11 @@ class index extends Component {
   };
 
   changScreenFilter = () => {
-    Navigation.showModal({
-      component: {
-        name: 'Filter',
+    Navigation.mergeOptions('sideMenu', {
+      sideMenu: {
+        left: {
+          visible: true,
+        },
       },
     });
   };

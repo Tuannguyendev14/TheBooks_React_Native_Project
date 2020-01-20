@@ -43,7 +43,7 @@ class Detail extends Component {
   }
 
   backMainScreen = () => {
-    Navigation.dismissAllModals();
+    Navigation.dismissModal(this.props.componentId);
   };
 
   changScreenShowAll = (data, title) => {
@@ -227,12 +227,12 @@ class Detail extends Component {
     const bookDetail = this.props.books;
 
     let star = [];
-    let starOutline = [];
     for (let i = 0; i < bookDetail.OverallStarRating; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
     for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
-      starOutline.push(<Icon name="star" size={20} color="#c3c1c1" />);
+      star.push(<Icon name="star" size={20} color="#c3c1c1" />);
+
     }
 
     const ShowAllComment = this.state.isShowAllComment ? (
@@ -327,10 +327,7 @@ class Detail extends Component {
 
           <View style={style.viewRank}>
             <View>
-              <TouchableOpacity style={style.rank}>
-                {star}
-                {starOutline}
-              </TouchableOpacity>
+              <TouchableOpacity style={style.rank}>{star}</TouchableOpacity>
             </View>
 
             <View style={style.viewIcon}>

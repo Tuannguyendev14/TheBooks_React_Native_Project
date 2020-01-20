@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -11,24 +11,18 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {offlineData} from '../../utils/offlineData';
-import {Navigation} from 'react-native-navigation';
-import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {List} from 'react-native-paper';
+import { offlineData } from '../../utils/offlineData';
+import { Navigation } from 'react-native-navigation';
+import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/thebook-appicon';
+import { List } from 'react-native-paper';
 
-export default class Categories extends Component {
+class Categories extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    const DATA = offlineData.Data.References.Categories;
-    return (
-      <View>
-        <Text>aa</Text>
-      </View>
-    );
+    this.state = {
+      value: '',
+    };
   }
 
   renderItem = DATA => {
@@ -36,24 +30,65 @@ export default class Categories extends Component {
       <View>
         <List.Accordion title={item.Name}>
           {item.SubCategories.map(listItem => (
-            <List.Item style={{marginHorizontal: 10}} title={listItem.Name} />
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    <Text>{this.setState({ value: listItem.Name })}</Text>;
+                  }}>
+                  <List.Item
+                    id={item.Id}
+                    style={{ marginHorizontal: 10 }}
+                    title={listItem.Name}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View>
+                {this.state.value === listItem.Name ? (
+                  <Icon name="ic-tick" size={20} color="#5f5f5f" />
+                ) : null}
+              </View>
+            </View>
           ))}
         </List.Accordion>
       </View>
     ));
   };
+
+  backMainScreen = () => {
+    Navigation.dismissModal(this.props.componentId);
+  };
+
+  changScreenSearch = data => {
+    Navigation.showModal({
+      component: {
+        name: 'Filter',
+        passProps: {
+          value: this.state.value,
+        },
+      },
+    });
+  };
+  onPress = () => {
+    {
+      this.state.value === '' ? null : this.changScreenSearch();
+    }
+  };
+
   render() {
     const DATA = offlineData.Data.References.Categories;
-
     return (
-      <View style={{backgroundColor: 'white', flex: 1}}>
+      <View>
         <SafeAreaView>
           <View style={styles.header}>
             <View style={styles.back}>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={Navigation.dismissModal(this.props.componentId)}>
-                <Icon name="ios-close" size={40} color="#5f5f5f" />
+              <TouchableOpacity style={styles.item}>
+                <Icon
+                  name="ic-back"
+                  size={30}
+                  color="#5f5f5f"
+                  onPress={() => this.backMainScreen()}
+                />
               </TouchableOpacity>
             </View>
             <View>
@@ -61,14 +96,24 @@ export default class Categories extends Component {
             </View>
             <View style={styles.search}>
               <TouchableOpacity style={styles.item}>
-                <Icon name="ios-refresh" size={30} color="#5f5f5f" />
+                <Icon
+                  name="ic-search"
+                  size={30}
+                  color="#5f5f5f"
+                  onPress={() => this.changScreenSearch()}
+                />
               </TouchableOpacity>
             </View>
           </View>
 
-          <ScrollView>
+          <ScrollView style={{ marginVertical: 120, marginTop: -10 }}>
             <View style={[styles.container, styles.item]}>
               {this.renderItem(DATA)}
+            </View>
+            <View style={[styles.container, styles.item]}>
+              <TouchableOpacity style={styles.button} onPress={this.onPress}>
+                <Text> Tìm kiếm </Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </SafeAreaView>
@@ -78,6 +123,11 @@ export default class Categories extends Component {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    alignItems: 'center',
+    backgroundColor: '#fc9619',
+    padding: 10,
+  },
   header: {
     borderColor: 'red',
     height: 50,
@@ -103,4 +153,15 @@ const styles = StyleSheet.create({
   container1: {
     flex: 1,
   },
+  text: {
+    fontSize: 42,
+  },
 });
+
+const mapStateToProps = state => {
+  return {
+    book: state.bookReducer,
+  };
+};
+
+export default connect(mapStateToProps, null)(Categories);
