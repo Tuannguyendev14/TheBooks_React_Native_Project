@@ -19,9 +19,9 @@ class SignIn extends Component {
     this.myRef = React.createRef();
     this.state = {
       grant_type: 'password',
-      userName: '',
-      // userName: 'tuan.nguyen.106902@gmail.com',
-      password: '',
+      // userName: 'tuan.nguyendev14@gmail.com',
+      userName: 'tuan.nguyen.106902@gmail.com',
+      password: 'tuannui123',
     };
   }
 

@@ -16,6 +16,7 @@ import iconProfile from '../../../assets/images/Home/anh.jpg';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import {Navigation} from 'react-native-navigation';
+import ScrollableTabView from 'rn-collapsing-tab-bar';
 
 class Profile extends Component {
   constructor(props) {
@@ -126,48 +127,67 @@ class Profile extends Component {
                 </View>
               </View>
             </View>
-
-            <View style={style.viewInfor}>
-              <View style={style.viewItemText}>
-                <Text style={style.text}>Đang mượn</Text>
-                <Text style={style.text}>12</Text>
-              </View>
-              <View style={style.viewItemText}>
-                <Text style={style.text}>Yêu thích</Text>
-                <Text style={style.text}>86</Text>
-              </View>
-              <View style={style.viewItemText}>
-                <Text style={style.text}>Tích điểm</Text>
-                <Text style={style.text}>215</Text>
-              </View>
-            </View>
-
-            <View style={style.viewIcon}>
-              <View style={style.iconButton}>
-                <Icon name="ic-filter-change-2" size={30} color="black" />
-              </View>
-              <View style={style.iconButton}>
-                <Icon name="ic-filter-change" size={30} color="black" />
-              </View>
-            </View>
-            <FlatList
-              style={style.list}
-              data={newBooks}
-              renderItem={({item}) => (
-                <Book
-                  image={item.Medias[0].ImageUrl}
-                  name={item.Shelf.Name}
-                  author={item.Authors[0].Name}
-                  count={item.Shelf.BookCount}
-                  title={item.Title}
-                  OverallStarRating={item.OverallStarRating}
-                  idBook={item.Id}
+            <ScrollableTabView>
+              <View style={{margin: 25}} name="tab1" tabLabel="Đang mượn">
+                <View style={style.viewIcon}>
+                  <View style={style.iconButton}>
+                    <Icon name="ic-filter-change-2" size={30} color="black" />
+                  </View>
+                  <View style={style.iconButton}>
+                    <Icon name="ic-filter-change" size={30} color="black" />
+                  </View>
+                </View>
+                <FlatList
+                  style={style.list}
+                  data={newBooks}
+                  renderItem={({item}) => (
+                    <Book
+                      image={item.Medias[0].ImageUrl}
+                      name={item.Shelf.Name}
+                      author={item.Authors[0].Name}
+                      count={item.Shelf.BookCount}
+                      title={item.Title}
+                      OverallStarRating={item.OverallStarRating}
+                      idBook={item.Id}
+                    />
+                  )}
+                  numColumns={2}
+                  // horizontal={2}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
                 />
-              )}
-              horizontal={true}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-            />
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}
+                name="tab2"
+                tabLabel="Yêu thích">
+                <Text
+                  style={{
+                    alignItems: 'center',
+                    marginVertical: 20,
+                    justifyContent: 'center',
+                  }}>
+                  Chưa có sự kiện
+                </Text>
+              </View>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}
+                name="tab3"
+                tabLabel="Tích điểm">
+                <Text
+                  style={{
+                    alignItems: 'center',
+                    marginVertical: 20,
+                    justifyContent: 'center',
+                  }}>
+                  Chưa có khuyến mãi
+                </Text>
+              </View>
+            </ScrollableTabView>
           </View>
         </ScrollView>
       </View>

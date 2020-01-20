@@ -20,7 +20,7 @@ export function* addCardSaga(data) {
     alert('Thêm thành công');
     yield put(addCardSuccess(data1));
   } catch (error) {
-    alert(error);
+    console.log('add saga error:', error);
     yield put(addCardFailure(error));
   }
 }
@@ -36,8 +36,6 @@ export function* getCardSaga({data, token}) {
 export function* deleteCardSaga({data, token}) {
   try {
     const response = yield call(deleteCard, data, token);
-    //let cart = store.getState().CardReducer.data.Data;
-    //console.log('getcart reducer: ', cart);
     alert('Xóa thành công');
     yield put(deleteCardSuccess(response));
   } catch (error) {

@@ -14,31 +14,30 @@ import {
 import {connect} from 'react-redux';
 import {getBook} from '../../redux/bookRedux/actions';
 import {getCard, deleteCard} from '../../redux/cardRedux/action';
-import Icon1 from 'react-native-vector-icons/thebook-appicon';
+import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../ShoppingCard/components/bookOrder';
 import {Navigation} from 'react-native-navigation';
 import {List} from 'react-native-paper';
+import {get} from 'lodash';
+
 class ShoppingCard extends Component {
-  // componentDidMount() {
-  //   this.props.onGetCard(this.props.idbasket, this.props.token);
-  //   console.log('got data card:', this.props.card);
-  // }
-  // componentDidUpdate() {
-  //   this.props.onGetCard(this.props.idbasket, this.props.token);
-  // }
-  // componentWillUnmount() {
-  //   this.props.onGetCard(this.props.idbasket, this.props.token);
-  // }
   componentWillMount() {
     this.props.onGetCard(this.props.idbasket, this.props.token);
   }
+
   listEmptyComponent = () => {
     return (
-      <View>
-        <Text style={styles.empty}>Giỏ hàng trống</Text>
+      <View
+        style={{
+          alignItems: 'center',
+          flex: 1,
+          justifyContent: 'center',
+        }}>
+        <Text>Hiện tại không có sách trong giỏ hàng</Text>
       </View>
     );
   };
+
   onCheck = async () => {
     try {
       let user = await AsyncStorage.getItem('user');
@@ -69,16 +68,18 @@ class ShoppingCard extends Component {
     }
   };
   back = () => {
-    Navigation.dismissAllModals();
+    Navigation.dismissModal(this.props.componentId);
   };
+
   render() {
     const card = this.props.card.data.Data;
-    //console.log('get data card:', this.props.card.data.Data);
-    if (card == null || card === 'undefined') {
+    console.log('get data card:', card);
+    
+    if (card === null || card === undefined) {
       return (
         <View style={styles.container}>
           <View style={styles.top}>
-            <Icon1
+            <Icon
               onPress={() => this.back()}
               style={styles.back}
               name="ic-back"
@@ -86,7 +87,7 @@ class ShoppingCard extends Component {
               color="#5f5f5f"
             />
             <Text style={styles.text}>Giỏ hàng</Text>
-            <Icon1
+            <Icon
               style={styles.trash}
               name="ic-trash"
               size={25}
@@ -94,7 +95,7 @@ class ShoppingCard extends Component {
             />
           </View>
           <View style={styles.center}>
-            <Text>Giỏ hàng trống</Text>
+            <Text>Hiện tại không có sách trong giỏ hàng</Text>
           </View>
         </View>
       );
@@ -102,7 +103,7 @@ class ShoppingCard extends Component {
       return (
         <View style={styles.container}>
           <View style={styles.top}>
-            <Icon1
+            <Icon
               onPress={() => this.back()}
               style={styles.back}
               name="ic-back"
@@ -110,7 +111,7 @@ class ShoppingCard extends Component {
               color="#5f5f5f"
             />
             <Text style={styles.text}>Giỏ hàng</Text>
-            <Icon1
+            <Icon
               onPress={() => this.onCheck()}
               style={styles.trash}
               name="ic-trash"
@@ -118,36 +119,27 @@ class ShoppingCard extends Component {
               color="#5f5f5f"
             />
           </View>
-          <ScrollView style={styles.center}>
-            <FlatList
-              style={styles.list}
-              data={card.Items}
-              renderItem={({item}) => (
-                <Book
-                  image={
-                    item.Book.Medias[0]
-                      ? item.Book.Medias[0].ImageUrl
-                      : 'https://the-books-dev-files.s3.amazonaws.com/Image/1533113457208_1533113324978_web.jpg'
-                  }
-                  name={item.Book.Publishers[0].Name}
-                  author={item.Book.Authors[0].Name}
-                  count={item.Book.Quantity}
-                  id={item.Book.Id}
-                  quantity={item.Book.Quantity}
-                  price={item.Book.Price}
-                />
-              )}
-              ListEmptyComponent={this.listEmptyComponent}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-            />
-          </ScrollView>
 
-          {/* <View style={styles.bot}>
-            <TouchableWithoutFeedback onPress={this.onAddToCard}>
-              <Text style={styles.buttonAddToCard}>Đặt sách</Text>
-            </TouchableWithoutFeedback>
-          </View> */}
+          <FlatList
+            style={styles.list}
+            data={card.Items}
+            renderItem={({item}) => (
+              <Book
+                image={
+                  get(item, 'Book.Medias.0')
+                    ? get(item, 'Book.Medias.0.ImageUrl')
+                    : 'https://the-books-dev-files.s3.amazonaws.com/Image/1533113457208_1533113324978_web.jpg'
+                }
+                name={get(item, 'Book.Publishers.0.Name')}
+                author={get(item, 'Book.Authors.0.Name')}
+                count={get(item, 'Book.Quantity')}
+                id={get(item, 'Book.Id')}
+              />
+            )}
+            ListEmptyComponent={this.listEmptyComponent}
+            keyExtractor={(item, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
       );
     }
@@ -178,6 +170,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e9e9e9',
     borderRadius: 5,
+    marginVertical: 20,
   },
   top: {
     flexDirection: 'row',
@@ -208,10 +201,10 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingTop: 10,
+    marginBottom: 70,
   },
 });
 const mapStateToProps = state => {
-  console.log('map', state.CardReducer);
   return {
     book: state.bookReducer,
     card: state.CardReducer,

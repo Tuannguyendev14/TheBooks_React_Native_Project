@@ -20,6 +20,7 @@ import Icon from 'react-native-vector-icons/thebook-appicon';
 import Book from '../../component/Book';
 import {Navigation} from 'react-native-navigation';
 import ScrollableTabView from 'rn-collapsing-tab-bar';
+import ImageProfile from '../../../assets/images/Profile/khuyenmai.png';
 
 class Profile extends Component {
   constructor(props) {
@@ -87,47 +88,22 @@ class Profile extends Component {
   };
 
   render() {
-    const {fullName, email, gender, phoneNumber} = this.state;
-    const newBooks = this.props.book.data.NewBooks;
-    const opacity = this.state.scrollY.interpolate({
-      inputRange: [0, 500],
-      outputRange: [0, 1],
-      extrapolate: 'clamp',
-    });
-    console.log('log-render');
     return (
       <Animated.ScrollView
         stickyHeaderIndices={[1]}
         onScroll={Animated.event([
           {nativeEvent: {contentOffset: {y: this.state.scrollY}}},
         ])}>
-        <View style={{flex: 1}}>
-          <ImageBackground
-            source={iconProfile}
-            style={{width: '100%', height: 500}}>
-            <View
-              style={{
-                alignItems: 'center',
-                marginHorizontal: 30,
-                marginVertical: 10,
-              }}>
-              <Text style={{color: 'white', fontSize: 30}}>The Books</Text>
-              <Text style={{color: 'white', fontSize: 15, marginTop: 10}}>
-                www.thebook.com
-              </Text>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 15,
-                  textAlign: 'center',
-                  marginTop: 10,
-                }}>
+        <View style={style.container}>
+          <ImageBackground source={iconProfile} style={style.imageBack}>
+            <View style={style.viewText}>
+              <Text style={style.text1}>The Books</Text>
+              <Text style={style.text2}>www.thebook.com</Text>
+              <Text style={style.text3}>
                 Think back over your life. Think about the people that had a
                 positive influence on you. If your past ...
               </Text>
-              <Text style={{color: 'white', fontSize: 15, textAlign: 'center'}}>
-                Think back over your life
-              </Text>
+              <Text style={style.text4}>Think back over your life</Text>
             </View>
             <View style={style.viewIcon}>
               <View style={style.iconButton}>
@@ -140,154 +116,77 @@ class Profile extends Component {
                 <Icon name="ic-youtube" size={30} color="white" />
               </View>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginVertical: 20,
-                alignContent: 'center',
-                alignItems: 'center',
-              }}>
+            <View style={style.viewIconText}>
               <View style={style.iconButton}>
-                <Text>OPEN</Text>
-                <Text>8am</Text>
+                <Text style={style.texttime}>OPEN</Text>
+                <Text style={style.texttime}>8am</Text>
               </View>
               <View style={style.iconButton}>
-                <Image
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: 90,
-                    borderWidth: 3,
-                    borderColor: 'white',
-                  }}
-                  source={iconLibrary}
-                />
+                <Image style={style.Image} source={iconLibrary} />
               </View>
               <View style={style.iconButton}>
-                <Text>CLOSE</Text>
-                <Text>6pm</Text>
+                <Text style={style.texttime}>CLOSE</Text>
+                <Text style={style.texttime}>6pm</Text>
               </View>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  width: 190,
-                  height: 70,
-                  borderRadius: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginHorizontal: 5,
-                }}>
-                <View
-                  style={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    padding: 10,
-                    borderRadius: 50,
-                  }}>
+            <View style={style.container2}>
+              <View style={style.viewbutton}>
+                <View style={style.viewIcon2}>
                   <Icon name="ic-phone" size={20} color="white" />
                 </View>
-                <View style={{marginLeft: 6}}>
-                  <Text style={{color: 'white'}}>Phone</Text>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    (+84) 000 00 000)
-                  </Text>
+                <View style={style.viewPhone}>
+                  <Text style={style.texttime}>Phone</Text>
+                  <Text style={style.textPhone}>(+84) 000 00 000)</Text>
                 </View>
               </View>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  borderWidth: 2,
-                  borderColor: 'white',
-                  width: 190,
-                  height: 70,
-                  borderRadius: 50,
-                  justifyContent: 'center',
-                  marginHorizontal: 5,
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    borderWidth: 2,
-                    borderColor: 'white',
-                    padding: 10,
-                    borderRadius: 50,
-                  }}>
+              <View style={style.viewbutton}>
+                <View style={style.viewIcon2}>
                   <Icon name="ic-solid-direction" size={20} color="white" />
                 </View>
-                <View style={{marginLeft: 6}}>
+                <View style={style.viewPhone}>
                   <Text style={{color: 'white'}}>Address</Text>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>
-                    20 Cao Thắng
-                  </Text>
+                  <Text style={style.textPhone}>20 Cao Thắng</Text>
                 </View>
               </View>
             </View>
           </ImageBackground>
         </View>
-        <Animated.View style={{opacity}}>
-          <Text>View View View</Text>
-        </Animated.View>
+
         <ScrollableTabView>
-          <View name="tab1" tabLabel="tab1">
-            <Text>duy</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>duy</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
-            <Text>Asdasd</Text>
+          <View style={{margin: 25}} name="tab1" tabLabel="Hình Ảnh">
+            <Image source={ImageProfile} style={style.styleImageProfile} />
           </View>
-          <View name="tab2" tabLabel="tab2">
-            <Text>le khanh duy</Text>
-            <Text>le khanh duy</Text>
-            <Text>le khanh duy</Text>
-            <Text>le khanh duy</Text>
-            <Text>le khanh duy</Text>
+          <View
+            style={{
+              alignItems: 'center',
+            }}
+            name="tab2"
+            tabLabel="Sự Kiện">
+            <Text
+              style={{
+                alignItems: 'center',
+                marginVertical: 20,
+                justifyContent: 'center',
+              }}>
+              Chưa có sự kiện
+            </Text>
           </View>
-          <View name="tab3" tabLabel="tab3" />
-          <View name="tab4" tabLabel="tab4" />
-          <View name="tab5" tabLabel="tab5" />
-          <View name="tab6" tabLabel="tab6" />
+          <View
+            style={{
+              alignItems: 'center',
+            }}
+            name="tab3"
+            tabLabel="Khuyến Mãi">
+            <Text
+              style={{
+                alignItems: 'center',
+                marginVertical: 20,
+                justifyContent: 'center',
+              }}>
+              Chưa có khuyến mãi
+            </Text>
+          </View>
         </ScrollableTabView>
       </Animated.ScrollView>
     );
@@ -295,61 +194,11 @@ class Profile extends Component {
 }
 
 const style = StyleSheet.create({
-  topbar: {
-    paddingLeft: 15,
-    paddingTop: 20.5,
-    fontSize: 10.5,
-    flexDirection: 'row',
-    marginHorizontal: 10,
-  },
-
-  styleViewProfile: {
-    alignContent: 'center',
-    alignItems: 'center',
-    marginTop: -80,
-  },
   styleImageProfile: {
     width: '100%',
-    height: 500,
+    height: 200,
   },
-  list: {
-    paddingTop: 5,
-  },
-  platinum: {
-    flexDirection: 'row',
-    flex: 3,
-    backgroundColor: '#f7f3f7',
-    borderRadius: 50,
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  viewInfor: {
-    marginHorizontal: 15,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  viewItemText: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 20,
-  },
-  viewCode: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 50,
-    height: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textPlatinum: {
-    margin: 18,
-    fontSize: 22,
-  },
+
   viewIcon: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -359,6 +208,82 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+  },
+  container2: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  imageBack: {
+    width: '100%',
+    height: 500,
+  },
+  viewText: {
+    alignItems: 'center',
+    marginHorizontal: 30,
+    marginVertical: 10,
+  },
+  text1: {
+    color: 'white',
+    fontSize: 30,
+  },
+  text2: {
+    color: 'white',
+    fontSize: 15,
+    marginTop: 10,
+  },
+  text3: {
+    color: 'white',
+    fontSize: 15,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  text4: {
+    color: 'white',
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  viewIconText: {
+    flexDirection: 'row',
+    marginVertical: 20,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  texttime: {
+    color: 'white',
+  },
+  Image: {
+    width: 120,
+    height: 120,
+    borderRadius: 90,
+    borderWidth: 3,
+    borderColor: 'white',
+  },
+  viewbutton: {
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'white',
+    width: 190,
+    height: 70,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  viewIcon2: {
+    borderWidth: 2,
+    borderColor: 'white',
+    padding: 10,
+    borderRadius: 50,
+  },
+  viewPhone: {
+    marginLeft: 6,
+  },
+  textPhone: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 
