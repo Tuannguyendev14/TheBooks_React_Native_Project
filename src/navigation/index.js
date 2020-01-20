@@ -20,7 +20,6 @@ import Detail from '../screens/Home/Detail';
 import ShoppingCard from '../screens/ShoppingCard';
 import Filter from '../screens/Filter/Filter';
 import Categories from '../screens/Filter/Categories';
-import Sort from '../screens/Filter/Sort';
 import UpdateModal from '../../src/navigation';
 import iconPaper from '../../assets/images/paper_icon.jpg';
 import iconNotification from '../../assets/images/notification_icon.png';
@@ -31,6 +30,7 @@ import {Provider} from 'react-redux';
 import store from '../redux/store';
 import {prepareIcons} from '../utils/icon';
 import Message from '../screens/Notification/component/message';
+import SideMenu from './../screens/Filter/SideMenu';
 console.disableYellowBox = true;
 
 import CommentModal from '../screens/Home/CommentModal';
@@ -65,6 +65,12 @@ Navigation.registerComponent(
   () => ReduxProvider(Message),
   () => Message,
 );
+Navigation.registerComponent(
+  'SideMenu',
+  () => ReduxProvider(SideMenu),
+  () => SideMenu,
+);
+
 Navigation.registerComponent(
   'Search',
   () => ReduxProvider(Search),
@@ -161,11 +167,6 @@ Navigation.registerComponent(
   () => Categories,
 );
 
-Navigation.registerComponent(
-  'Sort',
-  () => ReduxProvider(Sort),
-  () => Sort,
-);
 
 Navigation.registerComponent(
   'SideMenuLeft',
@@ -192,7 +193,7 @@ export const onChangeIntoMainScreen = () => {
         id: 'sideMenu',
         left: {
           component: {
-            name: 'Categories',
+            name: 'SideMenu',
           },
         },
         center: {
