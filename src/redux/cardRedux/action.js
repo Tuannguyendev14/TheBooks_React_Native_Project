@@ -41,6 +41,7 @@ export const getCardFailure = error => {
     payload: error,
   };
 };
+
 export const deleteCard = (data, token) => {
   return {
     type: types.DELETE_CARD,
@@ -48,6 +49,7 @@ export const deleteCard = (data, token) => {
     token: token,
   };
 };
+
 export const deleteCardSuccess = response => {
   return {
     type: types.DELETE_CARD_SUCCESS,
