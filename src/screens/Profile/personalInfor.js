@@ -49,7 +49,7 @@ export default class personalInfor extends Component {
   };
 
   editInfor = () => {
-    alert('edit');
+    alert('Editting personal information');
   };
 
   onBack = () => {

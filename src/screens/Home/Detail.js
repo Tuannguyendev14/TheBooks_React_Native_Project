@@ -43,6 +43,7 @@ class Detail extends Component {
       showAlert: false,
     };
   }
+
   backMainScreen = () => {
     Navigation.dismissAllModals();
   };
@@ -57,10 +58,6 @@ class Detail extends Component {
         },
       },
     });
-  };
-
-  onAddToCard = () => {
-    this.onCheckAddToCard();
   };
 
   onAddToCard = async () => {
@@ -211,7 +208,6 @@ class Detail extends Component {
       <Text style={style.text1}>Xem thêm</Text>
     );
 
-    console.log(commentData);
     return (
       <View style={style.container}>
         <View style={style.topbar}>
