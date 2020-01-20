@@ -260,6 +260,7 @@ class index extends Component {
             onPress={() => this.onCheck()}
           />
         </View>
+
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}

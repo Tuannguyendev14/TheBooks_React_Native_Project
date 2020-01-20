@@ -16,6 +16,7 @@ export function* registerSaga(action) {
   try {
     const response = yield call(register, action.data);
     const data = response.data;
+    console.log('user data:', data);
     yield put(addUserSuccess(data));
     AsyncStorage.setItem('user', JSON.stringify(data));
     onChangeIntoMainScreen();
@@ -29,6 +30,7 @@ export function* loginSaga({data}) {
     const response = yield call(login, data);
 
     const userData = response.data;
+    console.log('user data:', userData);
     AsyncStorage.setItem('user', JSON.stringify(userData));
     yield put(logInSuccess(userData));
     onChangeIntoMainScreen();

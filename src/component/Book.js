@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 200,
     backgroundColor: '#ababab',
-    marginHorizontal: 2,
+    marginHorizontal: 12,
   },
 });
 export default Book;

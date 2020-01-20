@@ -4,6 +4,7 @@ import bookSagas from './bookRedux/saga';
 import commentSagas from './commentRedux/saga';
 import relatedBookSagas from './relatedBooksRedux/saga';
 import cardSaga from './cardRedux/saga';
+import notificationSaga from './notificationRedux/saga';
 
 function* rootSagas() {
   yield all([
@@ -12,6 +13,7 @@ function* rootSagas() {
     ...commentSagas,
     ...relatedBookSagas,
     ...cardSaga,
+    ...notificationSaga,
   ]);
 }
 
