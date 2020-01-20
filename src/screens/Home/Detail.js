@@ -109,7 +109,6 @@ class Detail extends Component {
   }
 
   onCheck = async () => {
-    //await this.onCheck();
     let userId = this.state.userId;
     const commentData = this.props.comment.data;
 
@@ -131,7 +130,7 @@ class Detail extends Component {
         this.onCheck();
       }
     } catch (error) {
-      // alert(error);
+      alert(error);
     }
   };
 
@@ -146,7 +145,7 @@ class Detail extends Component {
         });
       }
     } catch (error) {
-      // alert(error);
+      alert(error);
     }
   };
 
@@ -162,9 +161,6 @@ class Detail extends Component {
   onUpdateComment = (commentData, Id) => {
     let userToken = this.state.userToken;
     this.props.onUpdateComment(commentData, Id, userToken);
-    // console.log('commentData', commentData);
-    // console.log('Id', Id);
-    // console.log('userToken', userToken);
   };
 
   onShowAllComment = () => {
@@ -227,12 +223,13 @@ class Detail extends Component {
     const bookDetail = this.props.books;
 
     let star = [];
+
     for (let i = 0; i < bookDetail.OverallStarRating; i++) {
       star.push(<Icon name="star" size={20} color="#fc9619" />);
     }
+
     for (let i = 0; i < 5 - bookDetail.OverallStarRating; i++) {
       star.push(<Icon name="star" size={20} color="#c3c1c1" />);
-
     }
 
     const ShowAllComment = this.state.isShowAllComment ? (
@@ -406,12 +403,10 @@ class Detail extends Component {
                 parentFlatList={this}
               />
             )}
-            // horizontal={true}
             keyExtractor={(item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
           />
           <TouchableWithoutFeedback onPress={this.onShowAllComment}>
-            {/* <Text style={style.textComment}>Xem tất cả nhận xét</Text> */}
             {ShowAllComment}
           </TouchableWithoutFeedback>
         </ScrollView>
@@ -477,7 +472,6 @@ const style = StyleSheet.create({
     paddingTop: 5,
     marginVertical: 10,
   },
-
   container: {
     flex: 1,
     marginTop: 1,
@@ -486,7 +480,6 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 5,
   },
-
   topbar: {
     paddingLeft: 15,
     fontSize: 10.5,

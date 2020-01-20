@@ -157,35 +157,11 @@ class Profile extends Component {
           <View style={{margin: 25}} name="tab1" tabLabel="Hình Ảnh">
             <Image source={ImageProfile} style={style.styleImageProfile} />
           </View>
-          <View
-            style={{
-              alignItems: 'center',
-            }}
-            name="tab2"
-            tabLabel="Sự Kiện">
-            <Text
-              style={{
-                alignItems: 'center',
-                marginVertical: 20,
-                justifyContent: 'center',
-              }}>
-              Chưa có sự kiện
-            </Text>
+          <View style={style.viewTab} name="tab2" tabLabel="Sự Kiện">
+            <Text style={style.styleText}>Chưa có sự kiện</Text>
           </View>
-          <View
-            style={{
-              alignItems: 'center',
-            }}
-            name="tab3"
-            tabLabel="Khuyến Mãi">
-            <Text
-              style={{
-                alignItems: 'center',
-                marginVertical: 20,
-                justifyContent: 'center',
-              }}>
-              Chưa có khuyến mãi
-            </Text>
+          <View style={style.viewTab} name="tab3" tabLabel="Khuyến Mãi">
+            <Text style={style.styleText}>Chưa có khuyến mãi</Text>
           </View>
         </ScrollableTabView>
       </Animated.ScrollView>
@@ -284,6 +260,14 @@ const style = StyleSheet.create({
   textPhone: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  styleText: {
+    alignItems: 'center',
+    marginVertical: 20,
+    justifyContent: 'center',
+  },
+  viewTab: {
+    alignItems: 'center',
   },
 });
 

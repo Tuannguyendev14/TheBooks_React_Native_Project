@@ -55,6 +55,7 @@ export default class personalInfor extends Component {
   onBack = () => {
     Navigation.dismissAllModals();
   };
+  
   render() {
     const {
       userName,

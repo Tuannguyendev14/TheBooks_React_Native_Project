@@ -134,27 +134,27 @@ class SignUp extends Component {
         <View style={style.container}>
           <Input
             getData={e => this.getData('firstName', e)}
-            title="First name *"
-            placeholder="Enter first name..."
+            title="Tên đầu tiên *"
+            placeholder="Nhập tên đầu tiên..."
             error={errorFirstName}
           />
           <Input
             getData={e => this.getData('lastName', e)}
-            title="Last name *"
-            placeholder="Enter last name..."
+            title="Tên cuối *"
+            placeholder="Nhập tên cuối..."
             error={errorLastName}
           />
           <Input
             getData={e => this.getData('phoneNumber', e)}
-            title="Phone number *"
-            placeholder="Enter phone number..."
+            title="Số điện thoại*"
+            placeholder="Nhập số điện thoại..."
             error={errorPhoneNumber}
             keyboardType="numeric"
           />
           <Input
             getData={e => this.getData('email', e)}
             title="Email*"
-            placeholder="Enter email..."
+            placeholder="Nhập email..."
             error={errorEmail}
           />
           <Input
@@ -168,8 +168,8 @@ class SignUp extends Component {
           />
           <Input
             getData={e => this.getData('confirmPass', e)}
-            title="Confirm password *"
-            placeholder="Confirm password ..."
+            title="Xác nhận mật khẩu *"
+            placeholder="Xác nhận mật khẩu ..."
             error={errorConfirmPass}
             returnKeyType="go"
             secureTextEntry={true}

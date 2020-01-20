@@ -19,7 +19,7 @@ import {notiData} from '../../utils/notificationData';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 class index extends Component {
   componentDidMount() {
-    this.onCheck();
+    //this.onCheck();
   }
   showAlert = () => {
     this.setState({
