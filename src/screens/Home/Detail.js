@@ -247,8 +247,6 @@ class Detail extends Component {
       <Text style={style.text1}>Xem thêm</Text>
     );
 
-    
-
     return (
       <View style={style.container}>
         <View style={style.topbar}>
@@ -457,7 +455,6 @@ class Detail extends Component {
             onSignIn();
           }}
         />
-
       </View>
     );
   }
