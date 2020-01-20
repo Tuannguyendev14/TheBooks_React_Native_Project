@@ -7,7 +7,6 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   TouchableWithoutFeedback,
   AsyncStorage,
 } from 'react-native';
@@ -23,7 +22,6 @@ import {addCard, getCard} from '../../redux/cardRedux/action';
 import store from '../../redux/store';
 import {getBookDetail} from '../../redux/bookRedux/actions';
 import CommentModal from './CommentModal';
-import ImageProfile from '../../../assets/images/Home/anh.jpg';
 import UpdateModal from './UpdateModal';
 import Icon from 'react-native-vector-icons/thebook-appicon';
 import AwesomeAlert from 'react-native-awesome-alerts';
@@ -66,7 +64,6 @@ class Detail extends Component {
       let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
       if (parsed === null) {
-        // onSignIn();
         this.showAlert();
       } else {
         this.onPress(parsed.Data.Id, parsed.Token.access_token, idbasket);
@@ -182,6 +179,48 @@ class Detail extends Component {
     });
   };
 
+  onCheckCard = async () => {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      let idbasket = await AsyncStorage.getItem('idbasket');
+      let parsed = JSON.parse(user);
+      if (parsed === null) {
+        this.showAlert();
+      } else {
+        this.changeShopping(idbasket, parsed.Token.access_token);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  changeShopping = (idbasket, token) => {
+    Navigation.showModal({
+      stack: {
+        children: [
+          {
+            component: {
+              name: 'ShoppingCard',
+              passProps: {
+                token: token,
+                idbasket: idbasket,
+              },
+              options: {
+                topBar: {
+                  title: {
+                    text: '',
+                    alignment: 'center',
+                  },
+                  visible: false,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+  };
+
   render() {
     const relatedBooks = this.props.relatedBooks.data.RelatedBooks;
     const commentData = this.props.comment.data;
@@ -208,6 +247,8 @@ class Detail extends Component {
       <Text style={style.text1}>Xem thêm</Text>
     );
 
+    
+
     return (
       <View style={style.container}>
         <View style={style.topbar}>
@@ -219,10 +260,10 @@ class Detail extends Component {
               onPress={() => this.backMainScreen()}
             />
           </View>
-          <View style={style.search}>
+          <View>
             {this.state.heartEmpty === false ? (
               <Icon
-                name="like"
+                name="ic-like"
                 size={30}
                 color="red"
                 backgroundColor="red"
@@ -234,14 +275,25 @@ class Detail extends Component {
               <Icon
                 name="like"
                 size={30}
-                color="#fc9619"
+                color="gray"
                 onPress={() => {
                   this.setState({heartEmpty: !this.state.heartEmpty});
                 }}
               />
             )}
           </View>
+
+          <View style={{marginLeft: 10}}>
+            <Icon
+              name="ic-cart"
+              size={30}
+              color="red"
+              backgroundColor="red"
+              onPress={this.onCheckCard}
+            />
+          </View>
         </View>
+
         <ScrollView orientation="vertical">
           <View style={style.viewimage}>
             <Image
@@ -405,6 +457,7 @@ class Detail extends Component {
             onSignIn();
           }}
         />
+
       </View>
     );
   }

@@ -28,7 +28,7 @@ class index extends Component {
     };
   }
 
-  changScreenShowAll = (data, title) => {
+  changeScreenShowAll = (data, title) => {
     Navigation.showModal({
       component: {
         name: 'ShowAllBook',
@@ -45,11 +45,10 @@ class index extends Component {
       let user = await AsyncStorage.getItem('user');
       let idbasket = await AsyncStorage.getItem('idbasket');
       let parsed = JSON.parse(user);
-      console.log('parsed:', parsed);
       if (parsed === null) {
         this.showAlert();
       } else {
-        this.changShopping(idbasket, parsed.Token.access_token);
+        this.changeShopping(idbasket, parsed.Token.access_token);
       }
     } catch (error) {
       alert(error);
@@ -68,7 +67,7 @@ class index extends Component {
     });
   };
 
-  changShopping = (idbasket, token) => {
+  changeShopping = (idbasket, token) => {
     Navigation.showModal({
       stack: {
         children: [
@@ -162,7 +161,7 @@ class index extends Component {
               <Text
                 style={styles.showall}
                 onPress={() =>
-                  this.changScreenShowAll(listNewBooksActive, 'Sách mới')
+                  this.changeScreenShowAll(listNewBooksActive, 'Sách mới')
                 }>
                 Xem hết
               </Text>
@@ -192,7 +191,7 @@ class index extends Component {
               <Text
                 style={styles.showall}
                 onPress={() =>
-                  this.changScreenShowAll(
+                  this.changeScreenShowAll(
                     listMostBorrowBooksActive,
                     'Sách mượn nhiều',
                   )
@@ -264,7 +263,7 @@ class index extends Component {
         <AwesomeAlert
           show={this.state.showAlert}
           showProgress={false}
-          title="Bạn có chắc đăng xuất không?"
+          title="Bạn cần đăng nhập để thực hiện thao tác này?"
           closeOnTouchOutside={true}
           closeOnHardwareBackPress={false}
           showCancelButton={true}
