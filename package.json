@@ -12,7 +12,7 @@
     "copyIconFontToNodeModules": "cp src/assets/thebook-appicon/thebook-appicon.ttf node_modules/react-native-vector-icons/Fonts"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "expo-constants": "^8.0.0",
     "lodash": "^4.17.15",
     "native-base": "^2.13.8",
